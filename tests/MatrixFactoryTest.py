@@ -8,39 +8,45 @@ class MatrixFactoryTest(unittest.TestCase):
     #create a new asymmetrical matrix factory
     self.aFactory = mf.MatrixFactory(sym=False)
     self.sFactory = mf.MatrixFactory(sym=True)
-    self.agents = 20
-    self.neighbours = 4
-    self.randomLinks = 5
 
   def test_asymCreation(self):
     """A matrix factory should be able to produce all implemented matrices"""
-    lattice = self.aFactory.makeLatticeMatrix(self.agents, self.neighbours)
-    scaleFree = self.aFactory.makeScaleFreeMatrix(self.agents)
-    smallWorld = self.aFactory.makeSmallWorldMatrix(self.agents, self.neighbours, self.randomLinks)
+    lattice = self.aFactory.makeLatticeMatrix(20, 4)
+    scaleFree = self.aFactory.makeScaleFreeMatrix(10)
+    smallWorld = self.aFactory.makeSmallWorldMatrix(15, 5, 4)
 
   def test_symCreation(self):
     """A matrix factory should be able to produce a lower triangular matrix version of every matrix"""
-    lattice = self.sFactory.makeLatticeMatrix(self.agents, self.neighbours)
-    scaleFree = self.sFactory.makeScaleFreeMatrix(self.agents)
-    smallWorld = self.sFactory.makeSmallWorldMatrix(self.agents, self.neighbours, self.randomLinks)
+    lattice = self.sFactory.makeLatticeMatrix(20, 4)
+    scaleFree = self.sFactory.makeScaleFreeMatrix(10)
+    smallWorld = self.sFactory.makeSmallWorldMatrix(15, 5, 4)
     self.assertTrue(np.allclose(lattice, np.tril(lattice)))  # check if lower triangular
     self.assertTrue(np.allclose(scaleFree, np.tril(scaleFree)))  # check if lower triangular
     self.assertTrue(np.allclose(smallWorld, np.tril(smallWorld)))  # check if lower triangular
 
   def test_latticeConnections(self):
     """Each agent in a lattice is connected exactly to a certain amount of neighbors"""
-    asymLattice = self.aFactory.makeLatticeMatrix(self.agents, self.neighbours)
-    symLattice = self.sFactory.makeLatticeMatrix(self.agents, self.neighbours)
-    nonZeroRowNrs, nonZeroColumnNrs = np.nonzero(asymLattice)
-    nonZeroCount = len(nonZeroRowNrs)
-    # An asymmetrical lattice matrix has 20 agent *4 neighbors= 80 connections
-    self.assertEqual(80, nonZeroCount)
-    nonZeroRowNrsSym, nonZeroColumnNrsSym = np.nonzero(symLattice)
-    nonZeroCountSym = len(nonZeroRowNrsSym)
-    # The symmetrical lattice should be equal to half the asymmetrical connections (in this case 40)
-    self.assertEqual(nonZeroCount / 2, nonZeroCountSym)
+    def doTest(pair):
+      agents = pair[0]
+      neighbours = pair[1]
+      asymLattice = self.aFactory.makeLatticeMatrix(agents, neighbours)
+      symLattice = self.sFactory.makeLatticeMatrix(agents, neighbours)
+      nonZeroRowNrs, nonZeroColumnNrs = np.nonzero(asymLattice)
+      nonZeroCount = len(nonZeroRowNrs)
+      # An asymmetrical lattice matrix has 20 agent *4 neighbors= 80 connections
+      print(asymLattice)
+      self.assertEqual(agents*neighbours, nonZeroCount, "Asymmetrical Error")
+      nonZeroRowNrsSym, nonZeroColumnNrsSym = np.nonzero(symLattice)
+      nonZeroCountSym = len(nonZeroRowNrsSym)
+      # The symmetrical lattice should be equal to half the asymmetrical connections (in this case 40)
+      self.assertEqual(agents*neighbours / 2, nonZeroCountSym, "Symmetrical Error")
+      ##ASK ABOUT UNEVEN NEIGHBOURS
+    latticePairs = [(20,4), (30,6), (99, 4), (15,10)]
 
-  def test_scaleFreeCreation(self):
+    for pair in latticePairs:
+      doTest(pair)
+
+  def test_scaleFreeConnections(self):
     """A matrix factory should be able to produce a scale free matrix"""
     scaleFree = self.aFactory.makeScaleFreeMatrix(self.agents)
     #
