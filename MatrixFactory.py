@@ -92,7 +92,7 @@ class MatrixFactory:
         # get the node from the rows array
         chosenNode = rows[chosenEdge]
         # if there isn't a connection prior, establish one
-        if scaleFree[chosenNode, newNode] == 0:
+        if scaleFree[chosenNode, newNode] == 0 and scaleFree[newNode, chosenNode] == 0:
           #if the matrix isn't symmetrical, add both connections
           if not self.sym:
             scaleFree[chosenNode, newNode] = 1
