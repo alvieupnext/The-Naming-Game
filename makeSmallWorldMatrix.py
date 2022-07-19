@@ -19,7 +19,7 @@ def makeSmallWorldMatrix(numberOfAgents, numberOfNeighbors, numberOfRandomLinks)
       y = r.randint(0, numberOfAgents-1);
     #make sure they are not equal to each other
     # ???? why <
-      if not x == y and latticeA[x, y] < 1:
+      if not x == y and latticeA[x, y] != 1:
         #if they have no prior connection, create the connection
         latticeA[x, y] = 1
         latticeA[y, x] = 1
