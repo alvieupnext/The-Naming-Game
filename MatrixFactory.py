@@ -121,7 +121,7 @@ class MatrixFactory:
       y = r.randint(0, numberOfAgents - 1);
       # make sure they are not equal to each other
       # if they have no prior connection, create the connection
-      if not x == y and smallWorld[x, y] != 1:
+      if not x == y and smallWorld[x, y] == 0 and smallWorld[y, x] == 0:
         #if matrix factory isn't symmetrical, we need to two-way connect
         if not self.sym:
           smallWorld[x, y] = 1
