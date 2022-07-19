@@ -38,7 +38,7 @@ class MatrixFactory:
     for shiftTeller in range(1, numberOfAgents):
       lattice[:, shiftTeller] = np.roll(lattice[:, shiftTeller - 1], 1)
 
-    # turn lattice matrix triangular (if matrices are symmetrical) (under triangular matrix)
+    # turn lattice matrix triangular (if matrices are symmetrical) (lower triangular matrix)
     # because otherwise every link between two agents is represented by two 1's
     # for instance agent 5 and 3 are connected
     # => element (3,5) and (5,3) of the latticeMatrix are 1
@@ -99,6 +99,35 @@ class MatrixFactory:
           establishedLinks += 1
 
     return scaleFree
+
+  #create a new small world matrix
+  def makeSmallWorldMatrix(self, numberOfAgents, numberOfNeighbors, numberOfRandomLinks):
+    #first step is creating a new lattice
+    smallWorld = self.makeLatticeMatrix(numberOfAgents, numberOfNeighbors)
+    # then we generate random connections
+    amount = 0
+    while amount < numberOfRandomLinks:
+      # get two random agents
+      x = r.randint(0, numberOfAgents - 1);
+      y = r.randint(0, numberOfAgents - 1);
+      # make sure they are not equal to each other
+      # if they have no prior connection, create the connection
+      if not x == y and smallWorld[x, y] != 1:
+        #if matrix factory isn't symmetrical, we need to two-way connect
+        if not self.sym:
+          smallWorld[x, y] = 1
+          smallWorld[y, x] = 1
+        #if symmetrical, just fill in the information for a lower triangular matrix
+        elif x > y:
+          smallWorld[x, y] = 1
+        else:
+          smallWorld[y, x] = 1
+        amount += 1
+
+    return smallWorld
+
+
+
 
 
 
