@@ -48,7 +48,7 @@ class MatrixFactory:
     else: return lattice
 
   #create a new scale free matrix
-  def makeScaleFreeMatrix(self, numberOfAgents):
+  def makeScaleFreeMatrix(self, numberOfAgents, numberOfEstablishedLinks = 2):
     # create matrix
     scaleFree = self.__createSquareMatrix(numberOfAgents)
 
@@ -74,7 +74,7 @@ class MatrixFactory:
       establishedLinks = 0;
       # find non zero elements
       rows, columns = np.nonzero(scaleFree)
-      while establishedLinks < 2:
+      while establishedLinks < numberOfEstablishedLinks:
         # get amount of non zero elements
         amount = len(rows)
         # amount has to be decremented because randint considers both bounds aswell
