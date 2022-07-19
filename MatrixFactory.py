@@ -22,7 +22,7 @@ class MatrixFactory:
     #create matrix
     lattice = self.__createSquareMatrix(numberOfAgents)
 
-    #generate neighbors connection for the first agent (agent 0 at column 0)
+    #generate symmetrical neighbors connection for the first agent (agent 0 at column 0)
     # scanNeighbours could be refactored to better match the usage of the variable
     scanNeighbours = numberOfNeighbors // 2
     for neighbourTeller in range(scanNeighbours):
@@ -32,11 +32,20 @@ class MatrixFactory:
       lattice[1 + neighbourTeller, 0] = 1
       lattice[numberOfAgents - (neighbourTeller + 1), 0] = 1
 
+    #if the neighbour amount is odd, we need to add one more neighbour after the while loop
+    if numberOfNeighbors % 2 == 1:
+      lattice[1 + scanNeighbours, 0] = 1
+    #this works since the for loop stops when neighbourTeller reaches scanNeighbours
+
     # generate neighbors for the other agents using circular shifting
     # we have to shift the row one position to the right
     # and wrap around cells that shift outside of the matrix
     for shiftTeller in range(1, numberOfAgents):
+      #shift the column
       lattice[:, shiftTeller] = np.roll(lattice[:, shiftTeller - 1], 1)
+      #transpose column below head diagonal and set as row of previous shiftTeller value
+      #ASK ABOUT THIS TOMORROW (INTENTIONAL?)
+     # lattice[shiftTeller-1] = lattice[:, shiftTeller - 1]
 
     # turn lattice matrix triangular (if matrices are symmetrical) (lower triangular matrix)
     # because otherwise every link between two agents is represented by two 1's
