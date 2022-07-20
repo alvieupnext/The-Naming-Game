@@ -12,8 +12,6 @@ def pairAgentsImproved(networkMatrix, symmetrical=True):
   agentPairs = []
   #get rownumbers and columnnumbers from non zero elements
   rowNrs, columnNrs = np.nonzero(networkMatrix)
-  amount = len(rowNrs)
-
 
   for i in range(numberOfPairs):
     #get rownumbers and columnnumbers from non zero elements
@@ -45,11 +43,6 @@ def pairAgentsImproved(networkMatrix, symmetrical=True):
       #update both arrays by filtering the used agents
       rowNrs = rowNrs[filterArray]
       columnNrs = columnNrs[filterArray]
-
-
-
-
-
   return agentPairs
 
 
