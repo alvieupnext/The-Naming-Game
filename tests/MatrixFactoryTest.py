@@ -38,15 +38,15 @@ class MatrixFactoryTest(unittest.TestCase):
       print("Testing Pair: " + str(pair))
       agents = pair[0]
       neighbours = pair[1]
-      asymLattice = self.rFactory.makeLatticeMatrix(agents, neighbours)
-      symLattice = self.tFactory.makeLatticeMatrix(agents, neighbours)
+      rLattice = self.rFactory.makeLatticeMatrix(agents, neighbours)
+      tLattice = self.tFactory.makeLatticeMatrix(agents, neighbours)
       #enforce neighbours to be even (round all odd numbers down)
       neighbours = (neighbours // 2) * 2
-      nonZeroRowNrs, nonZeroColumnNrs = np.nonzero(asymLattice)
+      nonZeroRowNrs, nonZeroColumnNrs = np.nonzero(rLattice)
       nonZeroCount = len(nonZeroRowNrs)
       # An asymmetrical lattice matrix has 20 agent *4 neighbors= 80 connections
       self.assertEqual(agents*neighbours, nonZeroCount, "Asymmetrical Error")
-      nonZeroRowNrsSym, nonZeroColumnNrsSym = np.nonzero(symLattice)
+      nonZeroRowNrsSym, nonZeroColumnNrsSym = np.nonzero(tLattice)
       nonZeroCountSym = len(nonZeroRowNrsSym)
       # The symmetrical lattice should be equal to half the asymmetrical connections (in this case 40)
       self.assertEqual(agents*neighbours / 2, nonZeroCountSym, "Symmetrical Error")
@@ -64,16 +64,16 @@ class MatrixFactoryTest(unittest.TestCase):
       print("Testing Pair: " + str(pair))
       agents = pair[0]
       establishedLinks = pair[1]
-      asymScaleFree= self.rFactory.makeScaleFreeMatrix(agents, establishedLinks)
-      symScaleFree = self.tFactory.makeScaleFreeMatrix(agents, establishedLinks)
-      nonZeroRowNrs, nonZeroColumnNrs = np.nonzero(asymScaleFree)
+      rScaleFree= self.rFactory.makeScaleFreeMatrix(agents, establishedLinks)
+      tScaleFree = self.tFactory.makeScaleFreeMatrix(agents, establishedLinks)
+      nonZeroRowNrs, nonZeroColumnNrs = np.nonzero(rScaleFree)
       nonZeroCount = len(nonZeroRowNrs)
       #expected non zero elements = 8 (starting connections from 4 agents) + 2 (two-way connection) * Established Links * remaining agents (agents - 4)
       self.assertEqual(8 + 2 * establishedLinks * (agents - 4), nonZeroCount, "Asymmetrical Error")
-      nonZeroRowNrsSym, nonZeroColumnNrsSym = np.nonzero(symScaleFree)
+      nonZeroRowNrsSym, nonZeroColumnNrsSym = np.nonzero(tScaleFree)
       nonZeroCountSym = len(nonZeroRowNrsSym)
       # The symmetrical lattice should be equal to half the asymmetrical connections
-      self.assertEqual(4 + establishedLinks * (agents - 4), nonZeroCountSym, "Symmetrical Error" + str(symScaleFree))
+      self.assertEqual(4 + establishedLinks * (agents - 4), nonZeroCountSym, "Symmetrical Error" + str(tScaleFree))
 
     #we are limited to max 3 establishing links
     scaleFreePairs = [(16, 0), (10, 1), (20, 2), (37, 3), (14, 3), (400, 3)]
@@ -90,15 +90,15 @@ class MatrixFactoryTest(unittest.TestCase):
       agents = set[0]
       neighbours = set[1]
       random = set[2]
-      asymSmallWorld = self.rFactory.makeSmallWorldMatrix(agents, neighbours, random)
-      symSmallWorld = self.tFactory.makeSmallWorldMatrix(agents, neighbours, random)
+      rSmallWorld = self.rFactory.makeSmallWorldMatrix(agents, neighbours, random)
+      tSmallWorld = self.tFactory.makeSmallWorldMatrix(agents, neighbours, random)
       # enforce neighbours to be even (round all odd numbers down)
       neighbours = (neighbours // 2) * 2
-      nonZeroRowNrs, nonZeroColumnNrs = np.nonzero(asymSmallWorld)
+      nonZeroRowNrs, nonZeroColumnNrs = np.nonzero(rSmallWorld)
       nonZeroCount = len(nonZeroRowNrs)
       # An asymmetrical lattice matrix has 20 agent *4 neighbors= 80 connections + 2 * random links
       self.assertEqual(agents*neighbours + 2 * random, nonZeroCount, "Asymmetrical Failure")
-      nonZeroRowNrsSym, nonZeroColumnNrsSym = np.nonzero(symSmallWorld)
+      nonZeroRowNrsSym, nonZeroColumnNrsSym = np.nonzero(tSmallWorld)
       nonZeroCountSym = len(nonZeroRowNrsSym)
       self.assertEqual(agents*neighbours/2 + random, nonZeroCountSym, "Symmetrical Failure")
 
