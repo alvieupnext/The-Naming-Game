@@ -4,11 +4,12 @@ import random as r
 class MatrixFactory:
   #sym indicates whether the output adjacency matrix is symmetrical or not (default False)
   #type indicates the type of the matrix elements (default int)
-  #order indicates the indexing order (default columns
-  def __init__(self, triangular = True, type = int, order ='C'):
+  #order indicates the indexing order (default columns)
+  def __init__(self, triangular = True, type = int, order ='C', random = None):
     self.triangular = triangular
     self.type = type
     self.order = order
+    self.random = random
 
   #create an empty square matrix
   def __createSquareMatrix(self, dim):
@@ -40,8 +41,6 @@ class MatrixFactory:
       #shift the column
       lattice[:, shiftTeller] = np.roll(lattice[:, shiftTeller - 1], 1)
       #transpose column below head diagonal and set as row of previous shiftTeller value
-      #ASK ABOUT THIS TOMORROW (INTENTIONAL?)
-     # lattice[shiftTeller-1] = lattice[:, shiftTeller - 1]
 
     # turn lattice matrix triangular (if matrices are symmetrical) (lower triangular matrix)
     # because otherwise every link between two agents is represented by two 1's
@@ -70,6 +69,9 @@ class MatrixFactory:
       scaleFree[1,2] = 1
       scaleFree[2,3] = 1
 
+    #to control the randomness of the output, set seed here
+    r.seed(self.random)
+
     # now we need to select a random node, but the chance to select node n has
     # to be proportional to the number of connections already ending in node n
     # we can achieve this by selecting a random non-zero value in the connection
@@ -83,6 +85,7 @@ class MatrixFactory:
         # get amount of non zero elements
         amount = len(rows)
         # amount has to be decremented because randint considers both bounds aswell
+        #set seed
         # generate a random number to choose edge
         chosenEdge = r.randint(0, amount - 1)
         # get the node from the rows array
@@ -109,6 +112,8 @@ class MatrixFactory:
   def makeSmallWorldMatrix(self, numberOfAgents, numberOfNeighbors, numberOfRandomLinks):
     #first step is creating a new lattice
     smallWorld = self.makeLatticeMatrix(numberOfAgents, numberOfNeighbors)
+    # to control the randomness, we establish seed here
+    r.seed(self.random)
     # then we generate random connections
     amount = 0
     while amount < numberOfRandomLinks:
