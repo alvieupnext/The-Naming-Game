@@ -5,9 +5,9 @@ import numpy as np
 class MatrixFactoryTest(unittest.TestCase):
   #setup the test
   def setUp(self):
-    #create a new triangular and regular matrix factory
-    self.rFactory = mf.MatrixFactory(triangular=False)
-    self.tFactory = mf.MatrixFactory(triangular=True)
+    #create a new triangular and regular matrix factory (use same seed)
+    self.rFactory = mf.MatrixFactory(triangular=False, random=10)
+    self.tFactory = mf.MatrixFactory(triangular=True, random=10)
 
   def test_asymCreation(self):
     """A matrix factory should be able to produce all implemented matrices"""
@@ -25,12 +25,11 @@ class MatrixFactoryTest(unittest.TestCase):
     self.assertTrue(np.allclose(smallWorld, np.tril(smallWorld)))  # check if lower triangular
 
   def test_equalityCreation(self):
-    """A lattice matrix created from a symmetrical allowance should be the same as the lower triangular of a matrix created without this allowance"""
-    #Full matrix
+    """A matrix created from a symmetrical allowance should be the same as the lower triangular of a matrix created without this allowance"""
     l1 = self.rFactory.makeLatticeMatrix(20, 4)
     #Lower triangular matrix
     l2 = self.tFactory.makeLatticeMatrix(20, 4)
-    self.assertTrue(np.allclose(l2, np.tril(l1)))  # check if same
+    self.assertTrue(np.allclose(l2, np.tril(l1)))  # check if equal
 
   def test_latticeConnections(self):
     """Each agent in a lattice is connected exactly to a certain amount of neighbors"""
@@ -102,7 +101,6 @@ class MatrixFactoryTest(unittest.TestCase):
       nonZeroCountSym = len(nonZeroRowNrsSym)
       self.assertEqual(agents*neighbours/2 + random, nonZeroCountSym, "Symmetrical Failure")
 
-    ##ASK ABOUT UNEVEN NEIGHBOURS
     smallWorldSets = [(20,4, 5), (30,6, 8), (99, 4, 3), (15,10,5), (24, 5, 6)]
 
     for set in smallWorldSets:
