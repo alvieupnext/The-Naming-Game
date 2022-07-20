@@ -41,3 +41,10 @@ class AgentPairsTest(unittest.TestCase):
       seen.append(a)
       seen.append(b)
 
+  def test_genuineConnections(self):
+    """All formed agent pairs have a connection with eachother in the matrix"""
+    tPairs = self.pair.generate(self.rlattice)
+    for a, b in tPairs:
+      self.assertEqual(1, self.rlattice[a,b])
+
+
