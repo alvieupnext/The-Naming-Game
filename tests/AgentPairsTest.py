@@ -30,7 +30,7 @@ class AgentPairsTest(unittest.TestCase):
     seen = []
     for a, b in rPairs:
       self.assertNotEqual(a, b)
-      self.assertTrue(a and b not in seen, "symmetrical")
+      self.assertTrue(a not in seen and b not in seen, "symmetrical: " + str(a) + " and " + str(b) + "in" + str(seen))
       seen.append(a)
       seen.append(b)
     tPairs = self.pair.generate(self.tlattice)
@@ -46,5 +46,10 @@ class AgentPairsTest(unittest.TestCase):
     tPairs = self.pair.generate(self.rlattice)
     for a, b in tPairs:
       self.assertEqual(1, self.rlattice[a,b])
+
+  def test_pairLimit(self):
+    """There are at most numberOfAgents divided by 2 pairs formed"""
+    tPairs = self.pair.generate(self.rlattice)
+    self.assertLessEqual(len(tPairs), 10)
 
 
