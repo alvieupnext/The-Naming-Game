@@ -24,6 +24,7 @@ class MatrixFactory:
 
     #generate symmetrical neighbors connection for the first agent (agent 0 at column 0)
     # scanNeighbours could be refactored to better match the usage of the variable
+    # has to be even
     scanNeighbours = numberOfNeighbors // 2
     for neighbourTeller in range(scanNeighbours):
       # neighbourTeller gets incremented because Python range works from [0, scanNeighbours[, incrementing will exclude 0 and include scanNeighbours
@@ -31,11 +32,6 @@ class MatrixFactory:
       # the row has to be chosen first
       lattice[1 + neighbourTeller, 0] = 1
       lattice[numberOfAgents - (neighbourTeller + 1), 0] = 1
-
-    #if the neighbour amount is odd, we need to add one more neighbour after the while loop
-    if numberOfNeighbors % 2 == 1:
-      lattice[1 + scanNeighbours, 0] = 1
-    #this works since the for loop stops when neighbourTeller reaches scanNeighbours
 
     # generate neighbors for the other agents using circular shifting
     # we have to shift the row one position to the right
