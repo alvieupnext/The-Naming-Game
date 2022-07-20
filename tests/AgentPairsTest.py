@@ -5,8 +5,8 @@ import AgentPairs as ap
 class AgentPairsTest(unittest.TestCase):
   #setup test
   def setUp(self):
-    rFactory = mf.MatrixFactory(triangular=False, random=1000)
-    tFactory = mf.MatrixFactory(triangular=True, random=1000)
+    rFactory = mf.MatrixFactory(triangular=False)
+    tFactory = mf.MatrixFactory(triangular=True)
     randomFactory = mf.MatrixFactory(triangular=True)
     #using lattices since they involve no random chances
     self.rlattice = rFactory.makeLatticeMatrix(20,4)
@@ -19,19 +19,25 @@ class AgentPairsTest(unittest.TestCase):
     self.pair.generateVillatoro(self.rlattice)
     self.pair.generateVillatoro(self.tlattice)
     #OurMethod
-    self.pair.generate(self.rlattice, symmetrical=True)
-    self.pair.generate(self.tlattice, symmetrical=False)
+    self.pair.generate(self.rlattice)
+    self.pair.generate(self.tlattice)
 
   #I'm not further testing the Villatoro Method since there is a lot to unpack there and I'm not sure if we are going to need this method
 
   def test_uniquePartner(self):
     """Generated pairs should be unique and not further connected with another agent"""
-    rPairs = self.pair.generate(self.tlattice, symmetrical=True)
+    rPairs = self.pair.generate(self.rlattice)
     seen = []
-    for pair in rPairs:
-      a = pair[0]
-      b = pair[1]
+    for a, b in rPairs:
       self.assertNotEqual(a, b)
-      self.assertTrue(a not in seen and b not in seen)
+      self.assertTrue(a and b not in seen, "symmetrical")
       seen.append(a)
       seen.append(b)
+    tPairs = self.pair.generate(self.tlattice)
+    seen = []
+    for a, b in tPairs:
+      self.assertNotEqual(a, b)
+      self.assertTrue(a and b not in seen, "asymmetrical")
+      seen.append(a)
+      seen.append(b)
+
