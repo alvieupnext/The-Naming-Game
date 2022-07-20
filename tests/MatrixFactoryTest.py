@@ -25,7 +25,7 @@ class MatrixFactoryTest(unittest.TestCase):
     self.assertTrue(np.allclose(smallWorld, np.tril(smallWorld)))  # check if lower triangular
 
   def test_equalityCreation(self):
-    """A matrix created from a symmetrical allowance should be the same as the lower triangular of a matrix created without this allowance"""
+    """A lattice matrix created from a symmetrical allowance should be the same as the lower triangular of a matrix created without this allowance"""
     l1 = self.rFactory.makeLatticeMatrix(20, 4)
     #Lower triangular matrix
     l2 = self.tFactory.makeLatticeMatrix(20, 4)
