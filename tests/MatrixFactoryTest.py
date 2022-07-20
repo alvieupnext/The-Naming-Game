@@ -31,6 +31,15 @@ class MatrixFactoryTest(unittest.TestCase):
     l2 = self.tFactory.makeLatticeMatrix(20, 4)
     self.assertTrue(np.allclose(l2, np.tril(l1)))  # check if equal
 
+  def test_seedCreation(self):
+    """A matrix factory can generate the same output if given the same random seed (if randomness involved)"""
+    sf1 = self.rFactory.makeScaleFreeMatrix(20)
+    sf2 = self.rFactory.makeScaleFreeMatrix(20)
+    sm1 = self.tFactory.makeSmallWorldMatrix(15, 5, 4)
+    sm2 = self.tFactory.makeSmallWorldMatrix(15, 5, 4)
+    self.assertTrue(np.allclose(sf1, sf2))
+    self.assertTrue(np.allclose(sm1, sm2))
+
   def test_latticeConnections(self):
     """Each agent in a lattice is connected exactly to a certain amount of neighbors"""
     def doTest(pair):
