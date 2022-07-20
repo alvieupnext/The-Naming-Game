@@ -5,8 +5,8 @@ class MatrixFactory:
   #sym indicates whether the output adjacency matrix is symmetrical or not (default False)
   #type indicates the type of the matrix elements (default int)
   #order indicates the indexing order (default columns
-  def __init__(self, sym = True, type = int, order = 'C'):
-    self.sym = sym
+  def __init__(self, triangular = True, type = int, order ='C'):
+    self.triangular = triangular
     self.type = type
     self.order = order
 
@@ -48,7 +48,7 @@ class MatrixFactory:
     # for instance agent 5 and 3 are connected
     # => element (3,5) and (5,3) of the latticeMatrix are 1
     #
-    if self.sym:
+    if self.triangular:
       return np.tril(lattice)
     else: return lattice
 
@@ -63,8 +63,8 @@ class MatrixFactory:
     scaleFree[2, 1] = 1
     scaleFree[3, 2] = 1
 
-    # if matrix factory isn't symmetrical, add the double connections to indicate two-way connection
-    if not self.sym:
+    # if matrix output isn't triangular, add the double connections to indicate two-way connection
+    if not self.triangular:
       scaleFree[0,1] = 1
       scaleFree[0,3] = 1
       scaleFree[1,2] = 1
@@ -89,8 +89,8 @@ class MatrixFactory:
         chosenNode = rows[chosenEdge]
         # if there isn't a connection prior, establish one
         if scaleFree[chosenNode, newNode] == 0 and scaleFree[newNode, chosenNode] == 0:
-          #if the matrix isn't symmetrical, add both connections
-          if not self.sym:
+          #if the matrix isn't triangular, add both connections
+          if not self.triangular:
             scaleFree[chosenNode, newNode] = 1
             scaleFree[newNode, chosenNode] = 1
           #if symmetrical, only add the connection under the main diagonal
@@ -118,8 +118,8 @@ class MatrixFactory:
       # make sure they are not equal to each other
       # if they have no prior connection, create the connection
       if not x == y and smallWorld[x, y] == 0 and smallWorld[y, x] == 0:
-        #if matrix factory isn't symmetrical, we need to two-way connect
-        if not self.sym:
+        #if matrix isn't triangular, we need to two-way connect
+        if not self.triangular:
           smallWorld[x, y] = 1
           smallWorld[y, x] = 1
         #if symmetrical, just fill in the information for a lower triangular matrix
