@@ -35,10 +35,10 @@ def pairAgentsImproved(networkMatrix, symmetrical=True):
       ##if symmetrical is false, we have to consider also column -> x and x -> row combinations
       for rowNr in rowNrs:
         #only consider column if the matrix isn't symmetrical
-        filterRow.append(chosenRow == rowNr or (not symmetrical and chosenColumn == rowNr))
+        filterRow.append(chosenRow == rowNr or (symmetrical and chosenColumn == rowNr))
       for columnNr in columnNrs:
         #only consider row if the matrix isn't symmetrical
-        filterColumn.append(chosenColumn == columnNr or (not symmetrical and chosenRow == columnNr))
+        filterColumn.append(chosenColumn == columnNr or (symmetrical and chosenRow == columnNr))
       #merge both filter arrays to create the final filter array
       #inverting row or column as we are interested in the elements that don't contain either a chosen row or column
       filterArray = [not (row or column) for row, column in zip(filterRow, filterColumn)]
