@@ -48,8 +48,6 @@ class AgentPairs:
         #make sure these agents can't return by removing every combination involving either one of the agents from row and column
         filterRow = []
         filterColumn = []
-        ##if symmetrical is true, we only have to remove row -> x and x -> column combinations
-        ##if symmetrical is false, we have to consider also column -> x and x -> row combinations
         #this code could be compressed into one pass (but this is more readable in my opinion)
         for rowNr in rowNrs:
           #only consider column if the matrix isn't symmetrical
