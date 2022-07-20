@@ -50,13 +50,13 @@ class AgentPairs:
         filterColumn = []
         ##if symmetrical is true, we only have to remove row -> x and x -> column combinations
         ##if symmetrical is false, we have to consider also column -> x and x -> row combinations
-        #this code could be compressed into one pass (but this is more readable in my book)
+        #this code could be compressed into one pass (but this is more readable in my opinion)
         for rowNr in rowNrs:
           #only consider column if the matrix isn't symmetrical
-          filterRow.append(chosenRow == rowNr or (symmetrical and chosenColumn == rowNr))
+          filterRow.append(chosenRow == rowNr or chosenColumn == rowNr)
         for columnNr in columnNrs:
           #only consider row if the matrix isn't symmetrical
-          filterColumn.append(chosenColumn == columnNr or (symmetrical and chosenRow == columnNr))
+          filterColumn.append(chosenColumn == columnNr or chosenRow == columnNr)
         #merge both filter arrays to create the final filter array
         #inverting row or column as we are interested in the elements that don't contain either a chosen row or column
         filterArray = [not (row or column) for row, column in zip(filterRow, filterColumn)]
