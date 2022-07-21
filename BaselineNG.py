@@ -57,6 +57,8 @@ class BaselineNG(NamingGame):
   def adopt(self, name, topic, agent):
     #store connection in agent memory
     self.memory[agent].append((name, topic))
+    #say that the agent has adopted this new method
+    print("Agent " + str(agent) + " has adopted the name " + name + " for topic " + str(topic))
 
   def success(self, speaker, listener, topic, name):
     #in case of success, do not update anyone's library
