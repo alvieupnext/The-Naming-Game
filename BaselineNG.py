@@ -59,19 +59,20 @@ class BaselineNG(NamingGame):
 
   def success(self, speaker, listener, topic, name):
     #in case of success, do not update anyone's library
-    print("Agent " + speaker + " and Agent " + listener + " agreed that object " + topic + " has the name " + name)
+    print("Agent " + str(speaker) + " and Agent " + str(listener) + " agreed that object " + str(topic) + " has the name " + str(name))
 
   def failure(self, speaker, listener, intendedTopic, perceivedTopic, name):
     #in case of failure, update listener with the intendedTopic
     #ASK WHETHER WE HAVE TO REMOVE THE PERCEIVED TOPIC
     self.memory[listener].append((name, intendedTopic))
-    print("Agent " + speaker + " and Agent " + listener + " did not agree with the name " + name + ". Intended Topic: " + intendedTopic + ", Perceived Topic: " + perceivedTopic)
+    print("Agent " + str(speaker) + " and Agent " + str(listener) + " did not agree with the name " + str(name) + ". Intended Topic: " + str(intendedTopic) + ", Perceived Topic: " + str(perceivedTopic))
 
   def display(self, sim):
     #display the current state and print vocabulary
-    print("Simulation " + sim)
-    for memory in self.memory:
-      print(memory)
+    print("Simulation " + str(sim))
+    for i in range(len(self.memory)):
+      print("Agent " + str(i))
+      print(self.memory[i])
 
 
 
