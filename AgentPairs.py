@@ -25,7 +25,7 @@ class AgentPairs:
     return agentPairs
 
   #Our method
-  def generate(self, networkMatrix, symmetrical=False):
+  def generate(self, networkMatrix):
     numberOfPairs = len(networkMatrix)//2
     #start agent pairs as empty
     agentPairs = []
