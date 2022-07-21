@@ -73,9 +73,13 @@ class NamingGame(ABC):
       name = self.produce(intendedTopic, speaker)
       #listeners interprets name and gives his own topic
       perceivedTopic = self.interpret(name, listener)
-      if intendedTopic == perceivedTopic:
-        self.success(speaker, listener, intendedTopic, name)
-      else: self.failure(speaker, listener, intendedTopic, perceivedTopic, name)
+      #if we found a topic
+      if intendedTopic:
+        if intendedTopic == perceivedTopic:
+          self.success(speaker, listener, intendedTopic, name)
+        else: self.failure(speaker, listener, intendedTopic, perceivedTopic, name)
+      #if we haven't found a topic, listener should adopt it
+      else: self.adopt(name, intendedTopic, listener)
 
   #Starts the Naming Game with the desired amount of simulations
   def start(self, matrixNetwork, simulations=2, iterations=20):
