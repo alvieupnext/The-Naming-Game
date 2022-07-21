@@ -66,7 +66,10 @@ class BaselineNG(NamingGame):
     #in case of failure, update listener with the intendedTopic
     #ASK WHETHER WE HAVE TO REMOVE THE PERCEIVED TOPIC
     self.memory[listener].append((name, intendedTopic))
+    #remove perceived topic
+    # self.memory[listener].remove((name, perceivedTopic))
     print("Agent " + str(speaker) + " and Agent " + str(listener) + " did not agree with the name " + str(name) + ". Intended Topic: " + str(intendedTopic) + ", Perceived Topic: " + str(perceivedTopic))
+    # print(self.memory[listener])
 
   def display(self, sim):
     #display the current state and print vocabulary
