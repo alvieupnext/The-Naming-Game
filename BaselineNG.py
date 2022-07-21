@@ -16,7 +16,42 @@ class BaselineNG(NamingGame):
       # Keep appending random characters using chr(x)
       name += (chr(random_integer))
     #update agent memory
-    self.memory[agent][name] = topic
+    self.memory[agent].append((name, object))
+    return name
     print(self.memory)
+
+  #just pick a random object
+  def pick(self, agent, context):
+    #pick a random object from context
+    index = random.randint(0, len(context) - 1)
+    return context[index]
+
+  #generates a name for object
+  def produce(self, object, agent):
+    #possible name matches for the object
+    results = []
+    #get memory and iterate through the vocabulary
+    for name, topic in self.memory[agent]:
+      if topic == object:
+        results.append(name)
+    #if we have found a result, pick a random name from our possible names
+    if results:
+      index = random.randint(0, len(results) - 1)
+      return name
+    #else invent a new name and give this new name in return
+    return self.invent(object, agent)
+
+  #
+  def interpret(self, name, agent):
+    #get agent memory and iterate through vocabulary
+    for vocName, topic in self.memory[agent]:
+      if vocName == name:
+        return topic
+    #if we have not encountered this name, return None
+    return None
+
+  def adopt(self, name, topic, agent):
+    #store connection in agent memory
+    self.memory[agent].append((name, topic))
 
 
