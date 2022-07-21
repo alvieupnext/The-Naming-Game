@@ -2,7 +2,10 @@ from NamingGame import *
 import random
 class BaselineNG(NamingGame):
   def generateContext(self):
-    range(10)
+    context = []
+    for i in range(10):
+      context.append(i)
+    return context
 
   def invent(self, topic, agent):
     #generate random string as name
