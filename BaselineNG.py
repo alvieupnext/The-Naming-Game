@@ -19,9 +19,10 @@ class BaselineNG(NamingGame):
       # Keep appending random characters using chr(x)
       name += (chr(random_integer))
     #update agent memory
-    self.memory[agent].append((name, object))
+    self.memory[agent].append((name, topic))
+    print("Agent " + str(agent) + " has invented the name " + name + " for topic " + str(topic))
     return name
-    print(self.memory)
+
 
   #just pick a random object
   def pick(self, agent, context):
