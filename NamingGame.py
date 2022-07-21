@@ -3,6 +3,7 @@ import AgentPairs as ap
 
 #Here, we will be defining the abstract superclass for all of the strategies for the Naming game, in general all the Naming Game variants use the same skeleton
 
+#TODO make methods private
 class NamingGame(ABC):
 
   #setup the game
@@ -10,7 +11,7 @@ class NamingGame(ABC):
     #get number of agents
     numberOfAgents = len(matrixNetwork)
     #create a list filled with no. agents worth of empty lists, these will be the memory of the agents
-    self.memory = [[]] * numberOfAgents
+    self.memory = [ [] for _ in range(numberOfAgents) ]
     #generate the context
     self.context = self.generateContext()
 
@@ -74,7 +75,7 @@ class NamingGame(ABC):
       #listeners interprets name and gives his own topic
       perceivedTopic = self.interpret(name, listener)
       #if we found a topic
-      if intendedTopic:
+      if perceivedTopic:
         if intendedTopic == perceivedTopic:
           self.success(speaker, listener, intendedTopic, name)
         else: self.failure(speaker, listener, intendedTopic, perceivedTopic, name)
