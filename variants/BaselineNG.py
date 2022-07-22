@@ -23,7 +23,7 @@ class BaselineNG(NamingGame):
       name += (chr(random_integer))
     #update agent memory
     self.memory[agent].append((name, topic))
-    self.display("Agent " + str(agent) + " has invented the name " + name + " for topic " + str(topic))
+    self.display(f"Agent {agent} has invented the name {name} for topic {topic}")
     return name
 
 
@@ -72,7 +72,6 @@ class BaselineNG(NamingGame):
     #invoke super
     super().failure(speaker, listener, intendedTopic, perceivedTopic, name)
     #in case of failure, update listener with the intendedTopic
-    #ASK WHETHER WE HAVE TO REMOVE THE PERCEIVED TOPIC
     self.memory[listener].append((name, intendedTopic))
     #remove perceived topic
     self.memory[listener].remove((name, perceivedTopic))

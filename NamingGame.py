@@ -54,7 +54,7 @@ class NamingGame(ABC):
   @abstractmethod
   def adopt(self, name, topic, agent):
     # say that the agent has adopted this new method
-    self.display("Agent " + str(agent) + " has adopted the name " + name + " for topic " + str(topic))
+    self.display(f"Agent {agent} has adopted the name {name} for topic {topic}")
 
   #Chooses an object from the context (called the topic)
   @abstractmethod
@@ -64,14 +64,13 @@ class NamingGame(ABC):
   #Code that runs in case of a success
   @abstractmethod
   def success(self, speaker, listener, topic, name):
-    self.display("Agent " + str(speaker) + " and Agent " + str(listener) + " agreed that object " + str(
-      topic) + " has the name " + str(name))
+    self.display(f"Agent {speaker} and Agent {listener} agreed that object {topic} has the name {name}")
 
   #Code that runs in case of a failure
   @abstractmethod
   def failure(self, speaker, listener, intendedTopic, perceivedTopic, name):
-    self.display("Agent " + str(speaker) + " and Agent " + str(listener) + " did not agree with the name " + str(
-        name) + ". Intended Topic: " + str(intendedTopic) + ", Perceived Topic: " + str(perceivedTopic))
+    self.display(f"Agent {speaker} and Agent {listener} did not agree with the name {name}. " +
+                 f"Intended Topic: {intendedTopic}, Perceived Topic: {perceivedTopic}")
 
   #Create our own display which only prints when self.display is enabled
   def display(self, args):
