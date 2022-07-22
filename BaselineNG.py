@@ -3,7 +3,8 @@ import random
 class BaselineNG(NamingGame):
   def generateContext(self):
     context = []
-    for i in range(10):
+    #start with 1 as 0 fails the if test
+    for i in range(1, 2):
       context.append(i)
     return context
 
@@ -24,7 +25,7 @@ class BaselineNG(NamingGame):
     return name
 
 
-  #just pick a random object
+  #just pick a random object/topic
   def pick(self, agent, context):
     #pick a random object from context
     index = random.randint(0, len(context) - 1)
@@ -41,7 +42,7 @@ class BaselineNG(NamingGame):
     #if we have found a result, pick a random name from our possible names
     if results:
       index = random.randint(0, len(results) - 1)
-      return name
+      return results[index]
     #else invent a new name and give this new name in return
     return self.invent(object, agent)
 
@@ -69,7 +70,7 @@ class BaselineNG(NamingGame):
     #ASK WHETHER WE HAVE TO REMOVE THE PERCEIVED TOPIC
     self.memory[listener].append((name, intendedTopic))
     #remove perceived topic
-    # self.memory[listener].remove((name, perceivedTopic))
+    self.memory[listener].remove((name, perceivedTopic))
     print("Agent " + str(speaker) + " and Agent " + str(listener) + " did not agree with the name " + str(name) + ". Intended Topic: " + str(intendedTopic) + ", Perceived Topic: " + str(perceivedTopic))
     # print(self.memory[listener])
 
