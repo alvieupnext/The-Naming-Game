@@ -7,10 +7,10 @@ import numpy as np
 #TODO make methods private
 class NamingGame(ABC):
 
-  def __init__(self, simulations=2, iterations=50, display=False):
+  def __init__(self, simulations=2, iterations=50, display=True):
     self.simulations = simulations
     self.iterations = iterations
-    self.display = display
+    self.displayEnabled = display
 
   #setup the game
   def setup(self, matrixNetwork):
@@ -51,7 +51,8 @@ class NamingGame(ABC):
   #Speaker Method
   @abstractmethod
   def adopt(self, name, topic, agent):
-    pass
+    # say that the agent has adopted this new method
+    self.display("Agent " + str(agent) + " has adopted the name " + name + " for topic " + str(topic))
 
   #Chooses an object from the context (called the topic)
   @abstractmethod
@@ -61,16 +62,19 @@ class NamingGame(ABC):
   #Code that runs in case of a success
   @abstractmethod
   def success(self, speaker, listener, topic, name):
-    if self.display:
-      print("Agent " + str(speaker) + " and Agent " + str(listener) + " agreed that object " + str(
-        topic) + " has the name " + str(name))
+    self.display("Agent " + str(speaker) + " and Agent " + str(listener) + " agreed that object " + str(
+      topic) + " has the name " + str(name))
 
   #Code that runs in case of a failure
   @abstractmethod
   def failure(self, speaker, listener, intendedTopic, perceivedTopic, name):
-    if self.display:
-      print("Agent " + str(speaker) + " and Agent " + str(listener) + " did not agree with the name " + str(
+    self.display("Agent " + str(speaker) + " and Agent " + str(listener) + " did not agree with the name " + str(
         name) + ". Intended Topic: " + str(intendedTopic) + ", Perceived Topic: " + str(perceivedTopic))
+
+  #Create our own display which only prints when self.display is enabled
+  def display(self, text):
+    if self.displayEnabled:
+      print(text)
 
   #Does one iteration of the Naming Game for all pairs
   def run(self, matrixNetwork):
@@ -93,22 +97,27 @@ class NamingGame(ABC):
   #Starts the Naming Game with the desired amount of simulations
   def start(self, matrixNetwork):
     print("Starting the Naming Game")
+    print("Parameters: ")
+    print("Simulations: " + str(self.simulations))
+    print("Iterations: " + str(self.iterations))
+    if self.displayEnabled:
+      print("Display Enabled")
+    else: print("Display Disabled")
     #create a table
     nameTable = np.zeros((self.iterations, self.simulations))
     for sim in range(self.simulations):
       self.setup(matrixNetwork)
       for iteration in range(self.iterations):
-        print("Iteration " + str(iteration))
+        self.display("Iteration " + str(iteration))
         self.run(matrixNetwork)
         #update name table
         nameTable[iteration, sim] = self.inventedNames
       #visualize the simulation
       # display the current state and print vocabulary
-      if self.display:
-        print("Simulation " + str(sim))
-        for i in range(len(self.memory)):
-          print("Agent " + str(i))
-          print(self.memory[i])
+      self.display("Simulation " + str(sim))
+      for i in range(len(self.memory)):
+        self.display("Agent " + str(i))
+        self.display(self.memory[i])
     #return median
     return np.mean(nameTable, axis=1)
 

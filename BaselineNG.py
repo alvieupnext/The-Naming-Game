@@ -23,7 +23,8 @@ class BaselineNG(NamingGame):
       name += (chr(random_integer))
     #update agent memory
     self.memory[agent].append((name, topic))
-    print("Agent " + str(agent) + " has invented the name " + name + " for topic " + str(topic))
+    if self.displayEnabled:
+      print("Agent " + str(agent) + " has invented the name " + name + " for topic " + str(topic))
     return name
 
 
@@ -60,8 +61,8 @@ class BaselineNG(NamingGame):
   def adopt(self, name, topic, agent):
     #store connection in agent memory
     self.memory[agent].append((name, topic))
-    #say that the agent has adopted this new method
-    print("Agent " + str(agent) + " has adopted the name " + name + " for topic " + str(topic))
+    #if succesfull, run super
+    super().adopt(name, topic, agent)
 
   def success(self, speaker, listener, topic, name):
     #invoke super
