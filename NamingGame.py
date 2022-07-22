@@ -1,16 +1,18 @@
 from abc import ABC, abstractmethod
 import AgentPairs as ap
 import numpy as np
+import Strategy
 
 #Here, we will be defining the abstract superclass for all of the strategies for the Naming game, in general all the Naming Game variants use the same skeleton
 
 #TODO make methods private
 class NamingGame(ABC):
 
-  def __init__(self, simulations=2, iterations=50, display=True):
+  def __init__(self, simulations=2, iterations=50, display=False, strategy=Strategy.multi):
     self.simulations = simulations
     self.iterations = iterations
     self.displayEnabled = display
+    self.strategy = strategy
 
   #setup the game
   def setup(self, matrixNetwork):
@@ -78,8 +80,11 @@ class NamingGame(ABC):
 
   #Does one iteration of the Naming Game for all pairs
   def run(self, matrixNetwork):
+    #get all possible agent pairs
     agentPairs = ap.AgentPairs().generate(matrixNetwork)
-    for speaker, listener in agentPairs:
+    #choose pairs based of strategy
+    chosenPairs = self.strategy(agentPairs)
+    for speaker, listener in chosenPairs:
       #speaker picks a topic from context
       intendedTopic = self.pick(speaker, self.context)
       #speaker produces a name for said topic
