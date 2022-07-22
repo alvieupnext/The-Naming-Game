@@ -74,9 +74,9 @@ class NamingGame(ABC):
         name) + ". Intended Topic: " + str(intendedTopic) + ", Perceived Topic: " + str(perceivedTopic))
 
   #Create our own display which only prints when self.display is enabled
-  def display(self, text):
+  def display(self, *args):
     if self.displayEnabled:
-      print(text)
+      map(print, args)
 
   #Does one iteration of the Naming Game for all pairs
   def run(self, matrixNetwork):
@@ -105,6 +105,7 @@ class NamingGame(ABC):
     print("Parameters: ")
     print("Simulations: " + str(self.simulations))
     print("Iterations: " + str(self.iterations))
+    print("Memory Length: " + str(len(matrixNetwork)))
     if self.displayEnabled:
       print("Display Enabled")
     else: print("Display Disabled")
@@ -120,9 +121,9 @@ class NamingGame(ABC):
       #visualize the simulation
       # display the current state and print vocabulary
       self.display("Simulation " + str(sim))
-      for i in range(len(self.memory)):
-        self.display("Agent " + str(i))
-        self.display(self.memory[i])
+    for i in range(len(self.memory)):
+      self.display("Agent " + str(i))
+      self.display(self.memory[i])
     #return median
     return np.mean(nameTable, axis=1)
 
