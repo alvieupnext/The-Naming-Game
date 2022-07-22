@@ -10,11 +10,11 @@ class Imitation(BaselineNG):
         self.memory[agent].remove((pairName, topic))
         self.display(f"Removed this pair from Agent memory {agent}: {pairName}, {pairTopic}")
 
-  def adopt(self, name, topic, agent):
+  def adopt(self, name, topic, listener, speaker):
     #remove all previous bindings of the topic with the name
-    self.remove(topic, agent)
+    self.remove(topic, listener)
     # if succesfull, run super
-    super().adopt(name, topic, agent)
+    super().adopt(name, topic, listener, speaker)
 
 #according to Guy Nagels, only success should clear memory
 class Imitationv2(BaselineNG):

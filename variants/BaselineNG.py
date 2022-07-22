@@ -57,11 +57,11 @@ class BaselineNG(NamingGame):
     #if we have not encountered this name, return None
     return None
 
-  def adopt(self, name, topic, agent):
+  def adopt(self, name, topic, listener, speaker):
     #store connection in agent memory
-    self.memory[agent].append((name, topic))
+    self.memory[listener].append((name, topic))
     #if succesfull, run super
-    super().adopt(name, topic, agent)
+    super().adopt(name, topic, listener, speaker)
 
   def success(self, speaker, listener, topic, name):
     #invoke super

@@ -52,9 +52,9 @@ class NamingGame(ABC):
   #Adopts a certain name for a topic
   #Speaker Method
   @abstractmethod
-  def adopt(self, name, topic, agent):
+  def adopt(self, name, topic, listener, speaker):
     # say that the agent has adopted this new method
-    self.display(f"Agent {agent} has adopted the name {name} for topic {topic}")
+    self.display(f"Agent {listener} has adopted the name {name} for topic {topic} from agent {speaker}")
 
   #Chooses an object from the context (called the topic)
   @abstractmethod
@@ -96,7 +96,7 @@ class NamingGame(ABC):
           self.success(speaker, listener, intendedTopic, name)
         else: self.failure(speaker, listener, intendedTopic, perceivedTopic, name)
       #if we haven't found a topic, listener should adopt it
-      else: self.adopt(name, intendedTopic, listener)
+      else: self.adopt(name, intendedTopic, listener, speaker)
 
   #Starts the Naming Game with the desired amount of simulations
   def start(self, matrixNetwork):
