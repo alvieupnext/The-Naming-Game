@@ -74,9 +74,9 @@ class NamingGame(ABC):
         name) + ". Intended Topic: " + str(intendedTopic) + ", Perceived Topic: " + str(perceivedTopic))
 
   #Create our own display which only prints when self.display is enabled
-  def display(self, *args):
+  def display(self, args):
     if self.displayEnabled:
-      print(*args)
+      print(args)
 
   #Does one iteration of the Naming Game for all pairs
   def run(self, matrixNetwork):
