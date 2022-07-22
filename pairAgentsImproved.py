@@ -24,7 +24,7 @@ def pairAgentsImproved(networkMatrix, symmetrical=True):
       chosenRow = rowNrs[selection]
       chosenColumn = columnNrs[selection]
       #assign them as pair
-      newPair = [chosenRow, chosenColumn]
+      newPair = [chosenRow, chosenColumn] #can be changed to set
       agentPairs.append(newPair)
       #make sure these agents can't return by removing every combination involving either one of the agents from row and column
       filterRow = []

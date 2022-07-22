@@ -7,7 +7,6 @@ class AgentPairsTest(unittest.TestCase):
   def setUp(self):
     rFactory = mf.MatrixFactory(triangular=False)
     tFactory = mf.MatrixFactory(triangular=True)
-    randomFactory = mf.MatrixFactory(triangular=True)
     #using lattices since they involve no random chances
     self.rlattice = rFactory.makeLatticeMatrix(20,4)
     self.tlattice = tFactory.makeLatticeMatrix(20,4)

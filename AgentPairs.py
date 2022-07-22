@@ -43,14 +43,14 @@ class AgentPairs:
         chosenRow = rowNrs[selection]
         chosenColumn = columnNrs[selection]
         #assign them as pair
-        newPair = [chosenRow, chosenColumn]
+        newPair = [chosenRow, chosenColumn] #could be a set
         agentPairs.append(newPair)
         #make sure these agents can't return by removing every combination involving either one of the agents from row and column
         filterRow = []
         filterColumn = []
         #this code could be compressed into one pass (but this is more readable in my opinion)
         for rowNr in rowNrs:
-          #only consider column if the matrix isn't symmetrical
+          #only consider column if the matrix isn't symmetrical (could be improved)
           filterRow.append(chosenRow == rowNr or chosenColumn == rowNr)
         for columnNr in columnNrs:
           #only consider row if the matrix isn't symmetrical
