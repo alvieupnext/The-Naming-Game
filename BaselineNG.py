@@ -9,6 +9,8 @@ class BaselineNG(NamingGame):
     return context
 
   def invent(self, topic, agent):
+    #perform invent of the parent
+    super().invent(topic, agent)
     #generate random string as name
     name = ''
     for _ in range(7):

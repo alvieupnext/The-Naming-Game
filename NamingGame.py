@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 import AgentPairs as ap
+import numpy as np
 
 #Here, we will be defining the abstract superclass for all of the strategies for the Naming game, in general all the Naming Game variants use the same skeleton
 
@@ -14,6 +15,8 @@ class NamingGame(ABC):
     self.memory = [ [] for _ in range(numberOfAgents) ]
     #generate the context
     self.context = self.generateContext()
+    #keep track of the amount of names generated
+    self.inventedNames = 0
 
   #Generates the context for The Naming Game
   @abstractmethod
@@ -34,9 +37,9 @@ class NamingGame(ABC):
 
   #Creates a new name for a certain topic
   #Speaker Method
-  @abstractmethod
   def invent(self, topic, agent):
-    pass
+    #increase name count
+    self.inventedNames += 1
 
   #Adopts a certain name for a topic
   #Speaker Method
@@ -59,7 +62,7 @@ class NamingGame(ABC):
   def failure(self, speaker, listener, intendedTopic, perceivedTopic, name):
     pass
 
-  #Code that runs after every simulation to visualize the game
+  #Code that runs after every simulation to visualize the game after each simulation
   @abstractmethod
   def display(self, sim):
     pass
@@ -83,14 +86,22 @@ class NamingGame(ABC):
       else: self.adopt(name, intendedTopic, listener)
 
   #Starts the Naming Game with the desired amount of simulations
-  def start(self, matrixNetwork, simulations=2, iterations=20):
+  def start(self, matrixNetwork, simulations=10, iterations=50):
+    #create a table
+    nameTable = np.zeros((iterations, simulations))
     for sim in range(simulations):
       self.setup(matrixNetwork)
       for iteration in range(iterations):
         print("Iteration " + str(iteration))
         self.run(matrixNetwork)
+        #update name table
+        nameTable[iteration, sim] = self.inventedNames
       #visualize the simulation
       self.display(sim)
+    #print median
+    print(np.mean(nameTable, axis=1))
+    return nameTable
+
 
 
 
