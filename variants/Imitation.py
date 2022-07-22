@@ -7,7 +7,12 @@ class Imitation(BaselineNG):
     for pairName, pairTopic in self.memory[agent]:
       #if name of pair corresponds with the adopted name
       if pairTopic == topic:
+        #remove pair from memory and circulation
         self.memory[agent].remove((pairName, topic))
+        self.circulation[pairName].remove(agent)
+        # if circulation list for name empty, remove name key
+        if not self.circulation[pairName]:
+          self.circulation.pop(pairName)
         self.display(f"Removed this pair from Agent memory {agent}: {pairName}, {pairTopic}")
 
   def adopt(self, name, topic, listener, speaker):
@@ -23,7 +28,12 @@ class Imitationv2(BaselineNG):
     for pairName, pairTopic in self.memory[agent]:
       #if name of pair corresponds with the adopted name
       if pairTopic == topic and name != pairName:
+        # remove pair from memory and circulation
         self.memory[agent].remove((pairName, topic))
+        self.circulation[pairName].remove(agent)
+        #if circulation list for name empty
+        if not self.circulation[pairName]:
+          self.circulation.pop(pairName)
         self.display(f"Removed this pair from Agent memory {agent}: {pairName}, {pairTopic}")
   #same code but only performs clear on success
   def success(self, speaker, listener, topic, name):
