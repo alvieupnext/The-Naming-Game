@@ -24,6 +24,8 @@ class NamingGame(ABC):
     self.context = self.generateContext()
     #keep track of the amount of names generated
     self.inventedNames = 0
+    #keep track of usage of names
+    self.circulation = {}
 
   #Generates the context for The Naming Game
   @abstractmethod
@@ -53,6 +55,11 @@ class NamingGame(ABC):
   #Speaker Method
   @abstractmethod
   def adopt(self, name, topic, listener, speaker):
+    #update language circulation
+    #if the list already exists
+    if self.circulation.get(name):
+      self.circulation[name].append(listener)
+    else: self.circulation[name] = [listener]
     # say that the agent has adopted this new method
     self.display(f"Agent {listener} has adopted the name {name} for topic {topic} from agent {speaker}")
 
@@ -108,8 +115,9 @@ class NamingGame(ABC):
     if self.displayEnabled:
       print("Display Enabled")
     else: print("Display Disabled")
-    #create a table
+    #create a table for keeping track of amount of invented names
     nameTable = np.zeros((self.iterations, self.simulations))
+
     for sim in range(self.simulations):
       self.setup(matrixNetwork)
       for iteration in range(self.iterations):
@@ -120,9 +128,10 @@ class NamingGame(ABC):
       #visualize the simulation
       # display the current state and print vocabulary
       self.display("Simulation " + str(sim))
-    for i in range(len(self.memory)):
-      self.display("Agent " + str(i))
-      self.display(self.memory[i])
+      self.display(self.circulation)
+      for i in range(len(self.memory)):
+        self.display("Agent " + str(i))
+        self.display(self.memory[i])
     #return median
     return np.mean(nameTable, axis=1)
 
