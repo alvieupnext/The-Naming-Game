@@ -1,4 +1,4 @@
-from BaselineNG import *
+from variants.BaselineNG import *
 
 class ABNG(BaselineNG):
   def invent(self, topic, agent):
