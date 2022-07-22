@@ -87,6 +87,7 @@ class NamingGame(ABC):
     for sim in range(simulations):
       self.setup(matrixNetwork)
       for iteration in range(iterations):
+        print("Iteration " + str(iteration))
         self.run(matrixNetwork)
       #visualize the simulation
       self.display(sim)
