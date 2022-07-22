@@ -21,9 +21,9 @@ class BaselineNG(NamingGame):
       random_integer = random_integer - 32 if flip_bit == 1 else random_integer
       # Keep appending random characters using chr(x)
       name += (chr(random_integer))
-    #update agent memory
-    self.memory[agent].append((name, topic))
     self.display(f"Agent {agent} has invented the name {name} for topic {topic}")
+    #update agent memory
+    self.adopt(name, topic, agent, agent)
     return name
 
 
