@@ -23,8 +23,7 @@ class BaselineNG(NamingGame):
       name += (chr(random_integer))
     #update agent memory
     self.memory[agent].append((name, topic))
-    if self.displayEnabled:
-      print("Agent " + str(agent) + " has invented the name " + name + " for topic " + str(topic))
+    self.display("Agent " + str(agent) + " has invented the name " + name + " for topic " + str(topic))
     return name
 
 

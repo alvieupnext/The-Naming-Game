@@ -76,7 +76,7 @@ class NamingGame(ABC):
   #Create our own display which only prints when self.display is enabled
   def display(self, *args):
     if self.displayEnabled:
-      map(print, args)
+      print(*args)
 
   #Does one iteration of the Naming Game for all pairs
   def run(self, matrixNetwork):
