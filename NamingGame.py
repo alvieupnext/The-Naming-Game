@@ -7,6 +7,11 @@ import numpy as np
 #TODO make methods private
 class NamingGame(ABC):
 
+  def __init__(self, simulations=2, iterations=50, display=False):
+    self.simulations = simulations
+    self.iterations = iterations
+    self.display = display
+
   #setup the game
   def setup(self, matrixNetwork):
     #get number of agents
@@ -37,6 +42,7 @@ class NamingGame(ABC):
 
   #Creates a new name for a certain topic
   #Speaker Method
+  @abstractmethod
   def invent(self, topic, agent):
     #increase name count
     self.inventedNames += 1
@@ -55,17 +61,16 @@ class NamingGame(ABC):
   #Code that runs in case of a success
   @abstractmethod
   def success(self, speaker, listener, topic, name):
-    pass
+    if self.display:
+      print("Agent " + str(speaker) + " and Agent " + str(listener) + " agreed that object " + str(
+        topic) + " has the name " + str(name))
 
   #Code that runs in case of a failure
   @abstractmethod
   def failure(self, speaker, listener, intendedTopic, perceivedTopic, name):
-    pass
-
-  #Code that runs after every simulation to visualize the game after each simulation
-  @abstractmethod
-  def display(self, sim):
-    pass
+    if self.display:
+      print("Agent " + str(speaker) + " and Agent " + str(listener) + " did not agree with the name " + str(
+        name) + ". Intended Topic: " + str(intendedTopic) + ", Perceived Topic: " + str(perceivedTopic))
 
   #Does one iteration of the Naming Game for all pairs
   def run(self, matrixNetwork):
@@ -86,21 +91,26 @@ class NamingGame(ABC):
       else: self.adopt(name, intendedTopic, listener)
 
   #Starts the Naming Game with the desired amount of simulations
-  def start(self, matrixNetwork, simulations=10, iterations=50):
+  def start(self, matrixNetwork):
+    print("Starting the Naming Game")
     #create a table
-    nameTable = np.zeros((iterations, simulations))
-    for sim in range(simulations):
+    nameTable = np.zeros((self.iterations, self.simulations))
+    for sim in range(self.simulations):
       self.setup(matrixNetwork)
-      for iteration in range(iterations):
+      for iteration in range(self.iterations):
         print("Iteration " + str(iteration))
         self.run(matrixNetwork)
         #update name table
         nameTable[iteration, sim] = self.inventedNames
       #visualize the simulation
-      self.display(sim)
-    #print median
-    print(np.mean(nameTable, axis=1))
-    return nameTable
+      # display the current state and print vocabulary
+      if self.display:
+        print("Simulation " + str(sim))
+        for i in range(len(self.memory)):
+          print("Agent " + str(i))
+          print(self.memory[i])
+    #return median
+    return np.mean(nameTable, axis=1)
 
 
 
