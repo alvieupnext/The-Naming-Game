@@ -63,6 +63,12 @@ class BaselineNG(NamingGame):
     #if succesfull, run super
     super().adopt(name, topic, listener, speaker)
 
+  def remove(self, name, topic, agent):
+    #remove connection from memory
+    self.memory[agent].remove((name, topic))
+    #if succesfull, run super
+    super().remove(name, topic, agent)
+
   def success(self, speaker, listener, topic, name):
     #invoke super
     super().success(speaker, listener, topic, name)
