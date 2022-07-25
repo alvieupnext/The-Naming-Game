@@ -26,10 +26,6 @@ class NamingGame(ABC):
     self.memory = [ [] for _ in range(numberOfAgents) ]
     #generate the context
     self.context = self.generateContext()
-    #keep track of the amount of names generated
-    self.inventedNames = 0
-    #keep track of usage of names
-    self.circulation = {}
 
   #Generates the context for The Naming Game
   @abstractmethod
@@ -58,17 +54,13 @@ class NamingGame(ABC):
   #Adopts a certain name for a topic
   @abstractmethod
   def adopt(self, name, topic, listener, speaker):
-    #update language circulation
-    #if the list already exists
-    if self.circulation.get(name):
-      self.circulation[name].append(listener)
-    else: self.circulation[name] = [listener]
+    list(map(lambda export: export.everyAdopt(name, listener), self.output))
     # say that the agent has adopted this new method
     self.display(f"Agent {listener} has adopted the name {name} for topic {topic} from agent {speaker}")
 
   @abstractmethod
   def remove(self, name, topic, agent):
-    list(map(lambda export: export.everyRemove(), self.output))
+    list(map(lambda export: export.everyRemove(name, agent), self.output))
     self.display(f"Removed this pair from Agent memory {agent}: {name}, {topic}")
 
   #Chooses an object from the context (called the topic)
@@ -134,7 +126,6 @@ class NamingGame(ABC):
       #visualize the simulation
       # display the current state and print vocabulary
       self.display("Simulation " + str(sim))
-      self.display(self.circulation)
       #update outputs
       list(map(lambda export: export.everySimulation(sim), self.output))
       for i in range(len(self.memory)):
