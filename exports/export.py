@@ -20,8 +20,12 @@ class export:
   def everyInvent(self):
     pass
 
+  #code to be performed after every adoption
+  def everyAdopt(self, name, listener):
+    pass
+
   #code to be performed after every removal
-  def everyRemove(self):
+  def everyRemove(self, name, agent):
     pass
 
   #code to be performed after finishing the game
