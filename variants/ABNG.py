@@ -1,11 +1,13 @@
 from variants.BaselineNG import *
+from variants.Imitation import *
 
-class ABNG(BaselineNG):
-  def invent(self, topic, agent):
+class ABNG(Imitationv2):
+  def generateName(self):
     flipBit = random.randint(0, 1)
     name = ''
     if flipBit:
       name = 'A'
-    else: name = 'B'
-    self.adopt(name, topic, agent, agent)
+    else:
+      name = 'B'
     return name
+
