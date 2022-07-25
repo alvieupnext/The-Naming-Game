@@ -115,7 +115,8 @@ class NamingGame(ABC):
     if self.displayEnabled:
       print("Display Enabled")
     else: print("Display Disabled")
-    list(map(lambda export: export.setup(self), self.output))
+    numberOfAgents = len(matrixNetwork)
+    list(map(lambda export: export.setup(self, numberOfAgents), self.output))
     for sim in range(self.simulations):
       self.setup(matrixNetwork)
       for iteration in range(self.iterations):

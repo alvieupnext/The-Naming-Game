@@ -4,7 +4,7 @@ import numpy as np
 #export object that returns how many names were invented
 class namesInvented(export):
 
-  def setup(self, ng):
+  def setup(self, ng, numberOfAgents):
     #create a table for keeping track of amount of invented names
     self.nameTable = np.zeros((ng.iterations, ng.simulations))
     #start invented names at zero
@@ -29,7 +29,7 @@ class namesInvented(export):
 class namesInCirculation(export):
 
   # create a dictionary to keep track of which agents have which name in their memory
-  def setup(self, ng):
+  def setup(self, ng, numberOfAgents):
     self.circulation = {}
     self.circulationPerSim = []
 

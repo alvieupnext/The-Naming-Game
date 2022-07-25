@@ -5,7 +5,7 @@ class export:
     self.name = name
 
   #setup to be performed before starting the game
-  def setup(self, ng):
+  def setup(self, ng, numberOfAgents):
     pass
 
   #code to be performed on afterevery Iteration
