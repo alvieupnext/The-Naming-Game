@@ -58,5 +58,50 @@ class namesInCirculation(export):
   def output(self):
     return self.circulationPerSim
 
+  # export which generates a heatmap with the preferred action of an agent per iteration (builds on top of names in circulation)
+class preferredAction(namesInCirculation):
+    # add a circulation matrix on top of the existing setup
+  def setup(self, ng, numberOfAgents):
+    # perform the namesInCirculation setup
+    super().setup(ng, numberOfAgents)
+    #add setup for circulation matrix
+    self.circulationMatrixPerSim= []
+    #remember number of agents
+    self.numberOfAgents = numberOfAgents
+    #remember iterations
+    self.iterations = ng.iterations
+    self.circulationMatrix = np.zeros((self.iterations, self.numberOfAgents), dtype=object)
+    # fill with empty arrays (could be shortened using Pythonism
+    for x in range(self.iterations):
+      for y in range(self.numberOfAgents):
+        self.circulationMatrix[x, y] = []
 
-possibleExports = {"names": namesInvented, "circulation": namesInCirculation}
+  def everySimulation(self, sim):
+    #perform the namesInCirculation every Simulation
+    super().everySimulation(sim)
+    #append matrix to list and clear circulation matrix
+    self.circulationMatrixPerSim.append(self.circulationMatrix)
+    self.circulationMatrix = np.zeros((self.iterations, self.numberOfAgents), dtype=object)
+    #fill with empty arrays (could be shortened using Pythonism
+    for x in range(self.iterations):
+      for y in range(self.numberOfAgents):
+        self.circulationMatrix[x, y] = []
+
+  #get the preferred action of every actor after every iteration
+  def everyIteration(self, sim, it):
+    allNames = list(self.circulation.keys())
+    for name in allNames:
+
+      listOfAgents = self.circulation[name]
+      for agent in listOfAgents:
+        self.circulationMatrix[it, agent].append(name)
+
+  #return all the circulation matrices
+  def output(self):
+    return self.circulationMatrixPerSim
+
+
+
+
+
+possibleExports = {"names": namesInvented, "circulation": namesInCirculation, "preferredAction": preferredAction}
