@@ -20,6 +20,10 @@ class export:
   def everyInvent(self):
     pass
 
+  #code to be performed after every removal
+  def everyRemove(self):
+    pass
+
   #code to be performed after finishing the game
   def teardown(self):
     pass
