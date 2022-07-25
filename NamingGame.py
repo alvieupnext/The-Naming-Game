@@ -13,6 +13,8 @@ class NamingGame(ABC):
     self.iterations = iterations
     self.displayEnabled = display
     self.strategy = strategy
+    #get class name
+    self.name = self.__class__.__name__
 
   #setup the game
   def setup(self, matrixNetwork):
