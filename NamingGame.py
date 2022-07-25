@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 import AgentPairs as ap
 import numpy as np
+from exports.possibleExports import possibleExports
 import Strategy
 
 #Here, we will be defining the abstract superclass for all of the strategies for the Naming game, in general all the Naming Game variants use the same skeleton
@@ -8,11 +9,12 @@ import Strategy
 #TODO make methods private
 class NamingGame(ABC):
 
-  def __init__(self, simulations=2, iterations=50, display=False, strategy=Strategy.multi):
+  def __init__(self, simulations=2, iterations=50, display=False, strategy=Strategy.multi, output=[]):
     self.simulations = simulations
     self.iterations = iterations
     self.displayEnabled = display
     self.strategy = strategy
+    self.output = list(map(lambda name: possibleExports[name](name), output))
     #get class name
     self.name = self.__class__.__name__
 
@@ -50,8 +52,8 @@ class NamingGame(ABC):
   #Speaker Method
   @abstractmethod
   def invent(self, topic, agent):
-    #increase name count
-    self.inventedNames += 1
+    #perform the everyInvent action for every export object
+    list(map(lambda export: export.everyInvent(), self.output))
 
   #Adopts a certain name for a topic
   #Speaker Method
@@ -117,25 +119,29 @@ class NamingGame(ABC):
     if self.displayEnabled:
       print("Display Enabled")
     else: print("Display Disabled")
-    #create a table for keeping track of amount of invented names
-    nameTable = np.zeros((self.iterations, self.simulations))
-
+    list(map(lambda export: export.setup(self), self.output))
     for sim in range(self.simulations):
       self.setup(matrixNetwork)
       for iteration in range(self.iterations):
         self.display("Iteration " + str(iteration))
         self.run(matrixNetwork)
-        #update name table
-        nameTable[iteration, sim] = self.inventedNames
+        #update outputs on every iteration
+        list(map(lambda export: export.everyIteration(sim, iteration), self.output))
       #visualize the simulation
       # display the current state and print vocabulary
       self.display("Simulation " + str(sim))
       self.display(self.circulation)
+      #update outputs
+      list(map(lambda export: export.everySimulation(sim), self.output))
       for i in range(len(self.memory)):
         self.display("Agent " + str(i))
         self.display(self.memory[i])
-    #return median
-    return np.mean(nameTable, axis=1)
+    result = {}
+    # after finishing the simulations
+    for export in self.output:
+      result[export.name] = export.output()
+    return result
+
 
 
 
