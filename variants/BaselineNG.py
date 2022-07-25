@@ -8,11 +8,24 @@ class BaselineNG(NamingGame):
       context.append(i)
     return context
 
+  #this code allows us to bypass the Baseline Level and get to the Naming Game Skeleton
+  def superOverride(self):
+    return super()
+
   def invent(self, topic, agent):
     #perform invent of the parent
     super().invent(topic, agent)
-    #generate random string as name
+    #generate name
+    name = self.generateName()
+    self.display(f"Agent {agent} has invented the name {name} for topic {topic}")
+    #update agent memory
+    self.adopt(name, topic, agent, agent)
+    return name
+
+  #procedure for generating names
+  def generateName(self):
     name = ''
+    # generate random string as name
     for _ in range(7):
       # Considering only upper and lowercase letters
       random_integer = random.randint(97, 97 + 26 - 1)
@@ -21,9 +34,6 @@ class BaselineNG(NamingGame):
       random_integer = random_integer - 32 if flip_bit == 1 else random_integer
       # Keep appending random characters using chr(x)
       name += (chr(random_integer))
-    self.display(f"Agent {agent} has invented the name {name} for topic {topic}")
-    #update agent memory
-    self.adopt(name, topic, agent, agent)
     return name
 
 
