@@ -56,7 +56,6 @@ class NamingGame(ABC):
     list(map(lambda export: export.everyInvent(), self.output))
 
   #Adopts a certain name for a topic
-  #Speaker Method
   @abstractmethod
   def adopt(self, name, topic, listener, speaker):
     #update language circulation
@@ -66,6 +65,11 @@ class NamingGame(ABC):
     else: self.circulation[name] = [listener]
     # say that the agent has adopted this new method
     self.display(f"Agent {listener} has adopted the name {name} for topic {topic} from agent {speaker}")
+
+  @abstractmethod
+  def remove(self, name, topic, agent):
+    list(map(lambda export: export.everyRemove(), self.output))
+    self.display(f"Removed this pair from Agent memory {agent}: {name}, {topic}")
 
   #Chooses an object from the context (called the topic)
   @abstractmethod
