@@ -21,7 +21,17 @@ def preferredAction(ng, actionMatrix):
   ax.set_title(f"Preferred Action per Agent per Iteration ({ng.strategy.__name__})")
   ax.set_ylabel("Games played per agent")
   ax.set_xlabel("Agents")
-  ax.matshow(numberMatrix)
+  heatmap = ax.imshow(numberMatrix)
+
+  cbar = fig.colorbar(heatmap, ax=ax, values=[0, 1 ,2,3])
+
+  cbar.ax.set_yticklabels(["", "Ignorant", "", "A", "", "B", "", "Both", ""])
+
+  # plt.colorbar(ax=ax)
+
+ # ax.legend([0,1,2,3], ['label1', 'label2', 'label3', 'Indecisive'])
+
+  # plt.legend()
 
   plt.show()
 
