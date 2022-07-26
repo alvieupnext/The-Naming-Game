@@ -32,6 +32,8 @@ class namesInCirculation(export):
   def setup(self, numberOfAgents):
     self.circulation = {}
     self.circulationPerSim = []
+    #remember number of agents
+    self.agents = numberOfAgents
 
   # update language circulation
   def everyAdopt(self, name, listener):
@@ -58,7 +60,7 @@ class namesInCirculation(export):
   #check whether we have reached an internal consensus in our code
   def checkConsensus(self, agents):
     #for all names, check whether there are enough agents in the list
-    return len(agents) / self.numberOfAgents >= self.consensus
+    return len(agents) / self.agents >= self.consensus
 
   def output(self):
     return self.circulationPerSim
@@ -72,16 +74,14 @@ class preferredAction(namesInCirculation):
     super().setup(numberOfAgents)
     #add setup for circulation matrix
     self.circulationMatrixPerSim= []
-    #and consensus percent
+    #Remember consensus
     self.consensus = self.ng.consensusScore
-    #remember number of agents
-    self.numberOfAgents = numberOfAgents
     #remember iterations
     self.iterations = self.ng.maxIterations
-    self.circulationMatrix = np.zeros((self.iterations, self.numberOfAgents), dtype=object)
+    self.circulationMatrix = np.zeros((self.iterations, self.agents), dtype=object)
     # fill with empty arrays (could be shortened using Pythonism
     for x in range(self.iterations):
-      for y in range(self.numberOfAgents):
+      for y in range(self.agents):
         self.circulationMatrix[x, y] = []
 
   def everySimulation(self, sim):
@@ -89,10 +89,10 @@ class preferredAction(namesInCirculation):
     super().everySimulation(sim)
     #append matrix to list and clear circulation matrix
     self.circulationMatrixPerSim.append(self.circulationMatrix)
-    self.circulationMatrix = np.zeros((self.iterations, self.numberOfAgents), dtype=object)
+    self.circulationMatrix = np.zeros((self.iterations, self.agents), dtype=object)
     #fill with empty arrays (could be shortened using Pythonism
     for x in range(self.iterations):
-      for y in range(self.numberOfAgents):
+      for y in range(self.agents):
         self.circulationMatrix[x, y] = []
 
   #get the preferred action of every actor after every iteration
@@ -124,11 +124,11 @@ class namePopularity(namesInCirculation):
   def setup(self, numberOfAgents):
     # perform the namesInCirculation setup
     super().setup(numberOfAgents)
+    #Remember consensus
+    self.consensus = self.ng.consensusScore
     # add a new dictionary that keeps track of name popularity
     self.popularity = {}
     self.popularityPerSim = []
-    #save numberOfAgents
-    self.agents = numberOfAgents
 
   #get the percentage of every used name after every iteration
   def everyIteration(self, sim, it):
@@ -140,10 +140,10 @@ class namePopularity(namesInCirculation):
       #check whether this name has appeared yet in our popularity dictionary
       if self.popularity.get(name):
         #if the name is known, add it to the list
-        self.popularity[name].append[proportion]
+        self.popularity[name].append(proportion)
       else:
         #if not known, generate a new list and add it to the dictionary, adding zero values for earlier iterations
-        valueList = [0] * it
+        valueList = [0] * (it + 1)
         valueList[it] = proportion
         self.popularity[name] = valueList
       #if we have reached our desired consensus, notify the Naming Game
@@ -164,4 +164,4 @@ class namePopularity(namesInCirculation):
 
 
 
-possibleExports = {"names": namesInvented, "circulation": namesInCirculation, "preferredAction": preferredAction}
+possibleExports = {"names": namesInvented, "circulation": namesInCirculation, "preferredAction": preferredAction, "popularity": namePopularity}
