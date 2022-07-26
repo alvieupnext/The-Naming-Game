@@ -27,12 +27,6 @@ def preferredAction(ng, actionMatrix):
 
   cbar.ax.set_yticklabels(["", "Ignorant", "", "A", "", "B", "", "Both", ""])
 
-  # plt.colorbar(ax=ax)
-
- # ax.legend([0,1,2,3], ['label1', 'label2', 'label3', 'Indecisive'])
-
-  # plt.legend()
-
   plt.show()
 
 factory = mf.MatrixFactory(triangular=True)
