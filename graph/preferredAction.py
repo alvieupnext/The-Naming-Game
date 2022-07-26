@@ -33,7 +33,7 @@ factory = mf.MatrixFactory(triangular=True)
 
 lattice = factory.makeLatticeMatrix(100, 5)
 
-ab = ABNG(iterations=100, strategy=Strategy.multi, output=["preferredAction"])
+ab = ABNG(maxIterations=100, strategy=Strategy.multi, output=["preferredAction"])
 
 output = ab.start(lattice)["preferredAction"][1]
 
