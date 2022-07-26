@@ -11,7 +11,7 @@ class Imitation(BaselineNG):
         self.remove(pairName, topic, agent)
 
   def adopt(self, name, topic, listener, speaker):
-    #remove all previous bindings of the topic with the name
+    #remove all previous bindings of the topic
     self.removeTopic(topic, listener)
     # if successful, run super
     super().adopt(name, topic, listener, speaker)
