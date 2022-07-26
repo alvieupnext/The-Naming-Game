@@ -91,7 +91,6 @@ class preferredAction(namesInCirculation):
   def everyIteration(self, sim, it):
     allNames = list(self.circulation.keys())
     for name in allNames:
-
       listOfAgents = self.circulation[name]
       for agent in listOfAgents:
         self.circulationMatrix[it, agent].append(name)
