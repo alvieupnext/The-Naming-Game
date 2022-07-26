@@ -11,7 +11,7 @@ class NamingGame(ABC):
 
   def __init__(self, simulations=2, iterations=50, display=False, strategy=Strategy.multi, output=[]):
     self.simulations = simulations
-    self.iterations = iterations
+    self.maxIterations = iterations
     self.displayEnabled = display
     self.strategy = strategy
     self.output = list(map(lambda name: possibleExports[name](name), output))
@@ -110,7 +110,7 @@ class NamingGame(ABC):
     print("Starting the Naming Game")
     print("Parameters: ")
     print("Simulations: " + str(self.simulations))
-    print("Iterations: " + str(self.iterations))
+    print("Maximum Iterations: " + str(self.maxIterations))
     print("Memory Length: " + str(len(matrixNetwork)))
     if self.displayEnabled:
       print("Display Enabled")
@@ -119,7 +119,7 @@ class NamingGame(ABC):
     list(map(lambda export: export.setup(self, numberOfAgents), self.output))
     for sim in range(self.simulations):
       self.setup(matrixNetwork)
-      for iteration in range(self.iterations):
+      for iteration in range(self.maxIterations):
         self.display("Iteration " + str(iteration))
         self.run(matrixNetwork)
         #update outputs on every iteration
