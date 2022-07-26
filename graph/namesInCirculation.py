@@ -5,7 +5,7 @@ from variants.ABNG import *
 import MatrixFactory as mf
 import Strategy
 
-ng = ABNG(maxIterations=100, strategy=Strategy.multi, output=["popularity"], consensusScore=0.8, display=True)
+ng = ABNG(maxIterations=1000, simulations=10, strategy=Strategy.multi, output=["popularity"], consensusScore=0.8, display=False)
 
 def namesInCirculation(popularity):
   plt.title(f"Proportion of names known by the Agents({ng.name}, {ng.strategy.__name__})")
@@ -16,6 +16,9 @@ def namesInCirculation(popularity):
 
 
   allNames = list(popularity.keys())
+
+  #to make sure we have the same legend every time
+  allNames.sort()
 
   for name in allNames:
     yvalues = popularity[name]
