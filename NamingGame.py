@@ -9,14 +9,17 @@ import Strategy
 #TODO make methods private
 class NamingGame(ABC):
 
-  def __init__(self, simulations=2, iterations=50, display=False, strategy=Strategy.multi, output=[]):
+  def __init__(self, simulations=2, maxIterations=50, display=False, strategy=Strategy.multi, output=[], consensusScore = 1):
     self.simulations = simulations
-    self.maxIterations = iterations
+    self.maxIterations = maxIterations
     self.displayEnabled = display
     self.strategy = strategy
-    self.output = list(map(lambda name: possibleExports[name](name), output))
+    self.output = list(map(lambda name: possibleExports[name](name, self), output))
     #get class name
     self.name = self.__class__.__name__
+    #set consensus to False
+    self.consensus = False
+    self.consensusScore = consensusScore
 
   #setup the game
   def setup(self, matrixNetwork):
@@ -116,7 +119,7 @@ class NamingGame(ABC):
       print("Display Enabled")
     else: print("Display Disabled")
     numberOfAgents = len(matrixNetwork)
-    list(map(lambda export: export.setup(self, numberOfAgents), self.output))
+    list(map(lambda export: export.setup(numberOfAgents), self.output))
     for sim in range(self.simulations):
       self.setup(matrixNetwork)
       for iteration in range(self.maxIterations):
@@ -124,6 +127,12 @@ class NamingGame(ABC):
         self.run(matrixNetwork)
         #update outputs on every iteration
         list(map(lambda export: export.everyIteration(sim, iteration), self.output))
+        #if we have reached consensus on this iteration
+        if self.consensus:
+          #notify outputs
+          list(map(lambda export: export.onConsensus(sim, iteration), self.output))
+          #stop the running loop
+          break
       #visualize the simulation
       # display the current state and print vocabulary
       self.display("Simulation " + str(sim))
