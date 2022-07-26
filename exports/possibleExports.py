@@ -106,6 +106,15 @@ class preferredAction(namesInCirculation):
         self.ng.consensus = True
 
 
+  def onConsensus(self, sim, it):
+    maxIterations = self.ng.maxIterations
+    self.ng.display(f"Simulation {sim} has reached a consensus on iteration {it}")
+    #fill the rest of the matrix with the last row filled in
+    for i in range(it + 1, maxIterations):
+      self.circulationMatrix[i, :] = self.circulationMatrix[it, :]
+
+
+
 
   #return all the circulation matrices
   def output(self):
