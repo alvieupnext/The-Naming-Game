@@ -1,11 +1,12 @@
 #define the structure of an output objects, these objects will decide what output the naming game returns
 class export:
-  def __init__(self, name):
+  def __init__(self, name, namingGame):
     #every export object knows its own name
     self.name = name
+    self.ng = namingGame
 
   #setup to be performed before starting the game
-  def setup(self, ng, numberOfAgents):
+  def setup(self, numberOfAgents):
     pass
 
   #code to be performed on afterevery Iteration
@@ -26,6 +27,10 @@ class export:
 
   #code to be performed after every removal
   def everyRemove(self, name, agent):
+    pass
+
+  #code to be performed on consensus
+  def onConsensus(self, sim, it):
     pass
 
   #code to be performed after finishing the game
