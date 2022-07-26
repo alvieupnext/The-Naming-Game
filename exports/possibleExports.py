@@ -55,10 +55,16 @@ class namesInCirculation(export):
     #clear circulation for the next simulation
     self.circulation = {}
 
+  #check whether we have reached an internal consensus in our code
+  def checkConsensus(self, agents):
+    #for all names, check whether there are enough agents in the list
+    return len(agents) / self.numberOfAgents >= self.consensus
+
   def output(self):
     return self.circulationPerSim
 
   # export which generates a heatmap with the preferred action of an agent per iteration (builds on top of names in circulation)
+  # preferred Action assumes every topic is the same
 class preferredAction(namesInCirculation):
     # add a circulation matrix on top of the existing setup
   def setup(self, numberOfAgents):
@@ -77,11 +83,6 @@ class preferredAction(namesInCirculation):
     for x in range(self.iterations):
       for y in range(self.numberOfAgents):
         self.circulationMatrix[x, y] = []
-
-  #check whether we have reached an internal consensus in our code
-  def checkConsensus(self, agents):
-    #for all names, check whether there are enough agents in the list
-    return len(agents) / self.numberOfAgents >= self.consensus
 
   def everySimulation(self, sim):
     #perform the namesInCirculation every Simulation
@@ -113,12 +114,51 @@ class preferredAction(namesInCirculation):
     for i in range(it + 1, maxIterations):
       self.circulationMatrix[i, :] = self.circulationMatrix[it, :]
 
-
-
-
   #return all the circulation matrices
   def output(self):
     return self.circulationMatrixPerSim
+
+#namePopularity assumes every topic is the same and only looks at the popularity of the name
+class namePopularity(namesInCirculation):
+
+  def setup(self, numberOfAgents):
+    # perform the namesInCirculation setup
+    super().setup(numberOfAgents)
+    # add a new dictionary that keeps track of name popularity
+    self.popularity = {}
+    self.popularityPerSim = []
+    #save numberOfAgents
+    self.agents = numberOfAgents
+
+  #get the percentage of every used name after every iteration
+  def everyIteration(self, sim, it):
+    allNames = list(self.circulation.keys())
+    for name in allNames:
+      listOfAgents = self.circulation[name]
+      #calculate the proportion of how many agents know this name vs the amount of agents
+      proportion = len(listOfAgents) / self.agents
+      #check whether this name has appeared yet in our popularity dictionary
+      if self.popularity.get(name):
+        #if the name is known, add it to the list
+        self.popularity[name].append[proportion]
+      else:
+        #if not known, generate a new list and add it to the dictionary, adding zero values for earlier iterations
+        valueList = [0] * it
+        valueList[it] = proportion
+        self.popularity[name] = valueList
+      #if we have reached our desired consensus, notify the Naming Game
+      if self.checkConsensus(listOfAgents):
+        self.ng.consensus = True
+
+  def everySimulation(self, sim):
+    #perform everySimulation from parent object
+    super().everySimulation(sim)
+    self.popularityPerSim.append(self.popularity)
+    self.popularity = {}
+
+  def output(self):
+    return self.popularityPerSim
+
 
 
 
