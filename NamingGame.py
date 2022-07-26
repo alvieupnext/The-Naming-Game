@@ -17,8 +17,6 @@ class NamingGame(ABC):
     self.output = list(map(lambda name: possibleExports[name](name, self), output))
     #get class name
     self.name = self.__class__.__name__
-    #set consensus to False
-    self.consensus = False
     self.consensusScore = consensusScore
 
   #setup the game
@@ -29,6 +27,8 @@ class NamingGame(ABC):
     self.memory = [ [] for _ in range(numberOfAgents) ]
     #generate the context
     self.context = self.generateContext()
+    #set consensus to False
+    self.consensus = False
 
   #Generates the context for The Naming Game
   @abstractmethod
