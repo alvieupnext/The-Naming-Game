@@ -25,11 +25,11 @@ factory = mf.MatrixFactory(triangular=True)
 
 lattice = factory.makeLatticeMatrix(40, 4)
 
-Baseline = BaselineNG(iterations=100, strategy=Strategy.mono, output=["names"])
+Baseline = BaselineNG(maxIterations=100, strategy=Strategy.mono, output=["names"])
 
-imi = Imitation(iterations=100, strategy=Strategy.mono, output=["names"])
+imi = Imitation(maxIterations=100, strategy=Strategy.mono, output=["names"])
 
-imi2 = Imitationv2(iterations=100, strategy=Strategy.mono, output=["names"])
+imi2 = Imitationv2(maxIterations=100, strategy=Strategy.mono, output=["names"])
 
 namesPerIteration(Baseline, lattice)
 
