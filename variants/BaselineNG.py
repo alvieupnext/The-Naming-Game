@@ -8,10 +8,6 @@ class BaselineNG(NamingGame):
       context.append(i)
     return context
 
-  #this code allows us to bypass the Baseline Level and get to the Naming Game Skeleton
-  def superOverride(self):
-    return super()
-
   def invent(self, topic, agent):
     #perform invent of the parent
     super().invent(topic, agent)
