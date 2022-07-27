@@ -121,6 +121,7 @@ class NamingGame(ABC):
     numberOfAgents = len(matrixNetwork)
     list(map(lambda export: export.setup(numberOfAgents), self.output))
     for sim in range(self.simulations):
+      print("Simulation " + str(sim))
       self.setup(matrixNetwork)
       for iteration in range(self.maxIterations):
         self.display("Iteration " + str(iteration))
@@ -136,8 +137,6 @@ class NamingGame(ABC):
           #stop the running loop
           break
       #visualize the simulation
-      # display the current state and print vocabulary
-      self.display("Simulation " + str(sim))
       #update outputs
       list(map(lambda export: export.everySimulation(sim), self.output))
       self.display("Agent Memory:")
