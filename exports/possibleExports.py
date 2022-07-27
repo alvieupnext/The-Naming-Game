@@ -160,8 +160,30 @@ class namePopularity(namesInCirculation):
     return self.popularityPerSim
 
 
+#get iteration where simulation reaches consensus on average
+class consensusIteration(export):
+
+  def setup(self, numberOfAgents):
+    #initialize consensus iteration at the maximum possible iterations
+    self.consensusIteration = self.ng.maxIterations
+    #keep a list of all the iterations where consensus was reached per simulation
+    self.consensusIterationPerSim = []
+
+  #update consensusIteration
+  def onConsensus(self, sim, it):
+    self.consensusIteration = it
+
+  #fill the consensus list at the end of every simulation
+  def everySimulation(self, sim):
+    self.consensusIterationPerSim.append(self.consensusIteration)
+    #reset consensusIteration to max
+    self.consensusIteration = self.ng.maxIterations
+
+  #as output return a list of all the iterations where consensus was reached
+  def output(self):
+    return self.consensusIterationPerSim
 
 
 
 
-possibleExports = {"names": namesInvented, "circulation": namesInCirculation, "preferredAction": preferredAction, "popularity": namePopularity}
+possibleExports = {"names": namesInvented, "circulation": namesInCirculation, "preferredAction": preferredAction, "popularity": namePopularity, "consensus": consensusIteration}
