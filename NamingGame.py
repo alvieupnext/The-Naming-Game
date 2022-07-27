@@ -129,6 +129,8 @@ class NamingGame(ABC):
         list(map(lambda export: export.everyIteration(sim, iteration), self.output))
         #if we have reached consensus on this iteration
         if self.consensus:
+          #Display that the simulation has reached a consensus
+          self.display(f"Simulation {sim} has reached a consensus on iteration {iteration}")
           #notify outputs
           list(map(lambda export: export.onConsensus(sim, iteration), self.output))
           #stop the running loop
