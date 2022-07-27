@@ -6,11 +6,11 @@ import MatrixFactory as mf
 import Strategy
 import numpy as np
 
-ng = ABNG(maxIterations=1000, simulations=5, strategy=Strategy.multi, output=["popularity", "consensus"], consensusScore=1, display=False)
+ng = ABNG(maxIterations=1000, simulations=10, strategy=Strategy.multi, output=["popularity", "consensus"], consensusScore=1, display=False)
 
-numberOfAgents = 200
+numberOfAgents = 100
 
-maxNeighbourSize = 20
+maxNeighbourSize = 40
 
 plt.title(f"Consensus Time Per Neighbourhood Size({ng.name}, {ng.strategy.__name__}, {numberOfAgents} agents)")
 
@@ -24,6 +24,7 @@ neighboursizes = list(range(2, maxNeighbourSize + 1, 2))
 consensusIterations = []
 
 for neighbour in neighboursizes:
+  print(f"Using Neighbour Size {neighbour}")
   lattice = mf.MatrixFactory().makeLatticeMatrix(numberOfAgents, neighbour)
   output = ng.start(lattice)
   #get list of when consensus was reached for every simulation
