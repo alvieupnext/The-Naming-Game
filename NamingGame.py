@@ -140,9 +140,9 @@ class NamingGame(ABC):
       self.display("Simulation " + str(sim))
       #update outputs
       list(map(lambda export: export.everySimulation(sim), self.output))
+      self.display("Agent Memory:")
       for i in range(len(self.memory)):
-        self.display("Agent " + str(i))
-        self.display(self.memory[i])
+        self.display(f"Agent {i}: {self.memory[i]}")
     result = {}
     # after finishing the simulations
     for export in self.output:
