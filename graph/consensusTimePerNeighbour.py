@@ -16,7 +16,7 @@ ng = ABNG(maxIterations=1000, simulations=5, strategy=Strategy.multi, output=["p
 maxNeighbourSize = 40
 
 #test every single neighbourhood size from 2 to maximum
-neighboursizes = list(range(2, maxNeighbourSize + 1, 2))
+neighboursizes = list(range(2, maxNeighbourSize + 1, 4))
 
 plt.title(f"Consensus Time Per Neighbourhood Size({ng.name}, {ng.strategy.__name__}, {numberOfAgents} agents)")
 
@@ -29,9 +29,9 @@ plt.xlabel("Neighbour Size of Agent")
 consensusIterations = []
 
 #create an empty matrix (rows are consensusScores, columns are number of neighbours)
-consensusMatrix = np.zeros((len(consensusScoreList), len(neighboursizes)))
+consensusMatrix = np.zeros((len(neighboursizes), len(consensusScoreList)), dtype=object)
 
-for neighbour in neighboursizes:
+for row, neighbour in enumerate(neighboursizes):
   print(f"Using Neighbour Size {neighbour}")
   lattice = mf.MatrixFactory().makeLatticeMatrix(numberOfAgents, neighbour)
   output = ng.start(lattice)
@@ -40,15 +40,21 @@ for neighbour in neighboursizes:
   print(consensusList)
   reformattedConsensusList = []
   for value in consensusScoreList:
-    reformattedConsensusList.append((value, []))
+    reformattedConsensusList.append([])
   for simulationConsensus in consensusList:
     for index, set in enumerate(simulationConsensus):
       #get the right iteration from consensusList and append it to the reformatted list
-      reformattedConsensusList[index][1].append(set[1])
+      reformattedConsensusList[index].append(set[1])
   print(reformattedConsensusList)
-  mean = np.mean(consensusList)
+  for column, values in enumerate(reformattedConsensusList):
+    consensusMatrix[row, column] = values
+
+print(consensusMatrix)
+
+
+ # mean = np.mean(consensusList)
   #add this mean value to consensusIterations
-  consensusIterations.append(mean)
+  #consensusIterations.append(mean)
 
 plt.plot(neighboursizes, consensusIterations)
 
