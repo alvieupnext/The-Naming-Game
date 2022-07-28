@@ -33,6 +33,10 @@ class export:
   def onConsensus(self, sim, it):
     pass
 
+  #code to be performed on the final consensus
+  def onFinalConsensus(self,sim, it):
+    pass
+
   #code to be performed after finishing the game
   def teardown(self):
     pass
