@@ -29,6 +29,8 @@ class NamingGame(ABC):
     self.context = self.generateContext()
     #set consensus to False
     self.consensus = False
+    #set final consensus to False
+    self.finalConsensus = False
 
   #Generates the context for The Naming Game
   @abstractmethod
@@ -134,8 +136,13 @@ class NamingGame(ABC):
           self.display(f"Simulation {sim} has reached a consensus on iteration {iteration}")
           #notify outputs
           list(map(lambda export: export.onConsensus(sim, iteration), self.output))
-          #stop the running loop
-          break
+          #if we have reached the final consensus
+          if self.finalConsensus:
+            #stop the running loop
+            break
+          #else set consensus back to false
+          else:
+            self.consensus = False
       #visualize the simulation
       #update outputs
       list(map(lambda export: export.everySimulation(sim), self.output))
