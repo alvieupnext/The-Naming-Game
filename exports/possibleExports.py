@@ -112,17 +112,20 @@ class preferredAction(namesInCirculation):
         self.circulationMatrix[it, agent].append(name)
       #if we have reached our desired consensus, notify the Naming Game
       if self.checkConsensus(listOfAgents):
-        #increase current consensus
-        self.currentConsensus += 1
-        #check whether we've reached all our consensus scores
-        if len(self.consensuslist) == self.currentConsensus:
           self.ng.consensus = True
-        else:
-          #if not reached, update to the next consensus score
-          self.consensus = self.consensuslist[self.currentConsensus]
 
-
+  #increase consensus meter and check whether we have reached the final consensus
   def onConsensus(self, sim, it):
+    # increase current consensus
+    self.currentConsensus += 1
+    # check whether we've reached the end
+    if len(self.consensuslist) == self.currentConsensus:
+      self.ng.finalConsensus = True
+    else:
+      self.consensus = self.consensuslist[self.currentConsensus]
+
+
+  def onFinalConsensus(self, sim, it):
     maxIterations = self.ng.maxIterations
     #fill the rest of the matrix with the last row filled in
     for i in range(it + 1, maxIterations):
@@ -142,6 +145,8 @@ class namePopularity(namesInCirculation):
     self.consensuslist = self.ng.consensusScore
     #keep track of how many consensus scores we've passed
     self.currentConsensus = 0
+    #update the current consensus score
+    self.consensus = self.consensuslist[self.currentConsensus]
     # add a new dictionary that keeps track of name popularity
     self.popularity = {}
     self.popularityPerSim = []
@@ -162,15 +167,29 @@ class namePopularity(namesInCirculation):
         valueList = [0] * (it + 1)
         valueList[it] = proportion
         self.popularity[name] = valueList
-      #if we have reached our desired consensus, notify the Naming Game
       if self.checkConsensus(listOfAgents):
         self.ng.consensus = True
+
+  #increase consensus meter and check whether we have reached the final consensus
+  def onConsensus(self, sim, it):
+    # increase current consensus
+    self.currentConsensus += 1
+    # check whether we've reached the end
+    if len(self.consensuslist) == self.currentConsensus:
+      self.ng.finalConsensus = True
+    #else update the consensus
+    else: self.consensus = self.consensuslist[self.currentConsensus]
+
 
   def everySimulation(self, sim):
     #perform everySimulation from parent object
     super().everySimulation(sim)
     self.popularityPerSim.append(self.popularity)
     self.popularity = {}
+    #reset current consensus and consensus value
+    self.currentConsensus = 0
+    # initialize first consensus to the lowest score
+    self.consensus = self.consensuslist[self.currentConsensus]
 
   def output(self):
     return self.popularityPerSim
