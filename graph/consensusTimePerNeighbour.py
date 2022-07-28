@@ -6,7 +6,7 @@ import MatrixFactory as mf
 import Strategy
 import numpy as np
 
-ng = ABNG(maxIterations=1000, simulations=100, strategy=Strategy.multi, output=["popularity", "consensus"], consensusScore=[1], display=False)
+ng = ABNG(maxIterations=1000, simulations=5, strategy=Strategy.multi, output=["popularity", "consensus"], consensusScore=[0.7, 1], display=False)
 
 numberOfAgents = 100
 
@@ -29,6 +29,7 @@ for neighbour in neighboursizes:
   output = ng.start(lattice)
   #get list of when consensus was reached for every simulation
   consensusList = output["consensus"]
+  print(consensusList)
   mean = np.mean(consensusList)
   #add this mean value to consensusIterations
   consensusIterations.append(mean)

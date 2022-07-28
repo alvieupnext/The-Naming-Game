@@ -201,18 +201,33 @@ class consensusIteration(export):
   def setup(self, numberOfAgents):
     #initialize consensus iteration at the maximum possible iterations
     self.consensusIteration = self.ng.maxIterations
+    #create an empty consensus List
+    self.consensuslist = []
     #keep a list of all the iterations where consensus was reached per simulation
     self.consensusIterationPerSim = []
+    #keep track of which consensus we are on right now
+    self.currentConsensus = 0
 
   #update consensusIteration
   def onConsensus(self, sim, it):
-    self.consensusIteration = it
+    #get current consensus
+    consensus = self.ng.consensusScore[self.currentConsensus]
+    self.consensuslist.append((consensus, it))
+    #increase consensus count
+    self.currentConsensus +=1
+    #if we reached the end of our list, we reached final consensus
+    if len(self.ng.consensusScore) == self.currentConsensus:
+      self.ng.finalConsensus = True
 
   #fill the consensus list at the end of every simulation
   def everySimulation(self, sim):
-    self.consensusIterationPerSim.append(self.consensusIteration)
+    self.consensusIterationPerSim.append(self.consensuslist)
     #reset consensusIteration to max
     self.consensusIteration = self.ng.maxIterations
+    #reset current consensus
+    self.currentConsensus = 0
+    #reset current consensus list
+    self.consensuslist = []
 
   #as output return a list of all the iterations where consensus was reached
   def output(self):
