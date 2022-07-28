@@ -18,6 +18,8 @@ class NamingGame(ABC):
     #get class name
     self.name = self.__class__.__name__
     self.consensusScore = consensusScore
+    #sort consensusScore list just in case
+    self.consensusScore.sort()
 
   #setup the game
   def setup(self, matrixNetwork):
