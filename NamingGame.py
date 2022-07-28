@@ -9,7 +9,7 @@ import Strategy
 #TODO make methods private
 class NamingGame(ABC):
 
-  def __init__(self, simulations=2, maxIterations=50, display=False, strategy=Strategy.multi, output=[], consensusScore = 1):
+  def __init__(self, simulations=2, maxIterations=50, display=False, strategy=Strategy.multi, output=[], consensusScore = [1]):
     self.simulations = simulations
     self.maxIterations = maxIterations
     self.displayEnabled = display

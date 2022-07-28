@@ -74,8 +74,12 @@ class preferredAction(namesInCirculation):
     super().setup(numberOfAgents)
     #add setup for circulation matrix
     self.circulationMatrixPerSim= []
-    #Remember consensus
-    self.consensus = self.ng.consensusScore
+    #remember consensusList
+    self.consensuslist = self.ng.consensusScore
+    #keep track of how many consensus scores we've passed
+    self.currentConsensus = 0
+    #initialize first consensus to the lowest score
+    self.consensus = self.consensuslist[self.currentConsensus]
     #remember iterations
     self.iterations = self.ng.maxIterations
     self.circulationMatrix = np.zeros((self.iterations, self.agents), dtype=object)
@@ -94,6 +98,10 @@ class preferredAction(namesInCirculation):
     for x in range(self.iterations):
       for y in range(self.agents):
         self.circulationMatrix[x, y] = []
+    #reset current consensus and consensus value
+    self.currentConsensus = 0
+    # initialize first consensus to the lowest score
+    self.consensus = self.consensuslist[self.currentConsensus]
 
   #get the preferred action of every actor after every iteration
   def everyIteration(self, sim, it):
@@ -104,7 +112,14 @@ class preferredAction(namesInCirculation):
         self.circulationMatrix[it, agent].append(name)
       #if we have reached our desired consensus, notify the Naming Game
       if self.checkConsensus(listOfAgents):
-        self.ng.consensus = True
+        #increase current consensus
+        self.currentConsensus += 1
+        #check whether we've reached all our consensus scores
+        if len(self.consensuslist) == self.currentConsensus:
+          self.ng.consensus = True
+        else:
+          #if not reached, update to the next consensus score
+          self.consensus = self.consensuslist[self.currentConsensus]
 
 
   def onConsensus(self, sim, it):
@@ -123,8 +138,10 @@ class namePopularity(namesInCirculation):
   def setup(self, numberOfAgents):
     # perform the namesInCirculation setup
     super().setup(numberOfAgents)
-    #Remember consensus
-    self.consensus = self.ng.consensusScore
+    #Remember consensus list
+    self.consensuslist = self.ng.consensusScore
+    #keep track of how many consensus scores we've passed
+    self.currentConsensus = 0
     # add a new dictionary that keeps track of name popularity
     self.popularity = {}
     self.popularityPerSim = []
