@@ -138,6 +138,8 @@ class NamingGame(ABC):
           list(map(lambda export: export.onConsensus(sim, iteration), self.output))
           #if we have reached the final consensus
           if self.finalConsensus:
+            #notify outputs
+            list(map(lambda export: export.onFinalConsensus(sim, iteration), self.output))
             #stop the running loop
             break
           #else set consensus back to false
