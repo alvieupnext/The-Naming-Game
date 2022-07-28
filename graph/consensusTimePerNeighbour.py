@@ -6,7 +6,8 @@ import MatrixFactory as mf
 import Strategy
 import numpy as np
 
-ng = ABNG(maxIterations=1000, simulations=5, strategy=Strategy.multi, output=["popularity", "consensus"], consensusScore=[0.7, 1], display=False)
+ng = ABNG(maxIterations=1000, simulations=5, strategy=Strategy.multi, output=["popularity", "consensus"],
+          consensusScore=[0.7, 0.8, 0.85, 0.9, 0.95, 1], display=False)
 
 numberOfAgents = 100
 
