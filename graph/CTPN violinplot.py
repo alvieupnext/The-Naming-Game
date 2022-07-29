@@ -5,15 +5,15 @@ from variants.ABNG import *
 import MatrixFactory as mf
 import Strategy
 import numpy as np
-from pylab import plot, show, savefig, xlim, figure, \
-                  ylim, legend, violinplot, setp, axes
+from pylab import plot, show, figure, \
+                  legend, violinplot, setp, axes
 
 #TODO clean this code
 numberOfAgents = 100
 
 consensusScoreList = [0.8, 0.9,0.95, 0.98, 0.99, 1]
 
-ng = ABNG(maxIterations=2000, simulations=100, strategy=Strategy.multi, output=["popularity", "consensus"],
+ng = ABNG(maxIterations=2000, simulations=10, strategy=Strategy.multi, output=["popularity", "consensus"],
           consensusScore=consensusScoreList, display=False)
 
 maxNeighbourSize = 40
@@ -30,23 +30,14 @@ plt.ylabel("Amount of Games played")
 
 plt.xlabel("Neighbour Size of Agent")
 
-
+colors = ['blue', 'red', 'cyan', 'magenta', 'green', 'purple']
 
 #help procedures for the boxplot
 # function for setting the colors of the box plots pairs
-def setBoxColors(vp):
-  #color for 0.8
-    setp(vp['bodies'][0], color='blue')
-  # color for 0.9
-    setp(vp['bodies'][1], color='red')
-  # color for 0.95
-    setp(vp['bodies'][2], color='cyan')
-  # color for 0.98
-    setp(vp['bodies'][3], color='magenta')
- # color for 0.99
-    setp(vp['bodies'][4], color='green')
-  # color for 1
-    setp(vp['bodies'][5], color='purple')
+def setBoxColors(bp):
+  for index, box in enumerate(bp['bodies']):
+    setp(box, color=colors[index])
+
 
 
 
@@ -69,7 +60,6 @@ for row, neighbour in enumerate(neighboursizes):
   output = ng.start(lattice)
   #get list of when consensus was reached for every simulation
   consensusList = output["consensus"]
-  print(consensusList)
   reformattedConsensusList = []
   for value in consensusScoreList:
     reformattedConsensusList.append([])
@@ -81,23 +71,13 @@ for row, neighbour in enumerate(neighboursizes):
   for column, values in enumerate(reformattedConsensusList):
     consensusMatrix[row, column] = values
 
-print(consensusMatrix)
+lines = [plot([1,1], color = color)[0] for color in colors]
 
-hB, = plot([1,1],'b-')
-hR, = plot([1,1],'r-')
-hC, = plot([1,1], 'c-')
-hM, = plot([1,1], 'm-')
-hG, = plot([1,1], 'g-')
-hP, = plot([1,1], color='purple')
+plot([1,1], color = 'white')
 
-legend((hB, hR, hC, hM, hG,hP),('Convergence Rate: 0.8', 'Convergence Rate: 0.9', 'Convergence Rate: 0.95', "Convergence Rate: 0.98", "Convergence Rate: 0.99", 'Convergence Rate: 1'))
-hB.set_visible(False)
-hR.set_visible(False)
-hC.set_visible(False)
-hM.set_visible(False)
-hG.set_visible(False)
-hP.set_visible(False)
+consensusScoreStringList = [f"Convergence Rate : {rate}" for rate in consensusScoreList]
 
+legend(lines,('Convergence Rate: 0.8', 'Convergence Rate: 0.9', 'Convergence Rate: 0.95', "Convergence Rate: 0.98", "Convergence Rate: 0.99", 'Convergence Rate: 1'))
 
 
 for index, row in enumerate(consensusMatrix):
