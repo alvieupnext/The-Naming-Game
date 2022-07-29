@@ -24,7 +24,7 @@ neighboursizes = list(range(5, maxNeighbourSize + 1, 5))
 fig = figure()
 ax = axes()
 
-plt.title(f"Consensus Time Per Neighbourhood Size({ng.name}, {ng.strategy.__name__}, {numberOfAgents} agents)")
+plt.title(f"Consensus Time Per Neighbourhood Size({ng.name}, {ng.strategy.__name__}, {ng.simulations} simulations, {numberOfAgents} agents)")
 
 plt.ylabel("Amount of Games played")
 
