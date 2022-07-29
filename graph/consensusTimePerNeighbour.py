@@ -75,7 +75,7 @@ lines = [plot([1,1], color = color)[0] for color in colors]
 
 consensusScoreStringList = [f"Convergence Rate : {rate}" for rate in consensusScoreList]
 
-legend(lines,('Convergence Rate: 0.8', 'Convergence Rate: 0.9', 'Convergence Rate: 0.95', "Convergence Rate: 0.98", "Convergence Rate: 0.99", 'Convergence Rate: 1'))
+legend(lines,consensusScoreStringList)
 
 
 for index, row in enumerate(consensusMatrix):

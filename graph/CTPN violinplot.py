@@ -13,7 +13,7 @@ numberOfAgents = 100
 
 consensusScoreList = [0.8, 0.9,0.95, 0.98, 0.99, 1]
 
-ng = ABNG(maxIterations=2000, simulations=10, strategy=Strategy.multi, output=["popularity", "consensus"],
+ng = ABNG(maxIterations=2000, simulations=100, strategy=Strategy.multi, output=["popularity", "consensus"],
           consensusScore=consensusScoreList, display=False)
 
 maxNeighbourSize = 40
@@ -77,8 +77,7 @@ plot([1,1], color = 'white')
 
 consensusScoreStringList = [f"Convergence Rate : {rate}" for rate in consensusScoreList]
 
-legend(lines,('Convergence Rate: 0.8', 'Convergence Rate: 0.9', 'Convergence Rate: 0.95', "Convergence Rate: 0.98", "Convergence Rate: 0.99", 'Convergence Rate: 1'))
-
+legend(lines,consensusScoreStringList)
 
 for index, row in enumerate(consensusMatrix):
   vp = violinplot(row, positions=positions[index], widths=0.6)
