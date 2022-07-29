@@ -11,15 +11,15 @@ from pylab import plot, show, savefig, xlim, figure, \
 #TODO clean this code
 numberOfAgents = 100
 
-consensusScoreList = [0.8, 0.9, 1]
+consensusScoreList = [0.8, 0.9,0.95, 0.98, 0.99, 1]
 
-ng = ABNG(maxIterations=1000, simulations=5, strategy=Strategy.multi, output=["popularity", "consensus"],
+ng = ABNG(maxIterations=2000, simulations=100, strategy=Strategy.multi, output=["popularity", "consensus"],
           consensusScore=consensusScoreList, display=False)
 
 maxNeighbourSize = 40
 
 #test every single neighbourhood size from 2 to maximum
-neighboursizes = list(range(2, maxNeighbourSize + 1, 10))
+neighboursizes = list(range(5, maxNeighbourSize + 1, 5))
 
 fig = figure()
 ax = axes()
@@ -35,32 +35,18 @@ plt.xlabel("Neighbour Size of Agent")
 #help procedures for the boxplot
 # function for setting the colors of the box plots pairs
 def setBoxColors(bp):
+  #color for 0.8
     setp(bp['boxes'][0], color='blue')
-    # setp(bp['caps'][0], color='blue')
-    # setp(bp['caps'][1], color='blue')
-    # setp(bp['whiskers'][0], color='blue')
-    # setp(bp['whiskers'][1], color='blue')
-    # setp(bp['fliers'][0], color='blue')
-    # setp(bp['fliers'][1], color='blue')
-    # setp(bp['medians'][0], color='blue')
-
+  # color for 0.9
     setp(bp['boxes'][1], color='red')
-    # setp(bp['caps'][2], color='red')
-    # setp(bp['caps'][3], color='red')
-    # setp(bp['whiskers'][2], color='red')
-    # setp(bp['whiskers'][3], color='red')
-    # setp(bp['fliers'][2], color='red')
-    # setp(bp['fliers'][3], color='red')
-    # setp(bp['medians'][1], color='red')
-
-    setp(bp['boxes'][2], color='purple')
-    # setp(bp['caps'][4], color='purple')
-    # setp(bp['caps'][5], color='purple')
-    # setp(bp['whiskers'][4], color='purple')
-    # setp(bp['whiskers'][5], color='purple')
-    # setp(bp['fliers'][4], color='purple')
-    # setp(bp['fliers'][5], color='purple')
-    # setp(bp['medians'][2], color='purple')
+  # color for 0.95
+    setp(bp['boxes'][2], color='cyan')
+  # color for 0.98
+    setp(bp['boxes'][3], color='magenta')
+ # color for 0.99
+    setp(bp['boxes'][4], color='green')
+  # color for 1
+    setp(bp['boxes'][5], color='purple')
 
 
 
@@ -99,10 +85,17 @@ print(consensusMatrix)
 
 hB, = plot([1,1],'b-')
 hR, = plot([1,1],'r-')
+hC, = plot([1,1], 'c-')
+hM, = plot([1,1], 'm-')
+hG, = plot([1,1], 'g-')
 hP, = plot([1,1], color='purple')
-legend((hB, hR, hP),('Convergence Rate: 0.8', 'Convergence Rate: 0.9', 'Convergence Rate: 1'))
+
+legend((hB, hR, hC, hM, hG,hP),('Convergence Rate: 0.8', 'Convergence Rate: 0.9', 'Convergence Rate: 0.95', "Convergence Rate: 0.98", "Convergence Rate: 0.99", 'Convergence Rate: 1'))
 hB.set_visible(False)
 hR.set_visible(False)
+hC.set_visible(False)
+hM.set_visible(False)
+hG.set_visible(False)
 hP.set_visible(False)
 
 
