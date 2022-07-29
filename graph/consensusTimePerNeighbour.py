@@ -81,6 +81,16 @@ legend(lines,consensusScoreStringList)
 for index, row in enumerate(consensusMatrix):
   bp = boxplot(row, positions=positions[index], widths=0.6)
   setBoxColors(bp)
+  ngroup = len(row)
+  clevels = np.linspace(0., 1., ngroup)
+  for position, simValues in zip(positions[index], row):
+    positionList = [position] * len(simValues)
+    print(positionList)
+    print(simValues)
+    plt.scatter(positionList, simValues, alpha=0.4)
+
+
+
 
 plt.xticks(ticks, neighboursizes)
 
