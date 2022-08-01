@@ -51,6 +51,7 @@ class MatrixFactory:
       return np.tril(lattice)
     else: return lattice
 
+  #TODO try to fix scaleFree with numberOfEstablishedLinks
   #create a new scale free matrix
   def makeScaleFreeMatrix(self, numberOfAgents, numberOfEstablishedLinks = 2):
     # create matrix
