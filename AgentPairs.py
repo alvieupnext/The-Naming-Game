@@ -1,9 +1,6 @@
 import numpy as np
 import random as r
 class AgentPairs:
-  def __init__(self):
-    pass
-
   #Villatoro wise
   def generateVillatoro(self, networkMatrix):
     numberOfPairs = len(networkMatrix) // 2
