@@ -22,7 +22,7 @@ randomLinks = 6
 #test every single neighbourhood size from 2 to maximum
 neighboursizes = list(range(5, maxNeighbourSize + 1, 5))
 
-plt.title(f"Consensus Time Per Neighbourhood Size (Small World)({ng.name}, {ng.strategy.__name__}, {ng.simulations} simulations, {numberOfAgents} agents, random links {randomLinks})")
+plt.title(f"Consensus Time Per Neighbourhood Size (Small World)({ng.name}, {ng.strategy.__name__}, {ng.simulations} simulations, {numberOfAgents} agents, random links proportion 1/5)")
 
 plt.ylabel("Amount of Games played")
 
@@ -47,11 +47,11 @@ print(positions)
 
 ticks = [np.mean(lst) for lst in positions]
 print(ticks)
-# ax.set_xticks(ticks)
 
+#row index starts a zero, we can use this as randomLinks if we increase row by 1
 for row, neighbour in enumerate(neighboursizes):
   print(f"Using Neighbour Size {neighbour}")
-  lattice = mf.MatrixFactory().makeSmallWorldMatrix(numberOfAgents, neighbour, randomLinks)
+  lattice = mf.MatrixFactory().makeSmallWorldMatrix(numberOfAgents, neighbour, row + 1)
   output = ng.start(lattice)
   #get list of when consensus was reached for every simulation
   consensusList = output["consensus"]
