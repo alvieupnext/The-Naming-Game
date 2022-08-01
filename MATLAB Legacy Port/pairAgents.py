@@ -1,5 +1,4 @@
 import numpy as np
-import makeLatticeMatrix as lattice
 import random as r
 
 def pairAgents(networkMatrix):
@@ -28,8 +27,3 @@ def pairAgents(networkMatrix):
       networkMatrix[:, chosenRow] = 0
 
   return agentPairs
-
-
-
-
-print(pairAgents(lattice.makeLatticeMatrix(20,4)))
