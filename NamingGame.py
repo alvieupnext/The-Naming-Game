@@ -79,13 +79,13 @@ class NamingGame(ABC):
   #Code that runs in case of a success
   @abstractmethod
   def success(self, speaker, listener, topic, name):
-    list(map(lambda export: export.everySuccess(speaker, listener, topic, name)))
+    list(map(lambda export: export.everySuccess(speaker, listener, topic, name), self.output))
     self.display(f"Agent {speaker} and Agent {listener} agreed that object {topic} has the name {name}")
 
   #Code that runs in case of a failure
   @abstractmethod
   def failure(self, speaker, listener, intendedTopic, perceivedTopic, name):
-    list(map(lambda export: export.everyFailure(speaker, listener, intendedTopic, perceivedTopic, name)))
+    list(map(lambda export: export.everyFailure(speaker, listener, intendedTopic, perceivedTopic, name), self.output))
     self.display(f"Agent {speaker} and Agent {listener} did not agree with the name {name}. " +
                  f"Intended Topic: {intendedTopic}, Perceived Topic: {perceivedTopic}")
 

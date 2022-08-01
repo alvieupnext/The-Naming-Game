@@ -38,11 +38,11 @@ class export:
     pass
 
   #code to be performed after every success
-  def onSuccess(self, speaker, listener, topic, name):
+  def everySuccess(self, speaker, listener, topic, name):
     pass
 
   #code to be performed after every failure
-  def onFailure(self, speaker, listener, intendedTopic, perceivedTopic, name):
+  def everyFailure(self, speaker, listener, intendedTopic, perceivedTopic, name):
     pass
 
   #code to be performed after finishing the game
