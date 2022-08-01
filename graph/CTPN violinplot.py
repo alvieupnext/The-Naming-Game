@@ -73,11 +73,11 @@ for row, neighbour in enumerate(neighboursizes):
 
 lines = [plot([1,1], color = color)[0] for color in colors]
 
-plot([1,1], color = 'white')
-
 consensusScoreStringList = [f"Convergence Rate : {rate}" for rate in consensusScoreList]
 
 legend(lines,consensusScoreStringList)
+
+list(map(lambda handle: handle.set_visible(False), lines))
 
 for index, row in enumerate(consensusMatrix):
   vp = violinplot(row, positions=positions[index], widths=0.6)

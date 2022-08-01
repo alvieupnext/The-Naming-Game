@@ -8,12 +8,11 @@ import numpy as np
 from pylab import plot, show, figure, \
                   legend, boxplot, setp, axes
 
-#TODO clean this code
 numberOfAgents = 100
 
 consensusScoreList = [0.8, 0.9,0.95, 0.98, 0.99, 1]
 
-ng = ABNG(maxIterations=2000, simulations=100, strategy=Strategy.multi, output=["popularity", "consensus"],
+ng = ABNG(maxIterations=2000, simulations=10, strategy=Strategy.multi, output=["popularity", "consensus"],
           consensusScore=consensusScoreList, display=False)
 
 maxNeighbourSize = 40
@@ -77,6 +76,7 @@ consensusScoreStringList = [f"Convergence Rate : {rate}" for rate in consensusSc
 
 legend(lines,consensusScoreStringList)
 
+list(map(lambda handle: handle.set_visible(False), lines))
 
 for index, row in enumerate(consensusMatrix):
   bp = boxplot(row, positions=positions[index], widths=0.6)
