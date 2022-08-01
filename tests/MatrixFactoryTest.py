@@ -73,18 +73,18 @@ class MatrixFactoryTest(unittest.TestCase):
       agents = pair[0]
       establishedLinks = pair[1]
       rScaleFree= self.rFactory.makeScaleFreeMatrix(agents, establishedLinks)
-      tScaleFree = self.tFactory.makeScaleFreeMatrix(agents, establishedLinks)
       nonZeroRowNrs, nonZeroColumnNrs = np.nonzero(rScaleFree)
       nonZeroCount = len(nonZeroRowNrs)
       #expected non zero elements = 8 (starting connections from 4 agents) + 2 (two-way connection) * Established Links * remaining agents (agents - 4)
       self.assertEqual(8 + 2 * establishedLinks * (agents - 4), nonZeroCount, "Asymmetrical Error")
+      tScaleFree = self.tFactory.makeScaleFreeMatrix(agents, establishedLinks)
       nonZeroRowNrsSym, nonZeroColumnNrsSym = np.nonzero(tScaleFree)
       nonZeroCountSym = len(nonZeroRowNrsSym)
       # The symmetrical lattice should be equal to half the asymmetrical connections
       self.assertEqual(4 + establishedLinks * (agents - 4), nonZeroCountSym, "Symmetrical Error" + str(tScaleFree))
 
     #we are limited to max 3 establishing links
-    scaleFreePairs = [(16, 0), (10, 1), (20, 2), (37, 3), (14, 3), (400, 3)]
+    scaleFreePairs = [(16, 0), (10, 1), (20, 2), (37, 3), (14, 3), (400, 3), (100, 3)]
     #Counter Example: any establishing links higher than 3
 
 
