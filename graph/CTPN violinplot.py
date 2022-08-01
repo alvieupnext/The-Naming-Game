@@ -5,8 +5,8 @@ from variants.ABNG import *
 import MatrixFactory as mf
 import Strategy
 import numpy as np
-from pylab import plot, show, figure, \
-                  legend, violinplot, setp, axes
+from pylab import plot, show, \
+                  legend, violinplot, setp
 
 #TODO clean this code
 numberOfAgents = 100
@@ -20,9 +20,6 @@ maxNeighbourSize = 40
 
 #test every single neighbourhood size from 2 to maximum
 neighboursizes = list(range(5, maxNeighbourSize + 1, 5))
-
-fig = figure()
-ax = axes()
 
 plt.title(f"Consensus Time Per Neighbourhood Size({ng.name}, {ng.strategy.__name__}, {ng.simulations} simulations, {numberOfAgents} agents)")
 

@@ -5,23 +5,20 @@ from variants.ABNG import *
 import MatrixFactory as mf
 import Strategy
 import numpy as np
-from pylab import plot, show, figure, \
-                  legend, boxplot, setp, axes
+from pylab import plot, show, \
+                  legend, boxplot, setp
 
 numberOfAgents = 100
 
 consensusScoreList = [0.8, 0.9,0.95, 0.98, 0.99, 1]
 
-ng = ABNG(maxIterations=2000, simulations=10, strategy=Strategy.multi, output=["popularity", "consensus"],
+ng = ABNG(maxIterations=2000, simulations=1, strategy=Strategy.multi, output=["popularity", "consensus"],
           consensusScore=consensusScoreList, display=False)
 
 maxNeighbourSize = 40
 
 #test every single neighbourhood size from 2 to maximum
 neighboursizes = list(range(5, maxNeighbourSize + 1, 5))
-
-fig = figure()
-ax = axes()
 
 plt.title(f"Consensus Time Per Neighbourhood Size({ng.name}, {ng.strategy.__name__}, {ng.simulations} simulations, {numberOfAgents} agents)")
 
@@ -36,9 +33,6 @@ colors = ['blue', 'red', 'cyan', 'magenta', 'green', 'purple']
 def setBoxColors(bp):
   for index, box in enumerate(bp['boxes']):
     setp(box, color=colors[index])
-
-
-
 
 consensusIterations = []
 
