@@ -109,7 +109,7 @@ class MatrixFactory:
     return scaleFree
 
   #create a new small world matrix
-  def makeSmallWorldMatrix(self, numberOfAgents, numberOfNeighbors, numberOfRandomLinks):
+  def makeSmallWorldMatrix(self, numberOfAgents, numberOfNeighbors, numberOfRandomLinks = 3):
     #first step is creating a new lattice
     smallWorld = self.makeLatticeMatrix(numberOfAgents, numberOfNeighbors)
     # to control the randomness, we establish seed here
