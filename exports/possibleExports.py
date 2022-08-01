@@ -11,15 +11,15 @@ class namesInvented(export):
     self.inventedNames = 0
 
   #update the nameTable every iteration
-  def everyIteration(self, sim, it):
+  def onIteration(self, sim, it):
     self.nameTable[it, sim] = self.inventedNames
 
   #reset inventedNames on every simulation
-  def everySimulation(self, sim):
+  def onSimulation(self, sim):
     self.inventedNames = 0
 
   #increment invented Names for every time an invent has been performed
-  def everyInvent(self):
+  def onInvent(self):
     self.inventedNames += 1
 
   #return output
@@ -36,7 +36,7 @@ class namesInCirculation(export):
     self.agents = numberOfAgents
 
   # update language circulation
-  def everyAdopt(self, name, listener):
+  def onAdopt(self, name, listener):
     #if the list already exists
     if self.circulation.get(name):
       self.circulation[name].append(listener)
@@ -44,14 +44,14 @@ class namesInCirculation(export):
     else: self.circulation[name] = [listener]
 
   # remove agent from circulation
-  def everyRemove(self, name, agent):
+  def onRemove(self, name, agent):
     self.circulation[name].remove(agent)
     # if circulation list for name empty
     if not self.circulation[name]:
       #remove name entry from dictionary
       self.circulation.pop(name)
 
-  def everySimulation(self, sim):
+  def onSimulation(self, sim):
     #append circulation to list
     self.circulationPerSim.append(self.circulation)
     #clear circulation for the next simulation
@@ -88,9 +88,9 @@ class preferredAction(namesInCirculation):
       for y in range(self.agents):
         self.circulationMatrix[x, y] = []
 
-  def everySimulation(self, sim):
+  def onSimulation(self, sim):
     #perform the namesInCirculation every Simulation
-    super().everySimulation(sim)
+    super().onSimulation(sim)
     #append matrix to list and clear circulation matrix
     self.circulationMatrixPerSim.append(self.circulationMatrix)
     self.circulationMatrix = np.zeros((self.iterations, self.agents), dtype=object)
@@ -104,7 +104,7 @@ class preferredAction(namesInCirculation):
     self.consensus = self.consensuslist[self.currentConsensus]
 
   #get the preferred action of every actor after every iteration
-  def everyIteration(self, sim, it):
+  def onIteration(self, sim, it):
     allNames = list(self.circulation.keys())
     for name in allNames:
       listOfAgents = self.circulation[name]
@@ -152,7 +152,7 @@ class namePopularity(namesInCirculation):
     self.popularityPerSim = []
 
   #get the percentage of every used name after every iteration
-  def everyIteration(self, sim, it):
+  def onIteration(self, sim, it):
     allNames = list(self.circulation.keys())
     for name in allNames:
       listOfAgents = self.circulation[name]
@@ -181,9 +181,9 @@ class namePopularity(namesInCirculation):
     else: self.consensus = self.consensuslist[self.currentConsensus]
 
 
-  def everySimulation(self, sim):
+  def onSimulation(self, sim):
     #perform everySimulation from parent object
-    super().everySimulation(sim)
+    super().onSimulation(sim)
     self.popularityPerSim.append(self.popularity)
     self.popularity = {}
     #reset current consensus and consensus value
@@ -220,7 +220,7 @@ class consensusIteration(export):
       self.ng.finalConsensus = True
 
   #fill the consensus list at the end of every simulation
-  def everySimulation(self, sim):
+  def onSimulation(self, sim):
     self.consensusIterationPerSim.append(self.consensuslist)
     #reset consensusIteration to max
     self.consensusIteration = self.ng.maxIterations
@@ -242,26 +242,26 @@ class actionsPerformed(export):
     #keep a list of actions count per simulation
     self.actionsPerSim = []
 
-  def everySimulation(self, sim):
+  def onSimulation(self, sim):
     #update actionsPerSim list
     self.actionsPerSim.append(self.actions)
     #reset actions list
     self.actions = {"invent": 0, "adopt": 0, "remove": 0, "invent": 0, "success": 0, "failure": 0,
                     "consensusReached": 0}
 
-  def everyInvent(self):
+  def onInvent(self):
     self.actions["invent"] += 1
 
-  def everyAdopt(self, name, listener):
+  def onAdopt(self, name, listener):
     self.actions["adopt"] += 1
 
-  def everyRemove(self, name, agent):
+  def onRemove(self, name, agent):
     self.actions["remove"] += 1
 
-  def everySuccess(self, speaker, listener, topic, name):
+  def onSuccess(self, speaker, listener, topic, name):
     self.actions["success"] += 1
 
-  def everyFailure(self, speaker, listener, intendedTopic, perceivedTopic, name):
+  def onFailure(self, speaker, listener, intendedTopic, perceivedTopic, name):
     self.actions["failure"] += 1
 
   def onConsensus(self, sim, it):

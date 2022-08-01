@@ -57,35 +57,35 @@ class NamingGame(ABC):
   @abstractmethod
   def invent(self, topic, agent):
     #perform the everyInvent action for every export object
-    list(map(lambda export: export.everyInvent(), self.output))
+    list(map(lambda export: export.onInvent(), self.output))
 
   #Adopts a certain name for a topic
   @abstractmethod
   def adopt(self, name, topic, listener, speaker):
-    list(map(lambda export: export.everyAdopt(name, listener), self.output))
+    list(map(lambda export: export.onAdopt(name, listener), self.output))
     # say that the agent has adopted this new method
     self.display(f"Agent {listener} has adopted the name {name} for topic {topic} from agent {speaker}")
 
   @abstractmethod
   def remove(self, name, topic, agent):
-    list(map(lambda export: export.everyRemove(name, agent), self.output))
+    list(map(lambda export: export.onRemove(name, agent), self.output))
     self.display(f"Removed this pair from Agent memory {agent}: {name}, {topic}")
 
   #Chooses an object from the context (called the topic)
   @abstractmethod
   def pick(self, agent, context):
-    list(map(lambda export: export.everyPick(agent, context), self.output))
+    list(map(lambda export: export.onPick(agent, context), self.output))
 
   #Code that runs in case of a success
   @abstractmethod
   def success(self, speaker, listener, topic, name):
-    list(map(lambda export: export.everySuccess(speaker, listener, topic, name), self.output))
+    list(map(lambda export: export.onSuccess(speaker, listener, topic, name), self.output))
     self.display(f"Agent {speaker} and Agent {listener} agreed that object {topic} has the name {name}")
 
   #Code that runs in case of a failure
   @abstractmethod
   def failure(self, speaker, listener, intendedTopic, perceivedTopic, name):
-    list(map(lambda export: export.everyFailure(speaker, listener, intendedTopic, perceivedTopic, name), self.output))
+    list(map(lambda export: export.onFailure(speaker, listener, intendedTopic, perceivedTopic, name), self.output))
     self.display(f"Agent {speaker} and Agent {listener} did not agree with the name {name}. " +
                  f"Intended Topic: {intendedTopic}, Perceived Topic: {perceivedTopic}")
 
@@ -135,7 +135,7 @@ class NamingGame(ABC):
         self.display("Iteration " + str(iteration))
         self.run(matrixNetwork)
         #update outputs on every iteration
-        list(map(lambda export: export.everyIteration(sim, iteration), self.output))
+        list(map(lambda export: export.onIteration(sim, iteration), self.output))
         #if we have reached consensus on this iteration
         if self.consensus:
           #Display that the simulation has reached a consensus
@@ -153,7 +153,7 @@ class NamingGame(ABC):
             self.consensus = False
       #visualize the simulation
       #update outputs
-      list(map(lambda export: export.everySimulation(sim), self.output))
+      list(map(lambda export: export.onSimulation(sim), self.output))
       self.display("Agent Memory:")
       for i in range(len(self.memory)):
         self.display(f"Agent {i}: {self.memory[i]}")

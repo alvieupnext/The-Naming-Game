@@ -10,23 +10,27 @@ class export:
     pass
 
   #code to be performed on afterevery Iteration
-  def everyIteration(self, sim, it):
+  def onIteration(self, sim, it):
     pass
 
   #code to be performed after every simulation
-  def everySimulation(self, sim):
+  def onSimulation(self, sim):
     pass
 
   #code to be performed after every invention
-  def everyInvent(self):
+  def onInvent(self):
     pass
 
   #code to be performed after every adoption
-  def everyAdopt(self, name, listener):
+  def onAdopt(self, name, listener):
     pass
 
   #code to be performed after every removal
-  def everyRemove(self, name, agent):
+  def onRemove(self, name, agent):
+    pass
+
+  #code to be performed on picking
+  def onPick(self, agent, context):
     pass
 
   #code to be performed on consensus
@@ -38,11 +42,11 @@ class export:
     pass
 
   #code to be performed after every success
-  def everySuccess(self, speaker, listener, topic, name):
+  def onSuccess(self, speaker, listener, topic, name):
     pass
 
   #code to be performed after every failure
-  def everyFailure(self, speaker, listener, intendedTopic, perceivedTopic, name):
+  def onFailure(self, speaker, listener, intendedTopic, perceivedTopic, name):
     pass
 
   #code to be performed after finishing the game
