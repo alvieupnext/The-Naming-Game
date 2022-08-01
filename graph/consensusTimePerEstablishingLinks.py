@@ -10,7 +10,7 @@ from pylab import plot, show, \
 
 numberOfAgents = 100
 
-consensusScoreList = [0.8, 0.9,0.95, 0.98, 0.99, 1]
+consensusScoreList = [0.6, 0.65, 0.69, 0.7]
 
 ng = ABNG(maxIterations=10000, simulations=10, strategy=Strategy.multi, output=["popularity", "consensus"],
           consensusScore=consensusScoreList, display=False)
