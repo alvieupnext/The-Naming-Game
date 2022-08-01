@@ -1,5 +1,4 @@
 import random as r
-import makeLatticeMatrix as lattice
 
 # Implementation of the MATLAB code written for the Multi Agent Learning Project by Guy Nagels
 
@@ -25,7 +24,3 @@ def makeSmallWorldMatrix(numberOfAgents, numberOfNeighbors, numberOfRandomLinks)
         amount += 1
 
   return latticeA
-
-
-
-print(makeSmallWorldMatrix(20,4,5))

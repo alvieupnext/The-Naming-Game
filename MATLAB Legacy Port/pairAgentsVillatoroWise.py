@@ -1,5 +1,4 @@
 import numpy as np
-import makeLatticeMatrix as lattice
 import random as r
 
 def pairAgentsVillatoroWise(networkMatrix):
@@ -23,8 +22,3 @@ def pairAgentsVillatoroWise(networkMatrix):
     agentPairs[i, 0] = i
     agentPairs[i, 1] = chosenColumn
   return agentPairs
-
-
-
-
-print(pairAgentsVillatoroWise(lattice.makeLatticeMatrix(20,4)))

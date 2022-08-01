@@ -37,7 +37,3 @@ def makeLatticeMatrix(numberOfAgents, numberOfNeighbors):
  # latticeA = np.tril(latticeA)
 
   return latticeA
-
-
-
-# print(makeLatticeMatrix(20,5))

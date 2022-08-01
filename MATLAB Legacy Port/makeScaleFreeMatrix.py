@@ -55,5 +55,3 @@ def makeScaleFreeMatrix(numberOfAgents):
 
   return latticeA
 
-print(makeScaleFreeMatrix(20))
-

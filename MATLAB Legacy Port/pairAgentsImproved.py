@@ -1,5 +1,4 @@
 import numpy as np
-import makeLatticeMatrix as lattice
 import random as r
 
 #this version of pair Agents is used in AgentPairs
@@ -44,9 +43,3 @@ def pairAgentsImproved(networkMatrix, symmetrical=True):
       rowNrs = rowNrs[filterArray]
       columnNrs = columnNrs[filterArray]
   return agentPairs
-
-
-array = pairAgentsImproved(lattice.makeLatticeMatrix(20,4))
-
-print(array)
-print(len(array))
