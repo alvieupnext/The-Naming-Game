@@ -14,15 +14,16 @@ class NamingGame(ABC):
     self.maxIterations = maxIterations
     self.displayEnabled = display
     self.strategy = strategy
+    #create a list with all export objects
     self.output = list(map(lambda name: possibleExports[name](name, self), output))
     #get class name
     self.name = self.__class__.__name__
     self.consensusScore = consensusScore
-    #sort consensusScore list just in case
+    #sort consensusScore list to ensure the biggest consensus score becomes last
     self.consensusScore.sort()
 
   #setup the game
-  def setup(self, matrixNetwork):
+  def setupSimulation(self, matrixNetwork):
     #get number of agents
     numberOfAgents = len(matrixNetwork)
     #create a list filled with no. agents worth of empty lists, these will be the memory of the agents
@@ -123,10 +124,11 @@ class NamingGame(ABC):
       print("Display Enabled")
     else: print("Display Disabled")
     numberOfAgents = len(matrixNetwork)
+    #notify exports that the simulations are starting
     list(map(lambda export: export.setup(numberOfAgents), self.output))
     for sim in range(self.simulations):
       print("Simulation " + str(sim))
-      self.setup(matrixNetwork)
+      self.setupSimulation(matrixNetwork)
       for iteration in range(self.maxIterations):
         self.display("Iteration " + str(iteration))
         self.run(matrixNetwork)
@@ -136,7 +138,7 @@ class NamingGame(ABC):
         if self.consensus:
           #Display that the simulation has reached a consensus
           self.display(f"Simulation {sim} has reached a consensus on iteration {iteration}")
-          #notify outputs
+          #notify outputs that we have reached consensus
           list(map(lambda export: export.onConsensus(sim, iteration), self.output))
           #if we have reached the final consensus
           if self.finalConsensus:
@@ -154,7 +156,7 @@ class NamingGame(ABC):
       for i in range(len(self.memory)):
         self.display(f"Agent {i}: {self.memory[i]}")
     result = {}
-    # after finishing the simulations
+    # after finishing the simulations, get the output from the export objects
     for export in self.output:
       result[export.name] = export.output()
     return result
