@@ -233,6 +233,44 @@ class consensusIteration(export):
   def output(self):
     return self.consensusIterationPerSim
 
+#Export the amount of times an action was performed per iterations
+class actionsPerformed(export):
+
+  def setup(self, numberOfAgents):
+    #initialize dictionary
+    self.actions = {"invent": 0, "adopt": 0, "remove": 0, "invent": 0, "success": 0, "failure": 0, "consensusReached": 0}
+    #keep a list of actions count per simulation
+    self.actionsPerSim = []
+
+  def everySimulation(self, sim):
+    #update actionsPerSim list
+    self.actionsPerSim.append(self.actions)
+    #reset actions list
+    self.actions = {"invent": 0, "adopt": 0, "remove": 0, "invent": 0, "success": 0, "failure": 0,
+                    "consensusReached": 0}
+
+  def everyInvent(self):
+    self.actions["invent"] += 1
+
+  def everyAdopt(self, name, listener):
+    self.actions["adopt"] += 1
+
+  def everyRemove(self, name, agent):
+    self.actions["remove"] += 1
+
+  def everySuccess(self, speaker, listener, topic, name):
+    self.actions["success"] += 1
+
+  def everyFailure(self, speaker, listener, intendedTopic, perceivedTopic, name):
+    self.actions["failure"] += 1
+
+  def onConsensus(self, sim, it):
+    self.actions["consensusReached"] += 1
+
+  def output(self):
+    return self.actionsPerSim
+
+
 
 
 
