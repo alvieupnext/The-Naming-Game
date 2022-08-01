@@ -35,9 +35,11 @@ lattice = factory.makeLatticeMatrix(100, 5)
 
 scaleFree = factory.makeScaleFreeMatrix(100)
 
-ab = ABNG(maxIterations=100, strategy=Strategy.multi, output=["preferredAction"], consensusScore=[0.8], display=True)
+smallWorld = factory.makeLatticeMatrix(100,5, 3)
 
-output = ab.start(scaleFree)["preferredAction"][1]
+ab = ABNG(maxIterations=100, strategy=Strategy.multi, output=["preferredAction"], consensusScore=[1], display=False)
+
+output = ab.start(smallWorld)["preferredAction"][1]
 
 preferredAction(ab, output)
 
