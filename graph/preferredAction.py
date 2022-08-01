@@ -33,9 +33,11 @@ factory = mf.MatrixFactory(triangular=True)
 
 lattice = factory.makeLatticeMatrix(100, 5)
 
+scaleFree = factory.makeScaleFreeMatrix(100)
+
 ab = ABNG(maxIterations=100, strategy=Strategy.multi, output=["preferredAction"], consensusScore=[0.8], display=True)
 
-output = ab.start(lattice)["preferredAction"][1]
+output = ab.start(scaleFree)["preferredAction"][1]
 
 preferredAction(ab, output)
 
