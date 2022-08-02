@@ -22,19 +22,6 @@ class NamingGame(ABC):
     #sort consensusScore list to ensure the biggest consensus score becomes last
     self.consensusScore.sort()
 
-  #setup the game
-  def setupSimulation(self, matrixNetwork):
-    #get number of agents
-    numberOfAgents = len(matrixNetwork)
-    #create a list filled with no. agents worth of empty lists, these will be the memory of the agents
-    self.memory = [ [] for _ in range(numberOfAgents) ]
-    #generate the context
-    self.context = self.generateContext()
-    #set consensus to False
-    self.consensus = False
-    #set final consensus to False
-    self.finalConsensus = False
-
   #Generates the context for The Naming Game
   @abstractmethod
   def generateContext(self):
@@ -93,6 +80,19 @@ class NamingGame(ABC):
   def display(self, args):
     if self.displayEnabled:
       print(args)
+
+  #setup the game
+  def setupSimulation(self, matrixNetwork):
+    #get number of agents
+    numberOfAgents = len(matrixNetwork)
+    #create a list filled with no. agents worth of empty lists, these will be the memory of the agents
+    self.memory = [ [] for _ in range(numberOfAgents) ]
+    #generate the context
+    self.context = self.generateContext()
+    #set consensus to False
+    self.consensus = False
+    #set final consensus to False
+    self.finalConsensus = False
 
   #Does one iteration of the Naming Game for all pairs
   def run(self, matrixNetwork):
