@@ -34,13 +34,11 @@ class NamingGame(ABC):
     pass
 
   #Looks up a name from memory (can either return one object or no object)
-  #Listener method
   @abstractmethod
   def interpret(self, name, agent):
     pass
 
   #Creates a new name for a certain topic
-  #Speaker Method
   @abstractmethod
   def invent(self, topic, agent):
     #perform the everyInvent action for every export object
