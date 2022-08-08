@@ -12,7 +12,7 @@ numberOfAgents = 100
 
 consensusScoreList = [0.8, 0.9,0.95, 0.98, 0.99, 1]
 
-ng = ABNG(maxIterations=2000, simulations=1, strategy=Strategy.multi, output=["popularity", "consensus"],
+ng = ABNG(maxIterations=2000, simulations=100, strategy=Strategy.multi, output=["popularity", "consensus"],
           consensusScore=consensusScoreList, display=False)
 
 maxNeighbourSize = 40
