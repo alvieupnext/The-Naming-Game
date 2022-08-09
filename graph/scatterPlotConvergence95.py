@@ -3,7 +3,7 @@ from matplotlib import pyplot as plt
 
 from readPatientData import *
 
-ng = ABNG(maxIterations=2000, simulations=10, strategy=Strategy.multi, output=["popularity", "consensus"],
+ng = ABNG(maxIterations=2000, simulations=100, strategy=Strategy.multi, output=["popularity", "consensus"],
           consensusScore=[0.95], display=False)
 
 patientNames = names
