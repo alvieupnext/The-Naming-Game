@@ -22,4 +22,6 @@ def readPatientData(name, numberOfAgents, type='connectivity'):
 
 names = np.loadtxt(f'../patients/names.csv', dtype=int)
 
+SDMT = pd.read_csv('../patients/SDMT.csv')
+
 # print(readPatientData("2096", 40))

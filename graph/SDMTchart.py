@@ -10,7 +10,7 @@ plt.xlabel("Patients")
 
 plt.ylabel("SDMT score")
 
-dataTable = pd.read_csv('../patients/SDMT.csv')
+dataTable = SDMT
 
 patientNames = names
 
