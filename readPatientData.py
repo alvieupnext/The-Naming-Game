@@ -5,8 +5,9 @@ import pandas as pd
 def readPatientData(name, numberOfAgents, type='connectivity'):
   #get data from csv
   array = np.loadtxt(f'../patients/{type}/{name}.csv', delimiter=',', dtype=float)
+  #threshold
   def binary(el):
-    if el:
+    if el >= 1:
       return 1
     else: return 0
   #change values into either 0 or 1 (could be removed later)
