@@ -33,9 +33,9 @@ def setBoxColors(bp):
   for index, box in enumerate(bp['boxes']):
     setp(box, color=colors[index])
 
-for patientGroup in patientGroups:
+for i, patientGroup in enumerate(patientGroups):
   plt.title(
-    f"Consensus Time Per Neighbourhood Size({ng.name}, {ng.strategy.__name__}, {ng.simulations} simulations, using patient SC)")
+    f"Consensus Time Per Patient({ng.name}, {ng.simulations} simulations, using patient SC group {i} with size {groupSize})")
 
   plt.ylabel("Amount of Games played")
 
@@ -54,6 +54,7 @@ for patientGroup in patientGroups:
     output = ng.start(data)
     #get list of when consensus was reached for every simulation
     consensusList = output["consensus"]
+    # reformat list to get the iteration values
     reformattedConsensusList = []
     for value in consensusScoreList:
       reformattedConsensusList.append([])
@@ -76,10 +77,11 @@ for patientGroup in patientGroups:
   for index, row in enumerate(consensusMatrix):
     bp = boxplot(row, positions=positions[index], widths=0.6)
     setBoxColors(bp)
-    # ngroup = len(row)
-    # clevels = np.linspace(0., 1., ngroup)
     # for position, simValues in zip(positions[index], row):
-    #   positionList = [position] * len(simValues)
+    #   # generate a linear space from 0 to 1 to scatter points
+    #   clevels = np.linspace(0., 1., len(simValues))
+    #   # generate positionList
+    #   positionList = [position - 0.5 + clevels[i] for i in range(len(simValues))]
     #   print(positionList)
     #   print(simValues)
     #   plt.scatter(positionList, simValues, alpha=0.4)
