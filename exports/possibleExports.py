@@ -68,7 +68,7 @@ class namesInCirculation(export):
     self.consensus = self.consensuslist[self.currentConsensus]
 
   #increase consensus meter and check whether we have reached the final consensus
-  def onConsensus(self, sim, it):
+  def onConsensus(self, sim, it, consensus):
     # increase current consensus
     self.currentConsensus += 1
     # check whether we've reached the end
@@ -76,6 +76,10 @@ class namesInCirculation(export):
       self.ng.finalConsensus = True
     else:
       self.consensus = self.consensuslist[self.currentConsensus]
+      #if our new consensus proportion is still smaller than the proportion that triggered the consensus action
+      if self.consensus < consensus:
+        #repeat onConsensus
+        self.onConsensus(sim, it, consensus)
 
 
   #check whether we have reached an internal consensus in our code
@@ -195,15 +199,21 @@ class consensusIteration(export):
     self.currentConsensus = 0
 
   #update consensusIteration
-  def onConsensus(self, sim, it):
+  def onConsensus(self, sim, it, consensus):
     #get current consensus
-    consensus = self.ng.consensusScore[self.currentConsensus]
-    self.consensuslist.append((consensus, it))
+    currentConsensus = self.ng.consensusScore[self.currentConsensus]
+    self.consensuslist.append((currentConsensus, it))
     #increase consensus count
     self.currentConsensus +=1
     #if we reached the end of our list, we reached final consensus
     if len(self.ng.consensusScore) == self.currentConsensus:
       self.ng.finalConsensus = True
+    else:
+      # if our new consensus proportion is still smaller than the proportion that triggered the consensus action
+      if currentConsensus < consensus:
+        #repeat onConsensus
+        self.onConsensus(sim, it, consensus)
+
 
   #fill the consensus list at the end of every simulation
   def onSimulation(self, sim):
