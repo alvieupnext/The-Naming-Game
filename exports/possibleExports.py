@@ -77,7 +77,7 @@ class namesInCirculation(export):
     else:
       self.consensus = self.consensuslist[self.currentConsensus]
       #if our new consensus proportion is still smaller than the proportion that triggered the consensus action
-      if self.consensus < consensus:
+      if self.consensus <= consensus:
         #repeat onConsensus
         self.onConsensus(sim, it, consensus)
 
@@ -171,8 +171,10 @@ class namePopularity(namesInCirculation):
         valueList = [0] * (it + 1)
         valueList[it] = proportion
         self.popularity[name] = valueList
-      if self.checkConsensus(listOfAgents):
-        self.ng.consensus = True
+      #if we have reached our desired consensus, notify the Naming Game
+      consensus = self.checkConsensus(listOfAgents)
+      if consensus:
+          self.ng.consensus = consensus
 
 
   def onSimulation(self, sim):
@@ -209,8 +211,9 @@ class consensusIteration(export):
     if len(self.ng.consensusScore) == self.currentConsensus:
       self.ng.finalConsensus = True
     else:
+      newConsensus = self.ng.consensusScore[self.currentConsensus]
       # if our new consensus proportion is still smaller than the proportion that triggered the consensus action
-      if currentConsensus < consensus:
+      if newConsensus <= consensus:
         #repeat onConsensus
         self.onConsensus(sim, it, consensus)
 
