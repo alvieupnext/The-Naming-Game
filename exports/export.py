@@ -34,7 +34,7 @@ class export:
     pass
 
   #code to be performed on consensus
-  def onConsensus(self, sim, it):
+  def onConsensus(self, sim, it, consensus):
     pass
 
   #code to be performed on the final consensus
