@@ -25,7 +25,7 @@ for i, patientGroup in enumerate(patientGroups):
 
   for index, patient in enumerate(patientGroup):
     print(f"Using Patient Data {patient}")
-    data = readPatientData(patient, 40)
+    data = readPatientData(patient)
     output = ng.start(data)
     #list is only one element long, since we only converging at 0.95
     consensusList = output["consensus"]

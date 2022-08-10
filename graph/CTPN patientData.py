@@ -50,7 +50,7 @@ for i, patientGroup in enumerate(patientGroups):
 
   for row, patient in enumerate(patientGroup):
     print(f"Using Patient Data {patient}")
-    data = readPatientData(patient, 40)
+    data = readPatientData(patient)
     output = ng.start(data)
     #get list of when consensus was reached for every simulation
     consensusList = output["consensus"]

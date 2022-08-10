@@ -2,9 +2,11 @@
 import numpy as np
 import pandas as pd
 
-def readPatientData(name, numberOfAgents, type='connectivity'):
+def readPatientData(name, type='connectivity'):
   #get data from csv
   array = np.loadtxt(f'../patients/{type}/{name}.csv', delimiter=',', dtype=float)
+  # numberOfAgents is the square root of the total array length
+  numberOfAgents = np.sqrt(len(array)).astype(int)
   #threshold
   def binary(el):
     if el >= 1:
@@ -20,8 +22,8 @@ def readPatientData(name, numberOfAgents, type='connectivity'):
   np.fill_diagonal(trig, 0)
   return trig
 
-names = np.loadtxt(f'../patients/names.csv', dtype=int)
-
+names = np.loadtxt('../patients/names.csv', dtype=int)
+#
 SDMT = pd.read_csv('../patients/SDMT.csv')
 
-# print(readPatientData("2096", 40))
+print(readPatientData("2096"))
