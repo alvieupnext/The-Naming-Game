@@ -26,4 +26,4 @@ names = np.loadtxt('../patients/names.csv', dtype=int)
 #
 SDMT = pd.read_csv('../patients/SDMT.csv')
 
-print(readPatientData("2096"))
+# print(readPatientData("2096"))
