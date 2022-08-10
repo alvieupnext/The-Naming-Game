@@ -32,6 +32,12 @@ class namesInCirculation(export):
   def setup(self, numberOfAgents):
     self.circulation = {}
     self.circulationPerSim = []
+    #remember consensusList
+    self.consensuslist = self.ng.consensusScore
+    #keep track of how many consensus scores we've passed
+    self.currentConsensus = 0
+    #initialize first consensus to the lowest score
+    self.consensus = self.consensuslist[self.currentConsensus]
     #remember number of agents
     self.agents = numberOfAgents
 
@@ -74,12 +80,6 @@ class preferredAction(namesInCirculation):
     super().setup(numberOfAgents)
     #add setup for circulation matrix
     self.circulationMatrixPerSim= []
-    #remember consensusList
-    self.consensuslist = self.ng.consensusScore
-    #keep track of how many consensus scores we've passed
-    self.currentConsensus = 0
-    #initialize first consensus to the lowest score
-    self.consensus = self.consensuslist[self.currentConsensus]
     #remember iterations
     self.iterations = self.ng.maxIterations
     self.circulationMatrix = np.zeros((self.iterations, self.agents), dtype=object)
@@ -141,12 +141,6 @@ class namePopularity(namesInCirculation):
   def setup(self, numberOfAgents):
     # perform the namesInCirculation setup
     super().setup(numberOfAgents)
-    #Remember consensus list
-    self.consensuslist = self.ng.consensusScore
-    #keep track of how many consensus scores we've passed
-    self.currentConsensus = 0
-    #update the current consensus score
-    self.consensus = self.consensuslist[self.currentConsensus]
     # add a new dictionary that keeps track of name popularity
     self.popularity = {}
     self.popularityPerSim = []
