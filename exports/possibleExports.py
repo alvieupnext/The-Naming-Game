@@ -77,10 +77,15 @@ class namesInCirculation(export):
     else:
       self.consensus = self.consensuslist[self.currentConsensus]
 
+
   #check whether we have reached an internal consensus in our code
   def checkConsensus(self, agents):
+    #get proportion
+    proportion = len(agents) / self.agents
     #for all names, check whether there are enough agents in the list
-    return len(agents) / self.agents >= self.consensus
+    if proportion >= self.consensus:
+      return proportion
+    else: return False
 
   def output(self):
     return self.circulationPerSim
@@ -121,8 +126,9 @@ class preferredAction(namesInCirculation):
       for agent in listOfAgents:
         self.circulationMatrix[it, agent].append(name)
       #if we have reached our desired consensus, notify the Naming Game
-      if self.checkConsensus(listOfAgents):
-          self.ng.consensus = True
+      consensus = self.checkConsensus(listOfAgents)
+      if consensus:
+          self.ng.consensus = consensus
 
 
   def onFinalConsensus(self, sim, it):
