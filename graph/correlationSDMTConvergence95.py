@@ -1,7 +1,7 @@
 from variants.ABNG import *
 from matplotlib import pyplot as plt
 
-from readPatientData import *
+from patientData import *
 
 ng = ABNG(maxIterations=2000, simulations=100, strategy=Strategy.multi, output=["popularity", "consensus"],
           consensusScore=[0.95], display=False)
@@ -14,7 +14,7 @@ patientGroups = [patientNames[i:i+groupSize] for i in range(0, len(patientNames)
 
 for i, patientGroup in enumerate(patientGroups):
   plt.title(
-    f"Correlation between Consensus Time And SMDT of Patient({ng.name}, {ng.simulations} simulations, using patient group {i} with size {groupSize})")
+    f"Correlation between {ng.consensusScore[-1]}Consensus Time And SMDT of Patient({ng.name}, {ng.simulations} simulations, using patient group {i} with size {groupSize})")
 
   plt.ylabel("SDMT score")
 
