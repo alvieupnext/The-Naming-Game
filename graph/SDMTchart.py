@@ -1,6 +1,6 @@
 from matplotlib import pyplot as plt
 import pandas as pd
-from readPatientData import *
+from patientData import *
 
 
 

@@ -7,7 +7,7 @@ import Strategy
 import numpy as np
 from pylab import plot, show, \
                   legend, boxplot, setp
-from readPatientData import *
+from patientData import *
 
 numberOfAgents = 100
 
