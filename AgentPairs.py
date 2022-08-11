@@ -67,6 +67,7 @@ class AgentPairs:
     agentPairs = []
     #get non zero indices from network
     nonZero = np.nonzero(networkMatrix)
+    print(f'nonZero is {nonZero}')
     #get non zero row column pair
     #transpose will return an array with as elements an array of a row and column
     nonZeroIdx = np.transpose(nonZero)
@@ -74,20 +75,20 @@ class AgentPairs:
     for i in range(numberOfPairs):
       # get non zero values
       nonZeroValues = networkMatrix[nonZero]
-      print(nonZeroValues)
       #get amount of non zero elements
       amount = len(nonZeroValues)
       #if we still have non zero values
       if amount > 0:
         #make a random choice (weighted using the values)
         chosenIdx, = r.choices(nonZeroIdx, weights=nonZeroValues)
-        print(chosenIdx)
         #add chosen IDX to agent pairs
         agentPairs.append(chosenIdx)
-        #update nonZeroIdx to remove the chosen agents
+        #update nonZeroIDX to remove the chosen agents
         chosenRow = chosenIdx[0]
         chosenCol = chosenIdx[1]
-        nonZeroIdx = list(filter(lambda pair: not (chosenRow in pair or chosenCol in pair), nonZeroIdx))
+        nonZero = tuple(filter(lambda pair: not (chosenRow in pair or chosenCol in pair), nonZeroIdx))
+        #update nonZero
+        nonZeroIdx = np.transpose(nonZero)
     return agentPairs
 
 
