@@ -56,10 +56,11 @@ class AgentPairsTest(unittest.TestCase):
   def test_uniquePartnerWeighted(self):
     """In a weighted agent pairing, generated pairs should be unique and not further connected with another agent"""
     pairs = self.pair.generateWeighted(self.weightedMatrix)
+    print(pairs)
     seen = []
     for a, b in pairs:
       self.assertNotEqual(a, b)
-      self.assertTrue(a not in seen and b not in seen, "symmetrical: " + str(a) + " and " + str(b) + "in" + str(seen))
+      self.assertTrue(a not in seen and b not in seen)
       seen.append(a)
       seen.append(b)
 
