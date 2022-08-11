@@ -78,15 +78,21 @@ class AgentPairs:
       #if we still have non zero values
       if amount > 0:
         #make a random choice (weighted using the values)
+        print(f"nonZeroIDX is {nonZeroIdx}")
+        print(nonZeroValues)
         chosenIdx, = r.choices(nonZeroIdx, weights=nonZeroValues)
         #add chosen IDX to agent pairs
         agentPairs.append(chosenIdx)
         #update nonZeroIDX to remove the chosen agents
         chosenRow = chosenIdx[0]
         chosenCol = chosenIdx[1]
-        nonZero = tuple(filter(lambda pair: not (chosenRow in pair or chosenCol in pair), nonZeroIdx))
-        #update nonZero
-        nonZeroIdx = np.transpose(nonZero)
+        nonZeroIdx = list(filter(lambda pair: not (chosenRow in pair or chosenCol in pair), nonZeroIdx))
+        print(f"nonZeroIDX became {nonZeroIdx}")
+        # update nonZero
+        nonZero = ([], [])
+        for pair in nonZeroIdx:
+          nonZero[0].append(pair[0])
+          nonZero[1].append(pair[1])
     return agentPairs
 
 
