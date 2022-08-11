@@ -11,7 +11,7 @@ class AgentPairsTest(unittest.TestCase):
     #using lattices since they involve no random chances
     self.rlattice = rFactory.makeLatticeMatrix(20,4)
     self.tlattice = tFactory.makeLatticeMatrix(20,4)
-    self.weightedMatrix = np.array([[0,3,0], [2, 0, 1], [5, 3, 0]])
+    self.weightedMatrix = np.array([[0,3,0, 1], [2, 0, 1, 1], [5, 3, 0, 1], [0, 0, 6, 0]])
     self.pair = ap.AgentPairs()
 
   def test_pairCreation(self):
