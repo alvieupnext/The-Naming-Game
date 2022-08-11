@@ -67,11 +67,9 @@ class AgentPairs:
     agentPairs = []
     #get non zero indices from network
     nonZero = np.nonzero(networkMatrix)
-    print(f'nonZero is {nonZero}')
     #get non zero row column pair
     #transpose will return an array with as elements an array of a row and column
     nonZeroIdx = np.transpose(nonZero)
-    print(nonZeroIdx)
     for i in range(numberOfPairs):
       # get non zero values
       nonZeroValues = networkMatrix[nonZero]
