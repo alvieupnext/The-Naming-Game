@@ -10,8 +10,6 @@ patient = "2201"
 
 data = readPatientData(patient)
 
-print(data[18, :])
-
 output = ng.start(data)
 
 actionMatrix = output["preferredAction"][0]
