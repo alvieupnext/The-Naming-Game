@@ -9,6 +9,8 @@ def readPatientData(name, type='connectivity'):
   numberOfAgents = np.sqrt(len(array)).astype(int)
   #turn data into the right array dimension
   matrix = np.reshape(array, (numberOfAgents, numberOfAgents))
+  #fill matrix diagonal with 0s
+  np.fill_diagonal(matrix, 0)
   return matrix
 
 # def readPatientData(name, type='connectivity'):
