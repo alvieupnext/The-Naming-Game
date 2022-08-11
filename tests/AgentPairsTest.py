@@ -1,6 +1,7 @@
 import unittest
 import MatrixFactory as mf
 import AgentPairs as ap
+import numpy as np
 
 class AgentPairsTest(unittest.TestCase):
   #setup test
@@ -10,6 +11,7 @@ class AgentPairsTest(unittest.TestCase):
     #using lattices since they involve no random chances
     self.rlattice = rFactory.makeLatticeMatrix(20,4)
     self.tlattice = tFactory.makeLatticeMatrix(20,4)
+    self.weightedMatrix = np.array([[0,3,0], [2, 0, 1], [5, 3, 0]])
     self.pair = ap.AgentPairs()
 
   def test_pairCreation(self):
@@ -50,5 +52,15 @@ class AgentPairsTest(unittest.TestCase):
     """There are at most numberOfAgents divided by 2 pairs formed"""
     tPairs = self.pair.generate(self.rlattice)
     self.assertLessEqual(len(tPairs), 10)
+
+  def test_uniquePartnerWeighted(self):
+    """In a weighted agent pairing, generated pairs should be unique and not further connected with another agent"""
+    pairs = self.pair.generateWeighted(self.weightedMatrix)
+    seen = []
+    for a, b in pairs:
+      self.assertNotEqual(a, b)
+      self.assertTrue(a not in seen and b not in seen, "symmetrical: " + str(a) + " and " + str(b) + "in" + str(seen))
+      seen.append(a)
+      seen.append(b)
 
 
