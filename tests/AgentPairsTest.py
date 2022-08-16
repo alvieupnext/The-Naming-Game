@@ -2,6 +2,8 @@ import unittest
 import MatrixFactory as mf
 import AgentPairs as ap
 import numpy as np
+# importing the module
+import collections
 
 class AgentPairsTest(unittest.TestCase):
   #setup test
@@ -11,7 +13,7 @@ class AgentPairsTest(unittest.TestCase):
     #using lattices since they involve no random chances
     self.rlattice = rFactory.makeLatticeMatrix(20,4)
     self.tlattice = tFactory.makeLatticeMatrix(20,4)
-    self.weightedMatrix = np.array([[0,3,0, 1], [2, 0, 1, 1], [5, 3, 0, 1], [0, 0, 6, 0]])
+    self.weightedMatrix = np.array([[0,3,0, 2], [2, 0, 1, 2], [6, 20, 0, 4], [0, 0, 60, 0]])
     self.pair = ap.AgentPairs()
 
   def test_pairCreation(self):
@@ -63,5 +65,39 @@ class AgentPairsTest(unittest.TestCase):
       self.assertTrue(a not in seen and b not in seen)
       seen.append(a)
       seen.append(b)
+
+  def test_weight(self):
+    """In a weighted agent pairing, certain agent pairs should be more likely to return than others"""
+    #get all non zero elements from the weighted matrix
+    nonZero = np.nonzero(self.weightedMatrix)
+    #transpose to get row column pairs
+    nonZeroIdx = np.transpose(nonZero)
+    #get all non zero values, get the weight
+    weights = self.weightedMatrix[nonZero]
+    #get sum of all weight
+    totalWeight = sum(weights)
+    #generate pair with the row column string and weight
+    weightPairs = []
+    for index, weight in zip(nonZeroIdx, weights):
+      weightPairs.append((str(index), weight))
+    #generate an agent pair iteration amount of times
+    iteration = 100000
+    chosenPairs = []
+    for i in range(iteration):
+      pairs = self.pair.generateWeighted(self.weightedMatrix)
+      #choose the first one of these pairs (Strategy Mono)
+      pair = pairs[0]
+      #turn pair into str to make a dictionary from
+      chosenPairs.append(str(pair))
+    #generate frequency dictionary
+    frequency = dict(collections.Counter(chosenPairs))
+    #check for all weight pairs if the weight corresponds to the iteration amount divided by the frequency
+    for indexString, weight in weightPairs:
+      stohasticFrequency = (frequency[indexString] / iteration) * totalWeight
+      print(f"Checking between {weight} and {stohasticFrequency}")
+      self.assertEqual(weight, round(stohasticFrequency))
+
+
+
 
 
