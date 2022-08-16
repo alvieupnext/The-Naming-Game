@@ -70,6 +70,8 @@ class AgentPairs:
     #get non zero row column pair
     #transpose will return an array with as elements an array of a row and column
     nonZeroIdx = np.transpose(nonZero)
+    #keep a list of agentWeights
+    agentWeights = []
     for i in range(numberOfPairs):
       # get non zero values
       nonZeroValues = networkMatrix[nonZero]
@@ -85,7 +87,7 @@ class AgentPairs:
           #get the score associated with the index
           score = networkMatrix[chosenRow][chosenCol]
           #add score to chosenIdx
-          chosenIdx = np.append(chosenIdx, score)
+          agentWeights.append(score)
         #add chosen IDX to agent pairs
         agentPairs.append(chosenIdx)
         #update nonZeroIDX to remove the chosen agents
@@ -95,7 +97,9 @@ class AgentPairs:
         for pair in nonZeroIdx:
           nonZero[0].append(pair[0])
           nonZero[1].append(pair[1])
-    return agentPairs
+    if weight:
+      return agentPairs, agentWeights
+    else: return agentPairs
 
 
 
