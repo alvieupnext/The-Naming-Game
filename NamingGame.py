@@ -95,7 +95,7 @@ class NamingGame(ABC):
   #Does one iteration of the Naming Game for all pairs
   def run(self, matrixNetwork):
     #get all possible agent pairs
-    agentPairs = ap.AgentPairs().generateWeighted(matrixNetwork)
+    agentPairs = ap.AgentPairs().generateWeighted(matrixNetwork, weight=True)
     #choose pairs based of strategy
     chosenPairs = self.strategy(agentPairs)
     for speaker, listener in chosenPairs:
