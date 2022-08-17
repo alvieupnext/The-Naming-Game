@@ -39,7 +39,9 @@ def readPatientData(name, type='connectivity'):
 #   np.fill_diagonal(trig, 0)
 #   return trig
 
-names = np.loadtxt(here + '/patients/names.csv', dtype=int)
+names = np.loadtxt(here + '/patients/names.csv', dtype=str)
+
+print(names)
 # #
 SDMT = pd.read_csv(here + '/patients/SDMT.csv')
 
