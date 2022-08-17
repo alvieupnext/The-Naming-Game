@@ -2,9 +2,15 @@
 import numpy as np
 import pandas as pd
 
+import os
+
+here = os.path.dirname(os.path.abspath(__file__))
+
 def readPatientData(name, type='connectivity'):
+  #create file path
+  path = here + f'\patients\{type}\{name}.csv'
   #get data from csv
-  array = np.loadtxt(f'../patients/{type}/{name}.csv', delimiter=',', dtype=float)
+  array = np.loadtxt(path, delimiter=',', dtype=float)
   # numberOfAgents is the square root of the total array length
   numberOfAgents = np.sqrt(len(array)).astype(int)
   #turn data into the right array dimension
@@ -33,8 +39,8 @@ def readPatientData(name, type='connectivity'):
 #   np.fill_diagonal(trig, 0)
 #   return trig
 
-names = np.loadtxt('../patients/names.csv', dtype=int)
+names = np.loadtxt(here + '/patients/names.csv', dtype=int)
 # #
-SDMT = pd.read_csv('../patients/SDMT.csv')
+SDMT = pd.read_csv(here + '/patients/SDMT.csv')
 
-info = pd.read_csv('./patients/info.csv')
+info = pd.read_csv(here + '/patients/info.csv')
