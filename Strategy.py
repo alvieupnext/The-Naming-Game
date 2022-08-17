@@ -13,3 +13,11 @@ def mono(agentPairs):
   chosenPair = agentPairs[index]
   #Return pair in a list
   return [chosenPair]
+
+#Only choose the most popular half of the agent pairs
+def halfPopular(agentPairs):
+  return agentPairs[0:len(agentPairs)//2]
+
+#only choose the least popular half of the agent pairs
+def halfUnpopular(agentPairs):
+  return agentPairs[len(agentPairs)//2:len(agentPairs)]
