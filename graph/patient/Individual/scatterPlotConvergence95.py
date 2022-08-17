@@ -31,7 +31,9 @@ for i, patientGroup in enumerate(patientGroups):
     # [0] to get the sole pair out of the list
     # [1] to get the iteration value
     for consensusPerSimList in consensusList:
-      reformattedConsensusList.append(consensusPerSimList[0][1])
+      #if we reached convergence
+      if consensusPerSimList:
+        reformattedConsensusList.append(consensusPerSimList[0][1])
     print(reformattedConsensusList)
     #make a list of all positions (all to be scattered around the index)
     #generate a linear space from 0 to 1 to scatter points
