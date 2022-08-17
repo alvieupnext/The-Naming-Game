@@ -39,10 +39,17 @@ def readPatientData(name, type='connectivity'):
 #   np.fill_diagonal(trig, 0)
 #   return trig
 
-names = np.loadtxt(here + '/patients/names.csv', dtype=str)
+names = np.loadtxt(here + '/patients/names.csv', dtype=int)
 
 print(names)
 # #
 SDMT = pd.read_csv(here + '/patients/SDMT.csv')
 
 info = pd.read_csv(here + '/patients/info.csv')
+
+info = info.loc[info["PatientNo"].isin(names)]
+
+#get the patients that have MS and are in the names group
+MS = info.loc[info["MS"] == 1]
+
+control = info.loc[info["MS"] == 0]
