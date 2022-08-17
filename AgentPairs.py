@@ -61,7 +61,7 @@ class AgentPairs:
     return agentPairs
 
   #Weighted method (weight boolean defines whether we should include weight in the agent pair)
-  def generateWeighted(self, networkMatrix, weight=False):
+  def generateWeighted(self, networkMatrix):
     numberOfPairs = len(networkMatrix)//2
     # start agent pairs as empty
     agentPairs = []
@@ -70,8 +70,6 @@ class AgentPairs:
     #get non zero row column pair
     #transpose will return an array with as elements an array of a row and column
     nonZeroIdx = np.transpose(nonZero)
-    #keep a list of agentWeights
-    agentWeights = []
     for i in range(numberOfPairs):
       # get non zero values
       nonZeroValues = networkMatrix[nonZero]
@@ -83,11 +81,6 @@ class AgentPairs:
         chosenIdx, = r.choices(nonZeroIdx, weights=nonZeroValues)
         chosenRow = chosenIdx[0]
         chosenCol = chosenIdx[1]
-        if weight:
-          #get the score associated with the index
-          score = networkMatrix[chosenRow][chosenCol]
-          #add score to chosenIdx
-          agentWeights.append(score)
         #add chosen IDX to agent pairs
         agentPairs.append(chosenIdx)
         #update nonZeroIDX to remove the chosen agents
@@ -97,9 +90,7 @@ class AgentPairs:
         for pair in nonZeroIdx:
           nonZero[0].append(pair[0])
           nonZero[1].append(pair[1])
-    if weight:
-      return agentPairs, agentWeights
-    else: return agentPairs
+        return agentPairs
 
 
 
