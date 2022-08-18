@@ -52,4 +52,8 @@ info = info.loc[info["PatientNo"].isin(names)]
 #get the patients that have MS and are in the names group
 MS = info.loc[info["MS"] == 1]
 
+MS_patients = MS["PatientNo"].tolist()
+
 control = info.loc[info["MS"] == 0]
+
+C_patients = control["PatientNo"].tolist()
