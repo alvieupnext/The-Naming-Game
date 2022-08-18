@@ -41,4 +41,4 @@ for patient in patientNames:
 print(df)
 
 #export to csv
-df.to_csv("output/convergencePerPatient(N_back_Reduced).csv")
+df.to_csv("output/convergencePerPatient(N_back_Reduced)_weighted.csv")
