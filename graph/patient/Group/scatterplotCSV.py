@@ -38,4 +38,4 @@ def generateScatterPlot(name):
 
     plt.show()
 
-generateScatterPlot("convergencePerPatient(N_back_Reduced)")
+generateScatterPlot("convergencePerPatient(N_back_Reduced)_weighted")
