@@ -92,6 +92,25 @@ class NamingGame(ABC):
     #set final consensus to False
     self.finalConsensus = False
 
+  #play the naming game with a speaker and listener
+  def play(self, speaker, listener):
+    # speaker picks a topic from context
+    intendedTopic = self.pick(speaker, self.context)
+    # speaker produces a name for said topic
+    name = self.produce(intendedTopic, speaker)
+    # listeners interprets name and gives his own topic
+    perceivedTopic = self.interpret(name, listener)
+    # if we found a topic
+    if perceivedTopic:
+      if intendedTopic == perceivedTopic:
+        self.success(speaker, listener, intendedTopic, name)
+      else:
+        self.failure(speaker, listener, intendedTopic, perceivedTopic, name)
+    # if we haven't found a topic, listener should adopt it
+    else:
+      self.adopt(name, intendedTopic, listener, speaker)
+
+
   #Does one iteration of the Naming Game for all pairs
   def run(self, matrixNetwork):
     #get all possible agent pairs
@@ -99,19 +118,7 @@ class NamingGame(ABC):
     #choose pairs based of strategy
     chosenPairs = self.strategy(agentPairs)
     for speaker, listener in chosenPairs:
-      #speaker picks a topic from context
-      intendedTopic = self.pick(speaker, self.context)
-      #speaker produces a name for said topic
-      name = self.produce(intendedTopic, speaker)
-      #listeners interprets name and gives his own topic
-      perceivedTopic = self.interpret(name, listener)
-      #if we found a topic
-      if perceivedTopic:
-        if intendedTopic == perceivedTopic:
-          self.success(speaker, listener, intendedTopic, name)
-        else: self.failure(speaker, listener, intendedTopic, perceivedTopic, name)
-      #if we haven't found a topic, listener should adopt it
-      else: self.adopt(name, intendedTopic, listener, speaker)
+      self.play(speaker, listener)
 
   #Starts the Naming Game with the desired amount of simulations
   def start(self, matrixNetwork):
