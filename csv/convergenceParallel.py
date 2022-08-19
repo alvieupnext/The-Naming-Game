@@ -13,7 +13,7 @@ ray.init()
 
 consensusScoreList = [0.8, 0.9,0.95, 0.98, 0.99, 1]
 
-scoresStringList = [f'SC_{score}' for score in consensusScoreList]
+scoresStringList = [f"SC_{score}" for score in consensusScoreList]
 
 columns = ['NG sim', 'subject']
 
