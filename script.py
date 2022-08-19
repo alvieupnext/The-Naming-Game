@@ -1,14 +1,7 @@
 # This code is responsible for exporting NG convergence results to a csv file (using multicore)
-import sys
-import os
 
-sys.path.append('C:/Users/alvar/PycharmProjects/MAP')
-
-import pandas as pd
-import numpy as np
 from multiprocessing import Pool
 from patientData import *
-import Strategy
 from variants.ABNG import *
 from functools import reduce
 
@@ -60,11 +53,11 @@ patientData = pd.DataFrame(columns=columns)
 
 
 if __name__ == "__main__":
-  with Pool(10) as pool:
+  with Pool(20) as pool:
     dataFrames = pool.map(getDataFromPatient, patientGroups)
     patientData = reduce(mergeData, dataFrames)
     print(patientData)
-    patientData.to_csv("output/convergencePerPatient(N_back_Reduced)_weighted_2.csv")
+    patientData.to_csv("csv/output/convergencePerPatient(N_back_Reduced)_weighted_2.csv")
 
 # if __name__ == "__main__":
 #   ray.init()
