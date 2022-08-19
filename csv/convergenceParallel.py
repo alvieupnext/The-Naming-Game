@@ -8,6 +8,9 @@ from variants.ABNG import *
 import ray
 from functools import reduce
 
+# Start Ray.
+ray.init()
+
 consensusScoreList = [0.8, 0.9,0.95, 0.98, 0.99, 1]
 
 scoresStringList = [f'SC_{score}' for score in consensusScoreList]
@@ -34,7 +37,6 @@ def getDataFromPatient(patientList):
     data = readPatientData(patient)
     output = ng.start(data)
     consensusList = output["consensus"]
-    print(consensusList)
     for sim, simValues in enumerate(consensusList):
       # extract the convergence values from the simValues
       reformattedSimValues = list(map(lambda set: set[1], simValues))
@@ -47,7 +49,6 @@ def getDataFromPatient(patientList):
       row.extend(reformattedSimValues)
       # add row to dataframe
       df.loc[len(df.index)] = row
-  print(df)
   return df
 
 patientDataRemotes = []
@@ -57,5 +58,7 @@ for patientChunk in patientGroups:
 results = ray.get(patientDataRemotes)
 
 patientData = reduce(lambda  left,right: pd.merge(left,right, how='outer'), results)
+
+patientData.to_csv("output/convergencePerPatient(N_back_Reduced)_weighted.csv")
 
 print(patientData)
