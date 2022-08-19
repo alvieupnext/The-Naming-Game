@@ -8,7 +8,7 @@ here = os.path.dirname(os.path.abspath(__file__))
 
 def readPatientData(name, type='connectivity'):
   #create file path
-  path = here + f'\patients\{type}\{name}.csv'
+  path = here + f'/patients/{type}/{name}.csv'
   #get data from csv
   array = np.loadtxt(path, delimiter=',', dtype=float)
   # numberOfAgents is the square root of the total array length
