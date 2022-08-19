@@ -1,7 +1,10 @@
 # This code is responsible for exporting NG convergence results to a csv file (using multicore)
 import sys
+import os
 
 sys.path.append('C:/Users/alvar/PycharmProjects/MAP')
+
+sys.path.append("/The-Naming-Game/")
 
 import pandas as pd
 import numpy as np
