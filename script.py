@@ -13,7 +13,7 @@ scoresStringList = [f"SC_{score}" for score in consensusScoreList]
 
 columns = ['NG sim', 'subject']
 
-patientNames = names[:10]
+patientNames = names
 
 columns.extend(scoresStringList)
 
