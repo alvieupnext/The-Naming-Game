@@ -92,7 +92,7 @@ class AgentPairs:
   #         nonZero[1].append(pair[1])
   #       return agentPairs
 
-  #Weighted method (weight boolean defines whether we should include weight in the agent pair) Symmetrical
+ # Weighted method (weight boolean defines whether we should include weight in the agent pair) Symmetrical
   def generateWeighted(self, networkMatrix):
     numberOfPairs = len(networkMatrix)//2
     # start agent pairs as empty
@@ -112,9 +112,9 @@ class AgentPairs:
         #make a random choice (weighted using the values)
         chosenIdx, = r.choices(nonZeroIdx, weights=nonZeroValues)
         # reverse chosenIdx (to remove index bias)
-        reverseChosenIdx = reversed(chosenIdx)
+        reverseChosenIdx = list(reversed(chosenIdx))
         # choose one of these (equal chance of both pairs appearing)
-        pair = r.choices([chosenIdx, reverseChosenIdx])
+        pair, = r.choices([chosenIdx, reverseChosenIdx])
         chosenRow = chosenIdx[0]
         chosenCol = chosenIdx[1]
         #add chosen IDX to agent pairs
