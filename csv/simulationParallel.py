@@ -84,6 +84,3 @@ if __name__ == "__main__":
 #     print(patientData)
 #   finally:
 #     ray.shutdown()
-
-
-
