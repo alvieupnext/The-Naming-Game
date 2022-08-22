@@ -23,7 +23,7 @@ patientGroups = [patientNames[i:i + groupSize] for i in range(0, len(patientName
 
 
 def getDataFromPatient(patientList):
-  ng = ABNG(maxIterations=100000, simulations=100, strategy=Strategy.multi, output=["popularity", "consensus"],
+  ng = ABNG(maxIterations=100000, simulations=1000, strategy=Strategy.multi, output=["popularity", "consensus"],
             consensusScore=consensusScoreList, display=False)
   df = pd.DataFrame(columns=columns, dtype=int)
   for patient in patientList:
@@ -58,7 +58,7 @@ if __name__ == "__main__":
     print(dataFrames)
     patientData = reduce(mergeData, dataFrames)
     print(patientData)
-    patientData.to_csv("csv/output/convergencePerPatient(N_back_Reduced)_weighted_hydra.csv")
+    patientData.to_csv("csv/output/convergencePerPatient(N_back_Reduced)_weighted_hydra_1000.csv")
 
 # if __name__ == "__main__":
 #   ray.init()
