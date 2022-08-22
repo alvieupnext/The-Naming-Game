@@ -60,7 +60,39 @@ class AgentPairs:
         columnNrs = columnNrs[filterArray]
     return agentPairs
 
-  #Weighted method (weight boolean defines whether we should include weight in the agent pair)
+  # #Weighted method (weight boolean defines whether we should include weight in the agent pair)
+  # def generateWeighted(self, networkMatrix):
+  #   numberOfPairs = len(networkMatrix)//2
+  #   # start agent pairs as empty
+  #   agentPairs = []
+  #   #get non zero indices from network
+  #   nonZero = np.nonzero(networkMatrix)
+  #   #get non zero row column pair
+  #   #transpose will return an array with as elements an array of a row and column
+  #   nonZeroIdx = np.transpose(nonZero)
+  #   for i in range(numberOfPairs):
+  #     # get non zero values
+  #     nonZeroValues = networkMatrix[nonZero]
+  #     #get amount of non zero elements
+  #     amount = len(nonZeroValues)
+  #     #if we still have non zero values
+  #     if amount > 0:
+  #       #make a random choice (weighted using the values)
+  #       chosenIdx, = r.choices(nonZeroIdx, weights=nonZeroValues)
+  #       chosenRow = chosenIdx[0]
+  #       chosenCol = chosenIdx[1]
+  #       #add chosen IDX to agent pairs
+  #       agentPairs.append(chosenIdx)
+  #       #update nonZeroIDX to remove the chosen agents
+  #       nonZeroIdx = list(filter(lambda pair: not (chosenRow in pair or chosenCol in pair), nonZeroIdx))
+  #       # update nonZero
+  #       nonZero = ([], [])
+  #       for pair in nonZeroIdx:
+  #         nonZero[0].append(pair[0])
+  #         nonZero[1].append(pair[1])
+  #       return agentPairs
+
+  #Weighted method (weight boolean defines whether we should include weight in the agent pair) Symmetrical
   def generateWeighted(self, networkMatrix):
     numberOfPairs = len(networkMatrix)//2
     # start agent pairs as empty
@@ -79,10 +111,14 @@ class AgentPairs:
       if amount > 0:
         #make a random choice (weighted using the values)
         chosenIdx, = r.choices(nonZeroIdx, weights=nonZeroValues)
+        # reverse chosenIdx (to remove index bias)
+        reverseChosenIdx = reversed(chosenIdx)
+        # choose one of these (equal chance of both pairs appearing)
+        pair = r.choices([chosenIdx, reverseChosenIdx])
         chosenRow = chosenIdx[0]
         chosenCol = chosenIdx[1]
         #add chosen IDX to agent pairs
-        agentPairs.append(chosenIdx)
+        agentPairs.append(pair)
         #update nonZeroIDX to remove the chosen agents
         nonZeroIdx = list(filter(lambda pair: not (chosenRow in pair or chosenCol in pair), nonZeroIdx))
         # update nonZero
