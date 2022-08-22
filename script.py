@@ -23,7 +23,7 @@ patientGroups = [patientNames[i:i + groupSize] for i in range(0, len(patientName
 
 
 def getDataFromPatient(patientList):
-  ng = ABNG(maxIterations=5000, simulations=10, strategy=Strategy.multi, output=["popularity", "consensus"],
+  ng = ABNG(maxIterations=100000, simulations=100, strategy=Strategy.multi, output=["popularity", "consensus"],
             consensusScore=consensusScoreList, display=False)
   df = pd.DataFrame(columns=columns, dtype=int)
   for patient in patientList:
@@ -53,7 +53,7 @@ def mergeData(sum, df):
 
 
 if __name__ == "__main__":
-  with Pool(95) as pool:
+  with Pool(100) as pool:
     dataFrames = pool.map(getDataFromPatient, patientGroups)
     print(dataFrames)
     patientData = reduce(mergeData, dataFrames)
