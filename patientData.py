@@ -17,7 +17,8 @@ def readPatientData(name, type='connectivity'):
   matrix = np.reshape(array, (numberOfAgents, numberOfAgents))
   #fill matrix diagonal with 0s
   np.fill_diagonal(matrix, 0)
-  return matrix
+  #make matrix triangular and return
+  return np.tril(matrix)
 
 # def readPatientData(name, type='connectivity'):
 #   #get data from csv
