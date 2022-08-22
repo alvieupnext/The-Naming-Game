@@ -55,7 +55,7 @@ patientData = pd.DataFrame(columns=columns)
 
 
 if __name__ == "__main__":
-  with Pool(95) as pool:
+  with Pool(25) as pool:
     dataFrames = pool.map(getDataFromPatient, patientGroups)
     patientData = reduce(mergeData, dataFrames)
     print(patientData)
