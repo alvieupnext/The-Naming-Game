@@ -1,5 +1,7 @@
 # This code is responsible for exporting NG convergence results to a csv file (using multicore)
 
+#This code is for running in the Hydra cluster
+
 from multiprocessing import Pool
 from patientData import *
 from variants.ABNG import *
@@ -53,11 +55,11 @@ patientData = pd.DataFrame(columns=columns)
 
 
 if __name__ == "__main__":
-  with Pool(20) as pool:
+  with Pool(95) as pool:
     dataFrames = pool.map(getDataFromPatient, patientGroups)
     patientData = reduce(mergeData, dataFrames)
     print(patientData)
-    patientData.to_csv("csv/output/convergencePerPatient(N_back_Reduced)_weighted_2.csv")
+    patientData.to_csv("output/convergencePerPatient(N_back_Reduced)_weighted.csv")
 
 # if __name__ == "__main__":
 #   ray.init()
