@@ -25,7 +25,7 @@ patientGroups = [patientNames[i:i + groupSize] for i in range(0, len(patientName
 def getDataFromPatient(patientList):
   ng = ABNG(maxIterations=5000, simulations=10, strategy=Strategy.multi, output=["popularity", "consensus"],
             consensusScore=consensusScoreList, display=False)
-  df = pd.DataFrame(columns=columns)
+  df = pd.DataFrame(columns=columns, dtype=int)
   for patient in patientList:
     print(f"Using Patient Data {patient}")
     data = readPatientData(patient)
@@ -50,13 +50,12 @@ def getDataFromPatient(patientList):
 def mergeData(sum, df):
   return pd.merge(sum, df, how='outer')
 
-patientData = pd.DataFrame(columns=columns)
-
 
 
 if __name__ == "__main__":
   with Pool(95) as pool:
     dataFrames = pool.map(getDataFromPatient, patientGroups)
+    print(dataFrames)
     patientData = reduce(mergeData, dataFrames)
     print(patientData)
     patientData.to_csv("csv/output/convergencePerPatient(N_back_Reduced)_weighted_hydra.csv")
