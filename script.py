@@ -59,7 +59,7 @@ if __name__ == "__main__":
     dataFrames = pool.map(getDataFromPatient, patientGroups)
     patientData = reduce(mergeData, dataFrames)
     print(patientData)
-    patientData.to_csv("output/convergencePerPatient(N_back_Reduced)_weighted.csv")
+    patientData.to_csv("csv/output/convergencePerPatient(N_back_Reduced)_weighted_hydra.csv")
 
 # if __name__ == "__main__":
 #   ray.init()
