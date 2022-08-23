@@ -25,6 +25,22 @@ class NamingGameTest(unittest.TestCase):
     self.singleIterationMono.output.append(outputTest)
     #start game with lattice
     self.singleIterationMono.start(self.lattice)
+    #start game with lattice again (to test)
+    self.singleIterationMono.start(self.lattice)
+
+  def test_influenceBetweenSims(self):
+    """The simulations in a single Naming Game are independent from each other"""
+    assertFalse = self.assertFalse
+    #create new subclass of BaselineNG to override setupSimulation
+    class BNG(BaselineNG):
+      def setupSimulation(self):
+        #perform the usual setupSimulation
+        super().setupSimulation()
+        for memory in self.memory:
+          #check that memory isn't transferred between simulations
+          assertFalse(memory)
+    multiSim = BNG(maxIterations=1, simulations=2, strategy=Strategy.multi, output=["actions"], display=False)
+    multiSim.start(self.lattice)
 
 
 
