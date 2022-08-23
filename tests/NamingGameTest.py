@@ -11,7 +11,7 @@ class NamingGameTest(unittest.TestCase):
     self.singleIterationMono = BaselineNG(maxIterations=1, simulations=1, strategy=Strategy.mono, output=["actions"], display=False)
     self.singleIterationMulti = BaselineNG(maxIterations=1, simulations=1, strategy=Strategy.multi, output=["actions"], display=False)
     self.singleItMultSim = BaselineNG(maxIterations=1, simulations=2, strategy=Strategy.multi, output=["actions"], display=False)
-    self.multiIT = BaselineNG(maxIterations=2, simulations=1, strategy=Strategy.multi, output=["actions"], display=False)
+    self.multiIT = BaselineNG(maxIterations=2, simulations=1, strategy=Strategy.multi, output=["actions"], display=True)
     self.numberOfAgents = 5
     self.lattice = MatrixFactory().makeLatticeMatrix(self.numberOfAgents, 2)
     self.singleConnection = np.array([[0,1],[1,0]])
@@ -67,6 +67,29 @@ class NamingGameTest(unittest.TestCase):
     action = actions[0]
     self.assertEquals(1, action["success"])
 
+  def test_consensus(self):
+    """If the Naming Game reaches a final consensus, the simulation stops early"""
+    # create an output test object that checks whether we have empty memory at the start and between simulations
+    assertEq = self.assertEquals
+    class test(export):
+      def onIteration(self, sim, it):
+        self.ng.consensus = 1
+
+      def onConsensus(self, sim, it, consensus):
+        self.ng.finalConsensus = True
+
+      def onFinalConsensus(self, sim, it):
+        #Iteration 0 is the first iteration
+        assertEq(0, it)
+    outputTest = test("test", self.multiIT)
+    self.multiIT.output.append(outputTest)
+    #If we reach consensus on every iteration, we should be able to stop the game after one iteration
+    output = self.multiIT.start(self.singleConnection)
+    actions = output["actions"]
+    # Single simulation
+    action = actions[0]
+    #If the game stopped after one iteration, a successfull game is not possible
+    self.assertEquals(0, action["success"])
 
 
 
