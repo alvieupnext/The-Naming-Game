@@ -11,6 +11,7 @@ class NamingGameTest(unittest.TestCase):
     self.singleIterationMono = BaselineNG(maxIterations=1, simulations=1, strategy=Strategy.mono, output=["actions"], display=False)
     self.singleIterationMulti = BaselineNG(maxIterations=1, simulations=1, strategy=Strategy.multi, output=["actions"], display=False)
     self.singleItMultSim = BaselineNG(maxIterations=1, simulations=2, strategy=Strategy.multi, output=["actions"], display=False)
+    self.multiIT = BaselineNG(maxIterations=2, simulations=1, strategy=Strategy.multi, output=["actions"], display=False)
     self.numberOfAgents = 5
     self.lattice = MatrixFactory().makeLatticeMatrix(self.numberOfAgents, 2)
     self.singleConnection = np.array([[0,1],[1,0]])
@@ -55,6 +56,16 @@ class NamingGameTest(unittest.TestCase):
     #Since our simulation is running one iteration, there should only be one invention and two adoptions
     self.assertEquals(1, action["invent"])
     self.assertEquals(2, action["adopt"])
+
+  def test_success(self):
+    """If a speaker listener pair agrees about the name of an object, the Naming Game reaches a success"""
+    # Using single connection: on Iteration 1 the pair will invent a name, on Iteration 2, they will agree to it
+    # Get output
+    output = self.multiIT.start(self.singleConnection)
+    actions = output["actions"]
+    # Single simulation
+    action = actions[0]
+    self.assertEquals(1, action["success"])
 
 
 
