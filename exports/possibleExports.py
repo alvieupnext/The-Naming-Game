@@ -263,7 +263,7 @@ class actionsPerformed(export):
   def onFailure(self, speaker, listener, intendedTopic, perceivedTopic, name):
     self.actions["failure"] += 1
 
-  def onConsensus(self, sim, it):
+  def onConsensus(self, sim, it, consensus):
     self.actions["consensusReached"] += 1
 
   def output(self):
