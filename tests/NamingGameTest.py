@@ -3,6 +3,7 @@ from variants.BaselineNG import *
 import Strategy
 from MatrixFactory import *
 from exports.export import *
+import numpy as np
 
 class NamingGameTest(unittest.TestCase):
   #setup the Naming Game (using actions export) for games that only
@@ -12,6 +13,7 @@ class NamingGameTest(unittest.TestCase):
     self.singleItMultSim = BaselineNG(maxIterations=1, simulations=2, strategy=Strategy.multi, output=["actions"], display=False)
     self.numberOfAgents = 5
     self.lattice = MatrixFactory().makeLatticeMatrix(self.numberOfAgents, 2)
+    self.singleConnection = np.array([[0,1],[1,0]])
 
   def test_startEmptyMemory(self):
     """Prior to starting a new Naming Game, every agent has no previous memory of the previous game"""
