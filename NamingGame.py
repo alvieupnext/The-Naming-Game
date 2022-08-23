@@ -79,14 +79,18 @@ class NamingGame(ABC):
     if self.displayEnabled:
       print(args)
 
-  #setup the game
-  def setupSimulation(self, matrixNetwork):
-    #get number of agents
-    numberOfAgents = len(matrixNetwork)
-    #create a list filled with no. agents worth of empty lists, these will be the memory of the agents
-    self.memory = [ [] for _ in range(numberOfAgents) ]
-    #generate the context
+  #setup the entire naming game
+  def setup(self, numberOfAgents):
+    # create a list filled with no. agents worth of empty lists, these will be the memory of the agents
+    self.memory = [[] for _ in range(numberOfAgents)]
+    # generate the context
     self.context = self.generateContext()
+
+  #setup every simulation
+  def setupSimulation(self):
+    #clear memory
+    for index in range(len(self.memory)):
+      self.memory[index] = []
     #set consensus to False
     self.consensus = False
     #set final consensus to False
@@ -131,11 +135,12 @@ class NamingGame(ABC):
       print("Display Enabled")
     else: print("Display Disabled")
     numberOfAgents = len(matrixNetwork)
+    self.setup(numberOfAgents)
     #notify exports that the simulations are starting
     list(map(lambda export: export.setup(numberOfAgents), self.output))
     for sim in range(self.simulations):
       print("Simulation " + str(sim))
-      self.setupSimulation(matrixNetwork)
+      self.setupSimulation()
       for iteration in range(self.maxIterations):
         self.display("Iteration " + str(iteration))
         self.run(matrixNetwork)
