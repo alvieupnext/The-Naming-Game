@@ -42,5 +42,19 @@ class NamingGameTest(unittest.TestCase):
     multiSim = BNG(maxIterations=1, simulations=2, strategy=Strategy.multi, output=["actions"], display=False)
     multiSim.start(self.lattice)
 
+  def test_inventAdopt(self):
+    """The very first iteration of the Naming Game, every speaker will invent a name and both listeners will adopt"""
+    #Since multi doensn't provide us with exact the same amount of agents every time, we are using mono for this test
+    #Get output
+    output = self.singleIterationMono.start(self.lattice)
+    actions = output["actions"]
+    #Single simulation
+    action = actions[0]
+    #Since our simulation is running one iteration, there should only be one invention and two adoptions
+    self.assertEquals(1, action["invent"])
+    self.assertEquals(2, action["adopt"])
+
+
+
 
 
