@@ -273,4 +273,5 @@ class actionsPerformed(export):
 
 
 
-possibleExports = {"names": namesInvented, "circulation": namesInCirculation, "preferredAction": preferredAction, "popularity": namePopularity, "consensus": consensusIteration}
+possibleExports = {"names": namesInvented, "circulation": namesInCirculation, "preferredAction": preferredAction, "popularity": namePopularity, "consensus": consensusIteration,
+                   "actions": actionsPerformed}
