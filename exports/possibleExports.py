@@ -269,9 +269,19 @@ class actionsPerformed(export):
   def output(self):
     return self.actionsPerSim
 
+#export the memory of each agent
+class agentMemory(export):
+  def setup(self, numberOfAgents):
+    self.memory = []
+
+  def onSimulation(self, sim):
+    self.memory.append(self.ng.memory)
+  def output(self):
+    return self.memory
+
 
 
 
 
 possibleExports = {"names": namesInvented, "circulation": namesInCirculation, "preferredAction": preferredAction, "popularity": namePopularity, "consensus": consensusIteration,
-                   "actions": actionsPerformed}
+                   "actions": actionsPerformed, "memory": agentMemory}
