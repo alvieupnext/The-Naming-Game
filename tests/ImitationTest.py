@@ -19,6 +19,7 @@ class ImitationTest(unittest.TestCase):
     self.step = 0
     self.imi = Imitation(maxIterations=2, simulations=1, strategy=self.strategy, output=["actions", "memory"], display=True)
     self.imi2 = Imitationv2(maxIterations=2, simulations=1, strategy=self.strategy, output=["actions", "memory"], display=True)
+    self.imi2_3 = Imitationv2(maxIterations=3, simulations=1, strategy=self.strategy, output=["actions", "memory"])
     self.numberOfAgents = 5
     self.lattice = MatrixFactory().makeLatticeMatrix(self.numberOfAgents, 2)
 
@@ -45,7 +46,7 @@ class ImitationTest(unittest.TestCase):
         self.assertNotEqual(pair0[0], pair4[0])
 
   def test_multipleAdoption(self):
-    """The v2 Imitation is capable of adapting several different names for the same topic"""
+    """In The v2 Imitation, an agent is capable of adapting several different names for the same topic"""
     output = self.imi2.start(self.lattice)
     actions = output["actions"]
     # single simulation
@@ -54,7 +55,7 @@ class ImitationTest(unittest.TestCase):
     self.assertEqual(0, action["remove"])
     memories = output["memory"]
     memory = memories[0]
-    # check whether agent 0 and agent 1 have the same name for all topics
+    # check the length of agent 0
     agent0 = memory[0]
     #check how many memory entries agent 0 has (should be 2)
     self.assertEqual(2, len(agent0))
@@ -63,27 +64,22 @@ class ImitationTest(unittest.TestCase):
     #get topic (on index 1)
     self.assertEqual(entry1[1], entry2[1])
 
-
-
-  # def test_successRemove(self):
-  #   """The v2 Imitation will only remove previous names for the same topic when a success is reached, it can adopt multi"""
-  #   output = self.imi2.start(self.lattice)
-  #   actions = output["actions"]
-  #   # single simulation
-  #   action = actions[0]
-  #   # check how many times a name was removed (should be zero)
-  #   self.assertEqual(0, action["remove"])
-  #   memories = output["memory"]
-  #   memory = memories[0]
-  #   # check whether agent 0 and agent 1 have the same name for all topics
-  #   agent0 = memory[0]
-  #   agent1 = memory[1]
-  #   print(agent0)
-  #   # for pair0, pair1 in zip(agent0, agent1):
-  #   #   if (pair0[1] == pair1[1]):
-  #   #     self.assertEqual(pair0[0], pair1[0])
-  #   # # check whether agent 4 and agent 1 have different names for the same topic (since they haven't interacted)
-  #   # agent4 = memory[4]
-  #   # for pair0, pair4 in zip(agent0, agent4):
-  #   #   if (pair0[1] == pair4[1]):
-  #   #     self.assertNotEqual(pair0[0], pair4[0])
+  def test_successRemove(self):
+    """In The v2 Imitation, an agent only removes multiple names of a topic when it reaches success in an iteration """
+    output = self.imi2_3.start(self.lattice)
+    actions = output["actions"]
+    # single simulation
+    action = actions[0]
+    # check how many times a name was removed (should be one)
+    self.assertEqual(1, action["remove"])
+    memories = output["memory"]
+    memory = memories[0]
+    # check the length of agent 0
+    agent0 = memory[0]
+    self.assertEqual(1, len(agent0))
+    # check whether agent 0 and agent 1 have the same name for all topics
+    agent0 = memory[0]
+    agent4 = memory[4]
+    for pair0, pair4 in zip(agent0, agent4):
+      if (pair0[1] == pair4[1]):
+        self.assertEqual(pair0[0], pair4[0])
