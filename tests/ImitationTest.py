@@ -8,6 +8,7 @@ class ImitationTest(unittest.TestCase):
   #
   def strategy(self, agents):
     #we will first return [[1, 2] [0, 4]] to get two names invented
+    #then we will make 1 and 0 interact to trigger the behavior we want
     if self.step:
       self.step = 0
       return [[1, 0]]
