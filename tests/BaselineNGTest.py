@@ -5,7 +5,7 @@ from MatrixFactory import *
 from exports.export import *
 import numpy as np
 
-class NamingGameTest(unittest.TestCase):
+class BaselineNGTest(unittest.TestCase):
   #setup the Naming Game (using actions export) for games that only
   def setUp(self):
     self.singleIterationMono = BaselineNG(maxIterations=1, simulations=1, strategy=Strategy.mono, output=["actions", "memory"], display=False)
