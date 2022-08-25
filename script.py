@@ -24,7 +24,7 @@ patientGroups = [patientNames[i:i + groupSize] for i in range(0, len(patientName
 
 @ray.remote
 def getDataFromPatient(patientList):
-  ng = ABNG(maxIterations=5000, simulations=10, strategy=Strategy.multi, output=["popularity", "consensus"],
+  ng = ABNG(maxIterations=100000, simulations=1000, strategy=Strategy.multi, output=["popularity", "consensus"],
             consensusScore=consensusScoreList, display=False)
   df = pd.DataFrame(columns=columns)
   for patient in patientList:
