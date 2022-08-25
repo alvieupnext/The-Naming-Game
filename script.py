@@ -6,6 +6,7 @@ from multiprocessing import Pool
 from patientData import *
 from variants.ABNG import *
 from functools import reduce
+import ray
 
 consensusScoreList = [0.8, 0.9, 0.95, 0.98, 0.99, 1]
 
@@ -21,11 +22,11 @@ groupSize = 1
 
 patientGroups = [patientNames[i:i + groupSize] for i in range(0, len(patientNames), groupSize)]
 
-
+@ray.remote
 def getDataFromPatient(patientList):
-  ng = ABNG(maxIterations=100000, simulations=1000, strategy=Strategy.multi, output=["popularity", "consensus"],
+  ng = ABNG(maxIterations=5000, simulations=10, strategy=Strategy.multi, output=["popularity", "consensus"],
             consensusScore=consensusScoreList, display=False)
-  df = pd.DataFrame(columns=columns, dtype=int)
+  df = pd.DataFrame(columns=columns)
   for patient in patientList:
     print(f"Using Patient Data {patient}")
     data = readPatientData(patient)
@@ -50,34 +51,39 @@ def getDataFromPatient(patientList):
 def mergeData(sum, df):
   return pd.merge(sum, df, how='outer')
 
+patientData = pd.DataFrame(columns=columns)
 
 
-if __name__ == "__main__":
-  with Pool(100) as pool:
-    dataFrames = pool.map(getDataFromPatient, patientGroups)
-    print(dataFrames)
-    patientData = reduce(mergeData, dataFrames)
-    print(patientData)
-    patientData.to_csv("csv/output/convergencePerPatient(N_back_Reduced)_weighted_hydra_1000.csv")
 
 # if __name__ == "__main__":
-#   ray.init()
-#   try:
-#     patientDataRemotes = []
-#     for patientChunk in patientGroups:
-#       patientDataRemotes.append(getDataFromPatient.remote(patientChunk))
-#
-#     patientData = pd.DataFrame(columns=columns)
-#
-#     while len(patientDataRemotes):
-#       doneRemote, patientDataRemotes = ray.wait(patientDataRemotes, timeout=None)
-#       print("Finished one")
-#       patientData = mergeData(patientData, ray.get(doneRemote[0]))
-#
-#     patientData.to_csv("output/convergencePerPatient(N_back_Reduced)_weighted_2.csv")
+#   with Pool(10) as pool:
+#     dataFrames = pool.map(getDataFromPatient, patientGroups)
+#     patientData = reduce(mergeData, dataFrames)
 #     print(patientData)
-#   finally:
-#     ray.shutdown()
+#     patientData.to_csv("output/convergencePerPatient(N_back_Reduced)_weighted_2.csv")
+
+if __name__ == "__main__":
+  ray.init()
+  try:
+    patientDataRemotes = []
+    for patientChunk in patientGroups:
+      patientDataRemotes.append(getDataFromPatient.remote(patientChunk))
+
+    patientData = pd.DataFrame(columns=columns)
+
+    while len(patientDataRemotes):
+      doneRemote, patientDataRemotes = ray.wait(patientDataRemotes, timeout=None)
+      print("Finished one")
+      patientData = mergeData(patientData, ray.get(doneRemote[0]))
+
+    patientData.to_csv("output/convergencePerPatient(N_back_Reduced)_weighted_7.csv")
+    print(patientData)
+  finally:
+    ray.shutdown()
+
+
+
+
 
 
 
