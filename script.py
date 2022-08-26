@@ -24,7 +24,7 @@ patientGroups = [patientNames[i:i + groupSize] for i in range(0, len(patientName
 
 @ray.remote
 def getDataFromPatient(patientList):
-  ng = ABNG(maxIterations=100000, simulations=1000, strategy=Strategy.multi, output=["popularity", "consensus"],
+  ng = ABNG(maxIterations=100000, simulations=500, strategy=Strategy.multi, output=["popularity", "consensus"],
             consensusScore=consensusScoreList, display=False)
   df = pd.DataFrame(columns=columns)
   for patient in patientList:
@@ -75,9 +75,7 @@ if __name__ == "__main__":
       doneRemote, patientDataRemotes = ray.wait(patientDataRemotes, timeout=None)
       print("Finished one")
       patientData = mergeData(patientData, ray.get(doneRemote[0]))
-
-    patientData.to_csv("output/convergencePerPatient(N_back_Reduced)_weighted_7.csv")
-    print(patientData)
+      patientData.to_csv("output/convergencePerPatient(N_back_Reduced)_weighted_hydra_tussen.csv")
   finally:
     ray.shutdown()
 
