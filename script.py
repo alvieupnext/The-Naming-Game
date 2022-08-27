@@ -24,7 +24,7 @@ patientGroups = [patientNames[i:i + groupSize] for i in range(0, len(patientName
 
 @ray.remote
 def getDataFromPatient(patientList):
-  ng = ABNG(maxIterations=100000, simulations=1000, strategy=Strategy.multi, output=["popularity", "consensus"],
+  ng = ABNG(maxIterations=100000, simulations=100, strategy=Strategy.multi, output=["popularity", "consensus"],
             consensusScore=consensusScoreList, display=False)
   df = pd.DataFrame(columns=columns)
   for patient in patientList:
@@ -61,23 +61,21 @@ patientData = pd.DataFrame(columns=columns)
 #     patientData = reduce(mergeData, dataFrames)
 #     print(patientData)
 #     patientData.to_csv("output/convergencePerPatient(N_back_Reduced)_weighted_2.csv")
+ray.init()
+try:
+  patientDataRemotes = []
+  for patientChunk in patientGroups:
+    patientDataRemotes.append(getDataFromPatient.remote(patientChunk))
 
-if __name__ == "__main__":
-  ray.init()
-  try:
-    patientDataRemotes = []
-    for patientChunk in patientGroups:
-      patientDataRemotes.append(getDataFromPatient.remote(patientChunk))
+  patientData = pd.DataFrame(columns=columns)
 
-    patientData = pd.DataFrame(columns=columns)
-
-    while len(patientDataRemotes):
-      doneRemote, patientDataRemotes = ray.wait(patientDataRemotes, timeout=None)
-      print("Finished one")
-      patientData = mergeData(patientData, ray.get(doneRemote[0]))
-      patientData.to_csv("csv/output/convergencePerPatient(N_back_Reduced)_weighted_hydra_tussen.csv")
-  finally:
-    ray.shutdown()
+  while len(patientDataRemotes):
+    doneRemote, patientDataRemotes = ray.wait(patientDataRemotes, timeout=None)
+    print("Finished one")
+    patientData = mergeData(patientData, ray.get(doneRemote[0]))
+    patientData.to_csv("csv/output/convergencePerPatient(N_back_Reduced)_weighted_hydra_tussen_10.csv")
+finally:
+  ray.shutdown()
 
 
 
