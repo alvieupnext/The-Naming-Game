@@ -22,6 +22,8 @@ groupSize = 1
 
 patientGroups = [patientNames[i:i + groupSize] for i in range(0, len(patientNames), groupSize)]
 
+print("Starting script")
+
 @ray.remote
 def getDataFromPatient(patientList):
   ng = ABNG(maxIterations=100000, simulations=100, strategy=Strategy.multi, output=["popularity", "consensus"],
