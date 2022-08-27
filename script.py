@@ -63,21 +63,17 @@ patientData = pd.DataFrame(columns=columns)
 #     patientData = reduce(mergeData, dataFrames)
 #     print(patientData)
 #     patientData.to_csv("output/convergencePerPatient(N_back_Reduced)_weighted_2.csv")
-ray.init()
-try:
-  patientDataRemotes = []
-  for patientChunk in patientGroups:
-    patientDataRemotes.append(getDataFromPatient.remote(patientChunk))
+patientDataRemotes = []
+for patientChunk in patientGroups:
+  patientDataRemotes.append(getDataFromPatient.remote(patientChunk))
 
-  patientData = pd.DataFrame(columns=columns)
+patientData = pd.DataFrame(columns=columns)
 
-  while len(patientDataRemotes):
-    doneRemote, patientDataRemotes = ray.wait(patientDataRemotes, timeout=None)
-    print("Finished one")
-    patientData = mergeData(patientData, ray.get(doneRemote[0]))
-    patientData.to_csv("csv/output/convergencePerPatient(N_back_Reduced)_weighted_hydra_tussen_10.csv")
-finally:
-  ray.shutdown()
+while len(patientDataRemotes):
+  doneRemote, patientDataRemotes = ray.wait(patientDataRemotes, timeout=None)
+  print("Finished one")
+  patientData = mergeData(patientData, ray.get(doneRemote[0]))
+  patientData.to_csv("csv/output/convergencePerPatient(N_back_Reduced)_weighted_hydra_tussen_10.csv")
 
 
 
