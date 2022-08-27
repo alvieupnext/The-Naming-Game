@@ -67,13 +67,11 @@ patientDataRemotes = []
 for patientChunk in patientGroups:
   patientDataRemotes.append(getDataFromPatient.remote(patientChunk))
 
-patientData = pd.DataFrame(columns=columns)
-
 while len(patientDataRemotes):
   doneRemote, patientDataRemotes = ray.wait(patientDataRemotes, timeout=None)
   print("Finished one")
   patientData = mergeData(patientData, ray.get(doneRemote[0]))
-  patientData.to_csv("csv/output/convergencePerPatient(N_back_Reduced)_weighted_hydra_tussen_10.csv")
+  patientData.to_csv("csv/output/convergencePerPatient(N_back_Reduced)_weighted_hydra_tussen_100.csv")
 
 
 
