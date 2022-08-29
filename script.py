@@ -26,7 +26,7 @@ print("Starting script")
 
 @ray.remote
 def getDataFromPatient(patientList):
-  ng = ABNG(maxIterations=100000, simulations=100, strategy=Strategy.multi, output=["popularity", "consensus"],
+  ng = ABNG(maxIterations=100000, simulations=1000, strategy=Strategy.multi, output=["popularity", "consensus"],
             consensusScore=consensusScoreList, display=False)
   df = pd.DataFrame(columns=columns)
   for patient in patientList:
@@ -53,25 +53,25 @@ def getDataFromPatient(patientList):
 def mergeData(sum, df):
   return pd.merge(sum, df, how='outer')
 
-patientData = pd.DataFrame(columns=columns)
+# patientData = pd.DataFrame(columns=columns)
 
 
 
-# if __name__ == "__main__":
-#   with Pool(10) as pool:
-#     dataFrames = pool.map(getDataFromPatient, patientGroups)
-#     patientData = reduce(mergeData, dataFrames)
-#     print(patientData)
-#     patientData.to_csv("output/convergencePerPatient(N_back_Reduced)_weighted_2.csv")
-patientDataRemotes = []
-for patientChunk in patientGroups:
-  patientDataRemotes.append(getDataFromPatient.remote(patientChunk))
-
-while len(patientDataRemotes):
-  doneRemote, patientDataRemotes = ray.wait(patientDataRemotes, timeout=None)
-  print("Finished one")
-  patientData = mergeData(patientData, ray.get(doneRemote[0]))
-  patientData.to_csv("csv/output/convergencePerPatient(N_back_Reduced)_weighted_hydra_tussen_100.csv")
+if __name__ == "__main__":
+  with Pool(32) as pool:
+    dataFrames = pool.map(getDataFromPatient, patientGroups)
+    patientData = reduce(mergeData, dataFrames)
+    print(patientData)
+    patientData.to_csv("output/convergencePerPatient(N_back_Reduced)_weighted_hydra_pool.csv")
+# patientDataRemotes = []
+# for patientChunk in patientGroups:
+#   patientDataRemotes.append(getDataFromPatient.remote(patientChunk))
+#
+# while len(patientDataRemotes):
+#   doneRemote, patientDataRemotes = ray.wait(patientDataRemotes, timeout=None)
+#   print("Finished one")
+#   patientData = mergeData(patientData, ray.get(doneRemote[0]))
+#   patientData.to_csv("csv/output/convergencePerPatient(N_back_Reduced)_weighted_hydra_tussen_100.csv")
 
 
 
