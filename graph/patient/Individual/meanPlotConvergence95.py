@@ -20,8 +20,6 @@ for i, patientGroup in enumerate(patientGroups):
 
   plt.xlabel("Patient Number")
 
-  #x and y values
-  x = []
   y = []
 
   for index, patient in enumerate(patientGroup):
@@ -37,17 +35,13 @@ for i, patientGroup in enumerate(patientGroups):
     for consensusPerSimList in consensusList:
       if consensusPerSimList:
         reformattedConsensusList.append(consensusPerSimList[0][1])
-    #add x and y values
-    x.append(index)
     y.append(np.mean(reformattedConsensusList))
+
+  # generate x-positions
+  x = list(range(len(patientGroup)))
 
   plt.plot(x, y)
 
-  #plt.xcorr(x, y)
-
-  #generate ticks
-  ticks = list(range(len(patientGroup)))
-
-  plt.xticks(ticks, patientGroup)
+  plt.xticks(x, patientGroup)
 
   plt.show()
