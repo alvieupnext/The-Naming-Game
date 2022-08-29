@@ -62,7 +62,7 @@ if __name__ == "__main__":
     dataFrames = pool.map(getDataFromPatient, patientGroups)
     patientData = reduce(mergeData, dataFrames)
     print(patientData)
-    patientData.to_csv("output/convergencePerPatient(N_back_Reduced)_weighted_hydra_pool.csv")
+    patientData.to_csv("csv/output/convergencePerPatient(N_back_Reduced)_weighted_hydra_pool.csv")
 # patientDataRemotes = []
 # for patientChunk in patientGroups:
 #   patientDataRemotes.append(getDataFromPatient.remote(patientChunk))
