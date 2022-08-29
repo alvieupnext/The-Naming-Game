@@ -54,7 +54,6 @@ def consensusTime(name):
       for consensusScore in consensusScoreList:
         #get array of values where this patient reached consensus
         consensus = getConsensusIterationOfSubject(patientData, patient, consensusScore)
-        print(consensus)
         consensusList.append(consensus)
       #add filled in consensusList to matrix
       consensusMatrix.append(consensusList)
