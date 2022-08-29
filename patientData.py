@@ -20,6 +20,22 @@ def readPatientData(name, type='connectivity'):
   #make matrix triangular and return
   return np.tril(matrix)
 
+#code for getting the neuron strenghts from a patient
+def getWeightsFromPatient(name, type='connectivity'):
+  # create file path
+  path = here + f'/patients/{type}/{name}.csv'
+  # get data from csv
+  array = np.loadtxt(path, delimiter=',', dtype=float)
+  numberOfAgents = np.sqrt(len(array)).astype(int)
+  for i in range(numberOfAgents):
+    #removes all diagonal elements
+    array = np.delete(array, numberOfAgents*i - i)
+  return array
+
+
+
+
+
 # def readPatientData(name, type='connectivity'):
 #   #get data from csv
 #   array = np.loadtxt(f'../patients/{type}/{name}.csv', delimiter=',', dtype=float)
@@ -56,3 +72,5 @@ MS_patients = MS["PatientNo"].tolist()
 control = info.loc[info["MS"] == 0]
 
 C_patients = control["PatientNo"].tolist()
+
+print(getWeightsFromPatient("2096"))
