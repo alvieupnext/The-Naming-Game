@@ -35,7 +35,8 @@ for i, patientGroup in enumerate(patientGroups):
     # [0] to get the sole pair out of the list
     # [1] to get the iteration value
     for consensusPerSimList in consensusList:
-      reformattedConsensusList.append(consensusPerSimList[0][1])
+      if consensusPerSimList:
+        reformattedConsensusList.append(consensusPerSimList[0][1])
     #add x and y values
     x.append(index)
     y.append(np.mean(reformattedConsensusList))
