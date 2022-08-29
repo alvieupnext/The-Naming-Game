@@ -1,6 +1,4 @@
 from matplotlib import pyplot as plt
-from variants.ABNG import *
-import Strategy
 from patientData import *
 from dataframeTools import *
 
