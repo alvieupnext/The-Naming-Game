@@ -6,7 +6,7 @@ from multiprocessing import Pool
 from patientData import *
 from variants.ABNG import *
 from functools import reduce
-import ray
+# import ray
 
 consensusScoreList = [0.8, 0.9, 0.95, 0.98, 0.99, 1]
 
