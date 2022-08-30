@@ -57,17 +57,17 @@ class MatrixFactory:
     scaleFree = self.__createSquareMatrix(numberOfAgents)
 
     # define the starting connections
-    scaleFree[1, 0] = 1
-    scaleFree[3, 0] = 1
-    scaleFree[2, 1] = 1
-    scaleFree[3, 2] = 1
+    scaleFree[1, 0] = self.generateWeight()
+    scaleFree[3, 0] = self.generateWeight()
+    scaleFree[2, 1] = self.generateWeight()
+    scaleFree[3, 2] = self.generateWeight()
 
     # if matrix output isn't triangular, add the double connections to indicate two-way connection
     if not self.triangular:
-      scaleFree[0,1] = 1
-      scaleFree[0,3] = 1
-      scaleFree[1,2] = 1
-      scaleFree[2,3] = 1
+      scaleFree[0,1] = scaleFree[1, 0]
+      scaleFree[0,3] = scaleFree[3, 0]
+      scaleFree[1,2] = scaleFree[2, 1]
+      scaleFree[2,3] = scaleFree[3, 2]
 
     #to control the randomness of the output, set seed here
     r.seed(self.random)
@@ -92,17 +92,18 @@ class MatrixFactory:
         chosenNode = rows[chosenEdge]
         # if there isn't a connection prior, establish one
         if scaleFree[chosenNode, newNode] == 0 and scaleFree[newNode, chosenNode] == 0:
+          weight = self.generateWeight()
           #if the matrix isn't triangular, add both connections
           if not self.triangular:
-            scaleFree[chosenNode, newNode] = 1
-            scaleFree[newNode, chosenNode] = 1
+            scaleFree[chosenNode, newNode] = weight
+            scaleFree[newNode, chosenNode] = weight
           #if symmetrical, only add the connection under the main diagonal
           else:
             # Property: in a lower triangular matrix, the row number has to always be higher than the column number
             if chosenNode > newNode:
-              scaleFree[chosenNode, newNode] = 1
+              scaleFree[chosenNode, newNode] = weight
             else:
-              scaleFree[newNode, chosenNode] = 1
+              scaleFree[newNode, chosenNode] = weight
           # increase established links
           establishedLinks += 1
 
