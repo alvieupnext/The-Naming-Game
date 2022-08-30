@@ -32,19 +32,14 @@ class MatrixFactory:
     # scanNeighbours could be refactored to better match the usage of the variable
     # has to be even
     scanNeighbours = numberOfNeighbors // 2
-    for neighbourTeller in range(scanNeighbours):
+    #iterate over every column
+    for index in range(numberOfAgents):
+      for neighbourTeller in range(scanNeighbours):
+        weight = self.generateWeight()
       # neighbourTeller gets incremented because Python range works from [0, scanNeighbours[, incrementing will exclude 0 and include scanNeighbours
       # MATLAB chooses first the column and then the row as opposed to numPy where matrices are represented as array of arrays, where an array represents a row, therefore
-      lattice[1 + neighbourTeller, 0] = 1
-      lattice[numberOfAgents - (neighbourTeller + 1), 0] = 1
-
-    # generate neighbors for the other agents using circular shifting
-    # we have to shift the row one position to the right
-    # and wrap around cells that shift outside of the matrix
-    for shiftTeller in range(1, numberOfAgents):
-      #shift the column
-      lattice[:, shiftTeller] = np.roll(lattice[:, shiftTeller - 1], 1)
-      #transpose column below head diagonal and set as row of previous shiftTeller value
+        lattice[(1 + neighbourTeller + index) % numberOfAgents, index] = weight
+        lattice[(numberOfAgents - (neighbourTeller + 1) + index) % numberOfAgents, index] = weight
 
     # turn lattice matrix triangular (if matrices are symmetrical) (lower triangular matrix)
     # because otherwise every link between two agents is represented by two 1's
