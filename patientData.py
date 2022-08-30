@@ -32,7 +32,13 @@ def getWeightsFromPatient(name, type='connectivity'):
     array = np.delete(array, numberOfAgents*i - i)
   return array
 
+def getAllWeightsFromPatients():
+  weights = []
+  for patient in names:
+    weights.extend(getWeightsFromPatient(patient))
+  return weights
 
+weightDistribution = getAllWeightsFromPatients()
 
 
 
