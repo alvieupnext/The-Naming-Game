@@ -113,8 +113,6 @@ class MatrixFactory:
   def makeSmallWorldMatrix(self, numberOfAgents, numberOfNeighbors, numberOfRandomLinks = 3):
     #first step is creating a new lattice
     smallWorld = self.makeLatticeMatrix(numberOfAgents, numberOfNeighbors)
-    # to control the randomness, we establish seed here
-    r.seed(self.random)
     # then we generate random connections
     amount = 0
     while amount < numberOfRandomLinks:
@@ -123,7 +121,7 @@ class MatrixFactory:
       y = r.randint(0, numberOfAgents - 1);
       # make sure they are not equal to each other
       # if they have no prior connection, create the connection
-      if not x == y and smallWorld[x, y] == 0 and smallWorld[y, x] == 0:
+      if (not x == y) and smallWorld[x, y] == 0 and smallWorld[y, x] == 0:
         #if matrix isn't triangular, we need to two-way connect
         if not self.triangular:
           smallWorld[x, y] = 1
@@ -134,8 +132,11 @@ class MatrixFactory:
         else:
           smallWorld[y, x] = 1
         amount += 1
-
     return smallWorld
+
+  # def generateSmallWorldPopulation(self, population, numberOfAgents, maxRandom = 10):
+
+
 
 
 
