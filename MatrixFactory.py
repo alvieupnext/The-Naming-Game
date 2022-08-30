@@ -136,7 +136,24 @@ class MatrixFactory:
         amount += 1
     return smallWorld
 
-  # def generateSmallWorldPopulation(self, population, numberOfAgents, maxRandom = 10):
+  def generateSmallWorldPopulation(self, population, numberOfAgents, maxRandom = 10):
+    #establish max amount of connections an agent can have
+    maxConnections = (numberOfAgents - 1) // 2
+    generatedPopulation = []
+    for _ in range(population):
+      #get a random number of neighbors
+      noNeighbors = r.randint(0, maxConnections)
+      #get a random number of random connections
+      noRandom = r.randint(0, maxRandom)
+      #calculate the overflow in connections
+      overflow = noNeighbors + noRandom - maxConnections
+      if overflow > 0:
+        #remove overflow from the number of neighbors
+        noNeighbors -= overflow
+      generatedPopulation.append(self.makeSmallWorldMatrix(numberOfAgents, noNeighbors, noRandom))
+    return generatedPopulation
+
+
 
 
 
