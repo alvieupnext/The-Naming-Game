@@ -9,7 +9,7 @@ class MatrixFactory:
   #type indicates the type of the matrix elements (default int)
   #order indicates the indexing order (default columns)
   #generateWeight creates a weight for a connection (by default returns 1)
-  def __init__(self, triangular = True, type = int, order ='C', random = None, generateWeight = generate1):
+  def __init__(self, triangular = True, type = float, order ='C', random = None, generateWeight = generate1):
     self.triangular = triangular
     self.type = type
     self.order = order
