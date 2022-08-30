@@ -142,7 +142,7 @@ class MatrixFactory:
     generatedPopulation = []
     for _ in range(population):
       #get a random number of neighbors
-      noNeighbors = r.randint(0, maxConnections)
+      noNeighbors = maxConnections
       #get a random number of random connections
       noRandom = r.randint(0, maxRandom)
       #calculate the overflow in connections
