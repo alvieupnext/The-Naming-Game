@@ -35,4 +35,4 @@ def meanConvergence(name):
     plt.show()
 
 
-meanConvergence("convergencePerPatient(N_back_Reduced)_weighted_hydra")
+meanConvergence("convergencePerPatient(N_back_Reduced)_weighted_hydra_1000")

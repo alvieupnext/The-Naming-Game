@@ -33,4 +33,4 @@ def scatterPlot(name):
 
     plt.show()
 
-scatterPlot("convergencePerPatient(N_back_Reduced)_weighted_hydra")
+scatterPlot("convergencePerPatient(N_back_Reduced)_weighted_hydra_1000")

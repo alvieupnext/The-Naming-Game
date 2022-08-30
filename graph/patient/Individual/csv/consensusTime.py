@@ -66,6 +66,6 @@ def consensusTime(name):
     #show graph
     plt.show()
 
-consensusTime("convergencePerPatient(N_back_Reduced)_weighted_hydra")
+consensusTime("convergencePerPatient(N_back_Reduced)_weighted_hydra_1000")
 
 
