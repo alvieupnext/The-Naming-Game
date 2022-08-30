@@ -48,8 +48,7 @@ def generateConnectionWeight():
   choice = 0
   while not choice:
     choice, = random.choices(weightDistribution)
-
-generateConnectionWeight()
+  return choice
 
 
 
