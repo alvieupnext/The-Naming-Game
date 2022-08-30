@@ -115,6 +115,17 @@ class MatrixFactoryTest(unittest.TestCase):
     for set in smallWorldSets:
       doTest(set)
 
+  def test_generateWeight(self):
+    """A matrix Factory can generate weights based on a procedure given in the init"""
+    def generate2s():
+      return 2
+    factory = mf.MatrixFactory(generateWeight=generate2s)
+    lattice = factory.makeLatticeMatrix(10, 2)
+    nonZero = np.nonzero(lattice)
+    weights = lattice[nonZero]
+    for weight in weights:
+      self.assertEqual(2, weight)
+
 
 if __name__ == '__main__':
   unittest.main()
