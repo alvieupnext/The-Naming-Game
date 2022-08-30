@@ -1,10 +1,13 @@
 #procedure for turning patient code from csv into readable data
 import numpy as np
 import pandas as pd
+import random
 
 import os
 
 here = os.path.dirname(os.path.abspath(__file__))
+
+names = np.loadtxt(here + '/patients/names.csv', dtype=int)
 
 def readPatientData(name, type='connectivity'):
   #create file path
@@ -40,6 +43,14 @@ def getAllWeightsFromPatients():
 
 weightDistribution = getAllWeightsFromPatients()
 
+#choose a non-zero connection
+def generateConnectionWeight():
+  choice = 0
+  while not choice:
+    choice, = random.choices(weightDistribution)
+
+generateConnectionWeight()
+
 
 
 # def readPatientData(name, type='connectivity'):
@@ -61,8 +72,6 @@ weightDistribution = getAllWeightsFromPatients()
 #   #fill the main diagonal with 0s
 #   np.fill_diagonal(trig, 0)
 #   return trig
-
-names = np.loadtxt(here + '/patients/names.csv', dtype=int)
 # #
 SDMT = pd.read_csv(here + '/patients/SDMT.csv')
 
