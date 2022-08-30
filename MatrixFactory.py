@@ -123,15 +123,16 @@ class MatrixFactory:
       # make sure they are not equal to each other
       # if they have no prior connection, create the connection
       if (not x == y) and smallWorld[x, y] == 0 and smallWorld[y, x] == 0:
+        weight = self.generateWeight()
         #if matrix isn't triangular, we need to two-way connect
         if not self.triangular:
-          smallWorld[x, y] = 1
-          smallWorld[y, x] = 1
+          smallWorld[x, y] = weight
+          smallWorld[y, x] = weight
         #if symmetrical, just fill in the information for a lower triangular matrix
         elif x > y:
-          smallWorld[x, y] = 1
+          smallWorld[x, y] = weight
         else:
-          smallWorld[y, x] = 1
+          smallWorld[y, x] = weight
         amount += 1
     return smallWorld
 
