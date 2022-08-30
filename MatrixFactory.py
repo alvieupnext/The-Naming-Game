@@ -115,6 +115,7 @@ class MatrixFactory:
     smallWorld = self.makeLatticeMatrix(numberOfAgents, numberOfNeighbors)
     # then we generate random connections
     amount = 0
+    r.seed(self.random)
     while amount < numberOfRandomLinks:
       # get two random agents
       x = r.randint(0, numberOfAgents - 1);
