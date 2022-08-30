@@ -1,15 +1,20 @@
 import numpy as np
 import random as r
 
+def generate1():
+  return 1
+
 class MatrixFactory:
   #sym indicates whether the output adjacency matrix is symmetrical or not (default False)
   #type indicates the type of the matrix elements (default int)
   #order indicates the indexing order (default columns)
-  def __init__(self, triangular = True, type = int, order ='C', random = None):
+  #generateWeight creates a weight for a connection (by default returns 1)
+  def __init__(self, triangular = True, type = int, order ='C', random = None, generateWeight = generate1):
     self.triangular = triangular
     self.type = type
     self.order = order
     self.random = random
+    self.generateWeight = generateWeight
 
   #create an empty square matrix
   def __createSquareMatrix(self, dim):
@@ -30,7 +35,6 @@ class MatrixFactory:
     for neighbourTeller in range(scanNeighbours):
       # neighbourTeller gets incremented because Python range works from [0, scanNeighbours[, incrementing will exclude 0 and include scanNeighbours
       # MATLAB chooses first the column and then the row as opposed to numPy where matrices are represented as array of arrays, where an array represents a row, therefore
-      # the row has to be chosen first
       lattice[1 + neighbourTeller, 0] = 1
       lattice[numberOfAgents - (neighbourTeller + 1), 0] = 1
 
