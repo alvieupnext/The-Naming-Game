@@ -14,7 +14,7 @@ class ImitationTest(unittest.TestCase):
       return [[1, 0]]
     else:
       self.step += 1
-      return [[1, 2], [0, 4]]
+      return [[1, 2], [4, 0]]
 
   def setUp(self):
     self.step = 0
