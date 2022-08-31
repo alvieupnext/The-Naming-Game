@@ -25,10 +25,11 @@ def generateScatterPlot(name):
     C_list = []
     for patient in names:
       consensus = getConsensusIterationOfSubject(patientData, patient, consensusScore)
-      if patient in MS_patients:
-        MS_list.extend(consensus)
-      else:
-        C_list.extend(consensus)
+      if patient in names:
+        if patient in MS_patients:
+          MS_list.extend(consensus)
+        else:
+          C_list.extend(consensus)
     for index, lst in enumerate([MS_list, C_list]):
       linspace = np.linspace(0., 1., len(lst))
       positionList = [index + 1 - 0.5 + linspace[i] for i in range(len(lst))]

@@ -31,10 +31,11 @@ def generateScatterPlot(name):
       weights = sortedConsensus[-proportionWeightCount :]
       #calculate mean from the biggest weights
       mean = np.mean(weights)
-      if patient in MS_patients:
-        MS_list.append(mean)
-      else:
-        C_list.append(mean)
+      if patient in names:
+        if patient in MS_patients:
+          MS_list.append(mean)
+        else:
+          C_list.append(mean)
     for index, lst in enumerate([MS_list, C_list]):
       linspace = np.linspace(0., 1., len(lst))
       positionList = [index + 1 - 0.5 + linspace[i] for i in range(len(lst))]
