@@ -28,7 +28,7 @@ print("Starting script")
 def getDataFromPatient(patientList):
   ng = ABNG(maxIterations=100000, simulations=1000, strategy=Strategy.multi, output=["popularity", "consensus"],
             consensusScore=consensusScoreList, display=False)
-  df = pd.DataFrame(columns=columns)
+  df = pd.DataFrame(columns=columns, dtype=int)
   for patient in patientList:
     print(f"Using Patient Data {patient}")
     data = readPatientData(patient)
