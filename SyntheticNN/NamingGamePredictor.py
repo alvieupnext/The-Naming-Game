@@ -35,9 +35,9 @@ noOfAgents = 40
 input_size = ((noOfAgents - 1) * noOfAgents) // 2
 #predicts 4 convergences
 num_classes = 1
-learning_rate = 0.08
+learning_rate = 0.01
 batch_size = 95
-num_epochs = 50
+num_epochs = 500
 
 #load Data
 
@@ -47,14 +47,17 @@ class ConvergenceDataset(Dataset):
     patientInfo = networkInfo
     # remove all zero columns (add no meaningful information)
     patientInfo = patientInfo.loc[(patientInfo.sum(axis=1) != 0), (patientInfo.sum(axis=0) != 0)]
+    # turn MS data into int
+    patientInfo["MS"] = patientInfo["MS"].astype(int)
     #only get the last column from convergenceInfo
     convergence = convergenceInfo
     #get last column
     convergence = convergence.iloc[:, [1, -1]]
     #merge datasets
-    xy = pd.merge(patientInfo, convergence)
+    xy = pd.merge(patientInfo, convergence, on="subject")
     #get the x data
-    x = xy.iloc[:, 1:-2]
+    x = xy.iloc[:, 1:-1]
+    print(x.columns)
     #get the y data
     y = xy.iloc[:, [-1]]
     self.xcolumns = x.shape[1]
@@ -105,11 +108,14 @@ train_loader = torch.utils.data.DataLoader(dataset, batch_size=batch_size,
 validation_loader = torch.utils.data.DataLoader(dataset, batch_size=batch_size,
                                                 sampler=valid_sampler)
 
+dataloader = torch.utils.data.DataLoader(dataset, batch_size=batch_size,
+                                                shuffle=True)
+
 #Initialize Network
 model = NN(input_size=dataset.xcolumns, num_classes=num_classes).to(device)
 
 #criterion and optimizer
-criterion = nn.L1Loss()
+criterion = nn.HuberLoss()
 optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
 #Train Network
@@ -117,7 +123,7 @@ optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 for epoch in range(num_epochs):
   print(f"On training epoch {epoch}")
   running_loss = 0
-  for batch_idx, (data, targets) in enumerate(train_loader):
+  for batch_idx, (data, targets) in enumerate(dataloader):
     data = data.to(device=device)
     targets = targets.to(device=device)
 
