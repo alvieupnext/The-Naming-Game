@@ -76,6 +76,10 @@ SDMT = pd.read_csv(here + '/patients/SDMT.csv')
 
 info = pd.read_csv(here + '/patients/info.csv')
 
+networkInfo = pd.read_csv(here + '/csv/output/NBackReducedPatientSC.csv', index_col=0)
+
+convergenceInfo = pd.read_csv(here + '/csv/output/convergencePerPatient(N_back_Reduced)_weighted_hydra_1000_int.csv', index_col=0)
+
 info = info.loc[info["PatientNo"].isin(names)]
 
 #get the patients that have MS and are in the names group
