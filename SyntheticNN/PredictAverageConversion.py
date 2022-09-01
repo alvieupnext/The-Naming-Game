@@ -55,7 +55,6 @@ class ConvergenceDataset(Dataset):
     meanConvergence = meanConvergence.iloc[:, [-1]]
     #merge datasets
     xy = pd.merge(patientInfo, meanConvergence, on="subject")
-    print(xy)
     #get the x data
     x = xy.iloc[:, 1:-2]
     #get the y data

@@ -22,8 +22,8 @@ class NN(nn.Module):
     self.fc2 = nn.Linear(50, num_classes)
 
   def forward(self, x):
-    x = F.relu(self.fc1(x))
-    x = self.fc2(x)
+    x = F.sigmoid(self.fc1(x))
+    x = F.relu(self.fc2(x))
     return x
 
 #Set device
@@ -134,6 +134,8 @@ for epoch in range(num_epochs):
     #forward
     scores = model(data)
     scores = torch.flatten(scores)
+    print(data)
+    print(targets)
     print(scores)
     loss = criterion(scores, targets)
     loss.backward()
