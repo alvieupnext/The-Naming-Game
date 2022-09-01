@@ -35,9 +35,9 @@ noOfAgents = 40
 input_size = ((noOfAgents - 1) * noOfAgents) // 2
 #predicts 4 convergences
 num_classes = 1
-learning_rate = 0.01
-batch_size = 16
-num_epochs = 100
+learning_rate = 0.08
+batch_size = 95
+num_epochs = 50
 
 #load Data
 
