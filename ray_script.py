@@ -25,12 +25,12 @@ def mergeData(sum, df):
   return pd.merge(sum, df, how='outer')
 
 @ray.remote
-def getDataFromSmallWorld(name):
+def getDataFromSmallWorld(patient):
   ng = ABNG(maxIterations=1000000, simulations=100, strategy=Strategy.multi, output=["popularity", "consensus"],
             consensusScore=consensusScoreList, display=False)
   df = pd.DataFrame(columns=columns, dtype=int)
-  print(f"Using Generated Data {name}")
-  array = readGeneratedData("NBackReducedPatientSC_generated", name)
+  print(f"Using Generated Data {patient}")
+  array = readGeneratedData("NBackReducedPatientSC_generated", patient)
   smallWorld = convertArrayToMatrix(array, numberOfAgents)
   print(smallWorld)
   output = ng.start(smallWorld)
@@ -42,19 +42,19 @@ def getDataFromSmallWorld(name):
     while len(reformattedSimValues) < len(consensusScoreList):
       reformattedSimValues.append(ng.maxIterations)
     # add simulation number and patient to an array
-    row = [sim, name]
+    row = [sim, patient]
     # extend it with the reformatted simulation values
     row.extend(reformattedSimValues)
     # add row to dataframe
     df.loc[len(df.index)] = row
-  print(f"Finished using Generated patient data {name}")
+  print(f"Finished using Generated patient data {patient}")
   return df
 
 
 if __name__ == "__main__":
   ray.init(address='auto')
   patientDataRemotes = []
-  for  name in names:
+  for name in names:
     patientDataRemotes.append(getDataFromSmallWorld.remote(name))
 
   patientData = pd.DataFrame(columns=columns, dtype=int)
