@@ -18,14 +18,6 @@ for n in range(noOfAgents):
   for i in range(n):
     columns.append(f"C{n}-{i}")
 
-#converts a lower triangular matrix into an array
-def convertMatrixToArray(matrix):
-  result = []
-  for n in range(len(matrix)):
-    for i in range(n):
-      result.append(matrix[n, i])
-  return result
-
 df = pd.DataFrame(columns=columns, dtype=float)
 
 for patient in patientNames:

@@ -23,6 +23,14 @@ def readPatientData(name, type='connectivity'):
   #make matrix triangular and return
   return np.tril(matrix)
 
+#converts a lower triangular matrix into an array
+def convertMatrixToArray(matrix):
+  result = []
+  for n in range(len(matrix)):
+    for i in range(n):
+      result.append(matrix[n, i])
+  return result
+
 #code for getting the neuron strenghts from a patient
 def getWeightsFromPatient(name, type='connectivity'):
   # create file path
@@ -38,13 +46,13 @@ def getWeightsFromPatient(name, type='connectivity'):
 def getAllWeightsFromPatients():
   weights = []
   for patient in names:
-    weights.extend(getWeightsFromPatient(patient))
-  return weights
+    weights.append(getWeightsFromPatient(patient))
+  return np.array(weights, dtype=float)
 
 weightDistribution = getAllWeightsFromPatients()
 
 #choose a non-zero connection
-def generateConnectionWeight():
+def generateConnectionWeight(frm, to):
   choice = 0
   while not choice:
     choice, = random.choices(weightDistribution)
