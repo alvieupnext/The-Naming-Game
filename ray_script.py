@@ -68,7 +68,7 @@ if __name__ == "__main__":
     doneRemote, patientDataRemotes = ray.wait(patientDataRemotes, timeout=None)
     print("Finished one")
     patientData = mergeData(patientData, ray.get(doneRemote[0]))
-    patientData.to_csv("output/convergencePerPatient(N_back_Reduced)_Ray.csv")
+    patientData.to_csv("csv/output/convergencePerPatient(N_back_Reduced)_Ray.csv")
 
 
 
