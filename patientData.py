@@ -48,7 +48,6 @@ weightDistribution = getAllWeightsFromPatients()
 
 #choose a non-zero connection
 def generateConnectionWeight(frm, to):
-  print(weightDistribution)
   #use the from and to to calculate the right connection in the array
   #calculate difference between two (to always smaller)
   difference = frm - to
