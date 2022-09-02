@@ -23,12 +23,31 @@ def readPatientData(name, type='connectivity'):
   #make matrix triangular and return
   return np.tril(matrix)
 
+def readGeneratedData(name, number):
+  path = here + f'/csv/output/{name}.csv'
+  # get data from csv
+  df = pd.read_csv(path, index_col=0)
+  desiredGenerated = df.iloc[[number], :]
+  array = desiredGenerated.to_numpy()
+  ar_new = np.delete(array, 0)
+  return ar_new
+
 #converts a lower triangular matrix into an array
 def convertMatrixToArray(matrix):
   result = []
   for n in range(len(matrix)):
     for i in range(n):
       result.append(matrix[n, i])
+  return result
+
+#converts an array to a lower triangular matrix
+def convertArrayToMatrix(array, noOfAgents):
+  result = np.zeros((noOfAgents, noOfAgents), dtype=float)
+  index = 0
+  for n in range(noOfAgents):
+    for i in range(n):
+      result[n, i] = array[index]
+      index += 1
   return result
 
 #code for getting the neuron strenghts from a patient
