@@ -59,7 +59,11 @@ def generateConnectionWeight(frm, to):
   weights = weightDistribution[:, edge]
   #choose one at random
   weight, = random.choices(weights)
-  return weight
+  #get standard deviation from the weights (this will act as our noise) (comment this if you dont want noise)
+  std = np.std(weights)
+  #do not guess a negative weight
+  proposedWeight = random.uniform(max(weight - std, 0), weight + std)
+  return proposedWeight
 
 
 # def readPatientData(name, type='connectivity'):
@@ -100,5 +104,3 @@ MS_patients = MS["PatientNo"].tolist()
 control = info.loc[info["MS"] == 0]
 
 C_patients = control["PatientNo"].tolist()
-
-print(getWeightsFromPatient("2096"))
