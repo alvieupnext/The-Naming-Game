@@ -3,18 +3,13 @@ from patientData import *
 from variants.ABNG import *
 from MatrixFactory import *
 from functools import reduce
+import ray
 
-populationCount = 10
+populationCount = 10000
 
 numberOfAgents =40
 
-factory = MatrixFactory(generateWeight=generateConnectionWeight)
-
-population = factory.generateSmallWorldPopulation(populationCount, 40, 20)
-
-names = [f"g{i}" for i in range(populationCount)]
-
-print(names)
+names = [i for i in range(populationCount)]
 
 consensusScoreList = [0.8, 0.9, 0.95, 0.98, 0.99, 1]
 
@@ -27,13 +22,15 @@ columns.extend(scoresStringList)
 def mergeData(sum, df):
   return pd.merge(sum, df, how='outer')
 
-def getDataFromSmallWorld(pair):
-  smallWorld = pair[0]
-  name = pair[1]
-  ng = ABNG(maxIterations=1000000, simulations=1, strategy=Strategy.multi, output=["popularity", "consensus"],
+@ray.remote
+def getDataFromSmallWorld(name):
+  ng = ABNG(maxIterations=1000000, simulations=100, strategy=Strategy.multi, output=["popularity", "consensus"],
             consensusScore=consensusScoreList, display=False)
-  df = pd.DataFrame(columns=columns)
+  df = pd.DataFrame(columns=columns, dtype=int)
   print(f"Using Generated Data {name}")
+  array = readGeneratedData("NBackReducedPatientSC_generated", name)
+  smallWorld = convertArrayToMatrix(array, numberOfAgents)
+  print(smallWorld)
   output = ng.start(smallWorld)
   consensusList = output["consensus"]
   for sim, simValues in enumerate(consensusList):
@@ -48,16 +45,32 @@ def getDataFromSmallWorld(pair):
     row.extend(reformattedSimValues)
     # add row to dataframe
     df.loc[len(df.index)] = row
-  print(f"Finished using patient data {name}")
+  print(f"Finished using Generated patient data {name}")
   return df
 
+getDataFromSmallWorld(1)
+
+
+# if __name__ == "__main__":
+#   with Pool(4) as pool:
+#     dataFrames = pool.map(getDataFromSmallWorld, zip(population, names))
+#     patientData = reduce(mergeData, dataFrames)
+#     print(patientData)
+#     patientData.to_csv("output/convergencePerGeneratedPatient.csv")
 
 if __name__ == "__main__":
-  with Pool(4) as pool:
-    dataFrames = pool.map(getDataFromSmallWorld, zip(population, names))
-    patientData = reduce(mergeData, dataFrames)
-    print(patientData)
-    patientData.to_csv("output/convergencePerGeneratedPatient.csv")
+  ray.init(address='auto')
+  patientDataRemotes = []
+  for  name in names:
+    patientDataRemotes.append(getDataFromSmallWorld.remote(name))
+
+  patientData = pd.DataFrame(columns=columns, dtype=int)
+
+  while len(patientDataRemotes):
+    doneRemote, patientDataRemotes = ray.wait(patientDataRemotes, timeout=None)
+    print("Finished one")
+    patientData = mergeData(patientData, ray.get(doneRemote[0]))
+    patientData.to_csv("csv/output/convergencePerPatient(N_back_Reduced)_Hydra_Ray_Generated.csv")
 
 
 
