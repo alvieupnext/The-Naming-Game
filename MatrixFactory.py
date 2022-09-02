@@ -1,7 +1,7 @@
 import numpy as np
 import random as r
 
-def generate1():
+def generate1(frm, to):
   return 1
 
 class MatrixFactory:
@@ -55,6 +55,15 @@ class MatrixFactory:
     if self.triangular:
       lattice = np.tril(lattice)
 
+    #right now all values are one, update all values to reflect generateWeight
+    nonZero = np.nonzero(lattice)
+    nonZeroIdx = np.transpose(nonZero)
+
+    if self.triangular:
+      for row, column in nonZeroIdx:
+        weight = self.generateWeight(row, column)
+        lattice[row, column] = weight
+
     return lattice
 
   #TODO try to fix scaleFree with numberOfEstablishedLinks
@@ -64,10 +73,10 @@ class MatrixFactory:
     scaleFree = self.__createSquareMatrix(numberOfAgents)
 
     # define the starting connections
-    scaleFree[1, 0] = self.generateWeight()
-    scaleFree[3, 0] = self.generateWeight()
-    scaleFree[2, 1] = self.generateWeight()
-    scaleFree[3, 2] = self.generateWeight()
+    scaleFree[1, 0] = self.generateWeight(1, 0)
+    scaleFree[3, 0] = self.generateWeight(3, 0)
+    scaleFree[2, 1] = self.generateWeight(2, 1)
+    scaleFree[3, 2] = self.generateWeight(3, 2)
 
     # if matrix output isn't triangular, add the double connections to indicate two-way connection
     if not self.triangular:
@@ -99,7 +108,11 @@ class MatrixFactory:
         chosenNode = rows[chosenEdge]
         # if there isn't a connection prior, establish one
         if scaleFree[chosenNode, newNode] == 0 and scaleFree[newNode, chosenNode] == 0:
-          weight = self.generateWeight()
+          weight = 0
+          if chosenNode > newNode:
+            weight = self.generateWeight(chosenNode, newNode)
+          else:
+            weight = self.generateWeight(newNode, chosenNode)
           #if the matrix isn't triangular, add both connections
           if not self.triangular:
             scaleFree[chosenNode, newNode] = weight
@@ -130,7 +143,11 @@ class MatrixFactory:
       # make sure they are not equal to each other
       # if they have no prior connection, create the connection
       if (not x == y) and smallWorld[x, y] == 0 and smallWorld[y, x] == 0:
-        weight = self.generateWeight()
+        weight = 0
+        if x > y:
+          weight = self.generateWeight(x, y)
+        else:
+          weight = self.generateWeight(y, x)
         #if matrix isn't triangular, we need to two-way connect
         if not self.triangular:
           smallWorld[x, y] = weight
