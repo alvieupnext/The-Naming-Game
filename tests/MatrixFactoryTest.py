@@ -118,7 +118,7 @@ class MatrixFactoryTest(unittest.TestCase):
 
   def test_generateWeight(self):
     """A matrix Factory can generate weights based on a procedure given in the init"""
-    def generate2s():
+    def generate2s(frm, to):
       return 2
     factory = mf.MatrixFactory(generateWeight=generate2s)
     lattice = factory.makeLatticeMatrix(10, 2)
