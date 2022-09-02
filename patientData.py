@@ -32,16 +32,11 @@ def convertMatrixToArray(matrix):
   return result
 
 #code for getting the neuron strenghts from a patient
-def getWeightsFromPatient(name, type='connectivity'):
-  # create file path
-  path = here + f'/patients/{type}/{name}.csv'
-  # get data from csv
-  array = np.loadtxt(path, delimiter=',', dtype=float)
-  numberOfAgents = np.sqrt(len(array)).astype(int)
-  for i in range(numberOfAgents):
-    #removes all diagonal elements
-    array = np.delete(array, numberOfAgents*i - i)
-  return array
+def getWeightsFromPatient(name):
+  #get matrix
+  matrix = readPatientData(name)
+  #turn into weight array and return
+  return convertMatrixToArray(matrix)
 
 def getAllWeightsFromPatients():
   weights = []
@@ -53,11 +48,19 @@ weightDistribution = getAllWeightsFromPatients()
 
 #choose a non-zero connection
 def generateConnectionWeight(frm, to):
-  choice = 0
-  while not choice:
-    choice, = random.choices(weightDistribution)
-  return choice
-
+  print(weightDistribution)
+  #use the from and to to calculate the right connection in the array
+  #calculate difference between two (to always smaller)
+  difference = frm - to
+  #get sum of lists from 1 to frm
+  sumToFrm = (frm * (frm + 1))//2
+  #the weight neuron we need is the sumToFrm minus the difference
+  edge = sumToFrm - difference
+  #get the neuron weight from that neuron (should return a column of possible weights)
+  weights = weightDistribution[:, edge]
+  #choose one at random
+  weight, = random.choices(weights)
+  return weight
 
 
 # def readPatientData(name, type='connectivity'):
