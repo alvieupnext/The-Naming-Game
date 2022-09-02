@@ -31,15 +31,21 @@ class MatrixFactory:
     #generate symmetrical neighbors connection for the first agent (agent 0 at column 0)
     # scanNeighbours could be refactored to better match the usage of the variable
     # has to be even
+    # generate neighbors for agent 1
+    # scanNeighbours could be refactored to better match the usage of the variable
     scanNeighbours = numberOfNeighbors // 2
-    #iterate over every column
-    for index in range(numberOfAgents):
-      for neighbourTeller in range(scanNeighbours):
-        weight = self.generateWeight()
+    for neighbourTeller in range(scanNeighbours):
       # neighbourTeller gets incremented because Python range works from [0, scanNeighbours[, incrementing will exclude 0 and include scanNeighbours
       # MATLAB chooses first the column and then the row as opposed to numPy where matrices are represented as array of arrays, where an array represents a row, therefore
-        lattice[(1 + neighbourTeller + index) % numberOfAgents, index] = weight
-        lattice[(numberOfAgents - (neighbourTeller + 1) + index) % numberOfAgents, index] = weight
+      # the row has to be chosen first
+      lattice[1 + neighbourTeller, 0] = 1
+      lattice[numberOfAgents - (neighbourTeller + 1), 0] = 1
+
+    # generate neighbors for the other agents using circular shifting
+    # we have to shift the row one position to the right
+    # and wrap around cells that shift outside of the matrix
+    for shiftTeller in range(1, numberOfAgents):
+      lattice[:, shiftTeller] = np.roll(lattice[:, shiftTeller - 1], 1)
 
     # turn lattice matrix triangular (if matrices are symmetrical) (lower triangular matrix)
     # because otherwise every link between two agents is represented by two 1's
@@ -47,8 +53,9 @@ class MatrixFactory:
     # => element (3,5) and (5,3) of the latticeMatrix are 1
     #
     if self.triangular:
-      return np.tril(lattice)
-    else: return lattice
+      lattice = np.tril(lattice)
+
+    return lattice
 
   #TODO try to fix scaleFree with numberOfEstablishedLinks
   #create a new scale free matrix
