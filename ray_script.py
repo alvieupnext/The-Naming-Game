@@ -1,10 +1,7 @@
 #!/usr/bin/env python
 
-from multiprocessing import Pool
 from patientData import *
 from variants.ABNG import *
-from MatrixFactory import *
-from functools import reduce
 import ray
 
 numberOfAgents =100
@@ -22,7 +19,7 @@ names = list(range(812))
 def mergeData(sum, df):
   return pd.merge(sum, df, how='outer')
 
-# @ray.remote
+@ray.remote
 def getDataFromHospital(name):
   ng = ABNG(maxIterations=1000, simulations=100, strategy=Strategy.multi, output=["popularity", "consensus"],
             consensusScore=consensusScoreList, display=False)
@@ -50,7 +47,7 @@ def getDataFromHospital(name):
 
 
 if __name__ == "__main__":
-  ray.init(address='auto')
+#  ray.init(address='auto')
   patientDataRemotes = []
   #only get the first 100 names
   for name in names[0:100]:
