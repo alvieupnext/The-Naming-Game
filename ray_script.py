@@ -30,7 +30,7 @@ def getDataFromSmallWorld(patient):
             consensusScore=consensusScoreList, display=False)
   df = pd.DataFrame(columns=columns, dtype=int)
   print(f"Using Generated Data {patient}")
-  array = readGeneratedData("NBackReducedPatientSC_generated", patient)
+  array = readCSVData("NBackReducedPatientSC_generated", patient)
   smallWorld = convertArrayToMatrix(array, numberOfAgents)
   print(smallWorld)
   output = ng.start(smallWorld)

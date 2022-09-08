@@ -23,7 +23,7 @@ def readPatientData(name, type='connectivity'):
   #make matrix triangular and return
   return np.tril(matrix)
 
-def readGeneratedData(name, number):
+def readCSVData(name, number):
   path = here + f'/csv/output/{name}.csv'
   # get data from csv
   df = pd.read_csv(path, index_col=0)
