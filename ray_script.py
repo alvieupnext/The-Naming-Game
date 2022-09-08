@@ -47,7 +47,7 @@ def getDataFromHospital(name):
 
 
 if __name__ == "__main__":
-#  ray.init(address='auto')
+  ray.init(address='auto')
   patientDataRemotes = []
   #only get the first 100 names
   for name in names[0:100]:
