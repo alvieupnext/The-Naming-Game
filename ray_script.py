@@ -52,7 +52,8 @@ def getDataFromHospital(name):
 if __name__ == "__main__":
   ray.init(address='auto')
   patientDataRemotes = []
-  for name in names:
+  #only get the first 100 names
+  for name in names[0:100]:
     patientDataRemotes.append(getDataFromHospital.remote(name))
 
   patientData = pd.DataFrame(columns=columns, dtype=int)
