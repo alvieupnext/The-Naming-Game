@@ -84,6 +84,25 @@ def generateConnectionWeight(frm, to):
   proposedWeight = random.uniform(max(weight - std, 0), weight + std)
   return proposedWeight
 
+def loadHPCData(name):
+  #create file path
+  path = here + f'/patients/hospital/{name}.txt'
+  # get data from txt
+  allPatients = np.loadtxt(path, dtype=float)
+  # how many patients are there
+  noOfPatients = len(allPatients)
+  #how many elements does one patient contain
+  noOfElements = len(allPatients[0])
+  numberOfAgents = np.sqrt(noOfElements).astype(int)
+  #generate list of matrices
+  matrices = []
+  #calculate number of agents
+  for patient in allPatients:
+    matrix = np.reshape(patient, (numberOfAgents, numberOfAgents))
+    matrices.append(matrix)
+  return matrices
+
+
 
 # def readPatientData(name, type='connectivity'):
 #   #get data from csv
