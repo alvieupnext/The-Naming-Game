@@ -29,6 +29,7 @@ def readCSVData(name, number):
   df = pd.read_csv(path, index_col=0)
   desiredGenerated = df.iloc[[number], :]
   array = desiredGenerated.to_numpy()
+  #delete subject number
   ar_new = np.delete(array, 0)
   return ar_new
 
@@ -89,6 +90,8 @@ def loadHPCData(name):
   path = here + f'/patients/hospital/{name}.txt'
   # get data from txt
   allPatients = np.loadtxt(path, dtype=float)
+  #get absolute value from allPatients
+  allPatients = np.absolute(allPatients)
   # how many patients are there
   noOfPatients = len(allPatients)
   #how many elements does one patient contain
