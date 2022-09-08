@@ -7,13 +7,9 @@ from MatrixFactory import *
 from functools import reduce
 import ray
 
-populationCount = 10000
+numberOfAgents =100
 
-numberOfAgents =40
-
-names = [i for i in range(populationCount)]
-
-consensusScoreList = [0.8, 0.9, 0.95, 0.98, 0.99, 1]
+consensusScoreList = [0.8, 0.9, 0.95, 1]
 
 scoresStringList = [f"SC_{score}" for score in consensusScoreList]
 
@@ -21,16 +17,18 @@ columns = ['NG sim', 'subject']
 
 columns.extend(scoresStringList)
 
+names = list(range(812))
+
 def mergeData(sum, df):
   return pd.merge(sum, df, how='outer')
 
-@ray.remote
-def getDataFromSmallWorld(patient):
-  ng = ABNG(maxIterations=1000000, simulations=100, strategy=Strategy.multi, output=["popularity", "consensus"],
+# @ray.remote
+def getDataFromHospital(name):
+  ng = ABNG(maxIterations=1000, simulations=100, strategy=Strategy.multi, output=["popularity", "consensus"],
             consensusScore=consensusScoreList, display=False)
   df = pd.DataFrame(columns=columns, dtype=int)
-  print(f"Using Generated Data {patient}")
-  array = readCSVData("NBackReducedPatientSC_generated", patient)
+  print(f"Using Hospital Data {name}")
+  array = readCSVData("HPC_NetMats2_absolute", name)
   smallWorld = convertArrayToMatrix(array, numberOfAgents)
   print(smallWorld)
   output = ng.start(smallWorld)
@@ -42,12 +40,12 @@ def getDataFromSmallWorld(patient):
     while len(reformattedSimValues) < len(consensusScoreList):
       reformattedSimValues.append(ng.maxIterations)
     # add simulation number and patient to an array
-    row = [sim, patient]
+    row = [sim, name]
     # extend it with the reformatted simulation values
     row.extend(reformattedSimValues)
     # add row to dataframe
     df.loc[len(df.index)] = row
-  print(f"Finished using Generated patient data {patient}")
+  print(f"Finished using patient data {name}")
   return df
 
 
@@ -55,7 +53,7 @@ if __name__ == "__main__":
   ray.init(address='auto')
   patientDataRemotes = []
   for name in names:
-    patientDataRemotes.append(getDataFromSmallWorld.remote(name))
+    patientDataRemotes.append(getDataFromHospital.remote(name))
 
   patientData = pd.DataFrame(columns=columns, dtype=int)
 
@@ -63,7 +61,7 @@ if __name__ == "__main__":
     doneRemote, patientDataRemotes = ray.wait(patientDataRemotes, timeout=None)
     print("Finished one")
     patientData = mergeData(patientData, ray.get(doneRemote[0]))
-    patientData.to_csv("csv/output/convergencePerPatient(N_back_Reduced)_Hydra_Ray_Generated.csv")
+    patientData.to_csv("csv/output/convergenceMultiHPCPatients.csv")
 
 
 
