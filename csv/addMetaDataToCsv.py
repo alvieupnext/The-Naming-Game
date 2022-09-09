@@ -1,14 +1,37 @@
 import pandas as pd
 from patientData import *
+import bct
+from graphAnalysis.smallWorldNess import *
 
-patientData = pd.read_csv('output/NBackReducedPatientSC.csv', index_col=0)
+patientData = pd.read_csv('output/HPC_NetMats2_absolute.csv', index_col=0)
 
-patientData["MS"] = patientData["subject"].isin(MS_patients)
+patients = loadHPCData("netmats2")
 
-patientData["SDMT"] = SDMT
+df = pd.DataFrame(columns=["subject", "characteristicPathLength", "globalEfficiency", "localEfficiency", "degreeDistribution", "clusterCoefficient", "transitivity", "smallWorldNess"])
 
-print(SDMT)
+for index, patient in enumerate(patients):
+  charpath = bct.charpath(patient)
+  characteristicPathLength = charpath[0]
+  globalEfficiency = charpath[1]
+  localEfficiency = bct.efficiency_wei(patient)
+  degreeDistribution = np.mean(bct.strengths_und(patient))
+  clusterCoefficient = np.mean(bct.clustering_coef_wu(patient))
+  transitivity = np.mean(bct.transitivity_wu(patient))
+  smallWorld = smallWorldNess(clusterCoefficient, characteristicPathLength)
+  row = [index, characteristicPathLength, globalEfficiency, localEfficiency, degreeDistribution, clusterCoefficient, transitivity, smallWorld]
+  df.loc[len(df.index)] = row
 
-print(patientData)
+df["subject"] = df["subject"].astype(int)
 
-patientData.to_csv('output/NBackReducedPatientSC_with_MetaData.csv',)
+merged = pd.merge(patientData, df)
+
+print(df)
+
+#
+# patientData["MS"] = patientData["subject"].isin(MS_patients)
+#
+# print(SDMT)
+#
+# print(patientData)
+
+merged.to_csv('output/HPC_NetMats2_absolute_with_MetaData.csv')
