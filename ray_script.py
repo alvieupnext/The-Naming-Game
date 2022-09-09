@@ -50,7 +50,7 @@ if __name__ == "__main__":
   ray.init(address='auto')
   patientDataRemotes = []
   #only get the first 100 names
-  for name in names[400:606]:
+  for name in names[606:812]:
     patientDataRemotes.append(getDataFromHospital.remote(name))
 
   patientData = pd.DataFrame(columns=columns, dtype=int)
@@ -59,7 +59,7 @@ if __name__ == "__main__":
     doneRemote, patientDataRemotes = ray.wait(patientDataRemotes, timeout=None)
     print("Finished one")
     patientData = mergeData(patientData, ray.get(doneRemote[0]))
-    patientData.to_csv("csv/output/convergenceMultiHPCPatients3.csv")
+    patientData.to_csv("csv/output/convergenceMultiHPCPatients4.csv")
 
 
 
