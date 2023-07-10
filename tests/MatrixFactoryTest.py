@@ -1,6 +1,7 @@
 import unittest
 import MatrixFactory as mf
 import numpy as np
+from patientData import generateConnectionWeight
 
 class MatrixFactoryTest(unittest.TestCase):
   #setup the test
@@ -115,6 +116,26 @@ class MatrixFactoryTest(unittest.TestCase):
     for set in smallWorldSets:
       doTest(set)
 
+  def test_generateWeight(self):
+    """A matrix Factory can generate weights based on a procedure given in the init"""
+    def generate2s(frm, to):
+      return 2
+    factory = mf.MatrixFactory(generateWeight=generate2s)
+    lattice = factory.makeLatticeMatrix(10, 2)
+    nonZero = np.nonzero(lattice)
+    weights = lattice[nonZero]
+    for weight in weights:
+      self.assertEqual(2, weight)
+
+  def test_generatePopulation(self):
+    """A matrix Factory can generate a population of small World matrices"""
+    factory = mf.MatrixFactory(generateWeight=generateConnectionWeight)
+    population = factory.generateSmallWorldPopulation(1000, 40, 10)
+    self.assertEqual(1000, len(population))
+    for world in population:
+      dim = world.shape
+      expectedDim = (40, 40)
+      self.assertEqual(expectedDim, dim)
 
 if __name__ == '__main__':
   unittest.main()

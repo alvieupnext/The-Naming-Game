@@ -126,7 +126,7 @@ class AgentPairs:
         for pair in nonZeroIdx:
           nonZero[0].append(pair[0])
           nonZero[1].append(pair[1])
-        return agentPairs
+    return agentPairs
 
 
 

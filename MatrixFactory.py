@@ -1,15 +1,20 @@
 import numpy as np
 import random as r
 
+def generate1(frm, to):
+  return 1
+
 class MatrixFactory:
   #sym indicates whether the output adjacency matrix is symmetrical or not (default False)
   #type indicates the type of the matrix elements (default int)
   #order indicates the indexing order (default columns)
-  def __init__(self, triangular = True, type = int, order ='C', random = None):
+  #generateWeight creates a weight for a connection (by default returns 1)
+  def __init__(self, triangular = True, type = float, order ='C', random = None, generateWeight = generate1):
     self.triangular = triangular
     self.type = type
     self.order = order
     self.random = random
+    self.generateWeight = generateWeight
 
   #create an empty square matrix
   def __createSquareMatrix(self, dim):
@@ -26,6 +31,8 @@ class MatrixFactory:
     #generate symmetrical neighbors connection for the first agent (agent 0 at column 0)
     # scanNeighbours could be refactored to better match the usage of the variable
     # has to be even
+    # generate neighbors for agent 1
+    # scanNeighbours could be refactored to better match the usage of the variable
     scanNeighbours = numberOfNeighbors // 2
     for neighbourTeller in range(scanNeighbours):
       # neighbourTeller gets incremented because Python range works from [0, scanNeighbours[, incrementing will exclude 0 and include scanNeighbours
@@ -38,9 +45,7 @@ class MatrixFactory:
     # we have to shift the row one position to the right
     # and wrap around cells that shift outside of the matrix
     for shiftTeller in range(1, numberOfAgents):
-      #shift the column
       lattice[:, shiftTeller] = np.roll(lattice[:, shiftTeller - 1], 1)
-      #transpose column below head diagonal and set as row of previous shiftTeller value
 
     # turn lattice matrix triangular (if matrices are symmetrical) (lower triangular matrix)
     # because otherwise every link between two agents is represented by two 1's
@@ -48,8 +53,18 @@ class MatrixFactory:
     # => element (3,5) and (5,3) of the latticeMatrix are 1
     #
     if self.triangular:
-      return np.tril(lattice)
-    else: return lattice
+      lattice = np.tril(lattice)
+
+    #right now all values are one, update all values to reflect generateWeight
+    nonZero = np.nonzero(lattice)
+    nonZeroIdx = np.transpose(nonZero)
+
+    if self.triangular:
+      for row, column in nonZeroIdx:
+        weight = self.generateWeight(row, column)
+        lattice[row, column] = weight
+
+    return lattice
 
   #TODO try to fix scaleFree with numberOfEstablishedLinks
   #create a new scale free matrix
@@ -58,17 +73,17 @@ class MatrixFactory:
     scaleFree = self.__createSquareMatrix(numberOfAgents)
 
     # define the starting connections
-    scaleFree[1, 0] = 1
-    scaleFree[3, 0] = 1
-    scaleFree[2, 1] = 1
-    scaleFree[3, 2] = 1
+    scaleFree[1, 0] = self.generateWeight(1, 0)
+    scaleFree[3, 0] = self.generateWeight(3, 0)
+    scaleFree[2, 1] = self.generateWeight(2, 1)
+    scaleFree[3, 2] = self.generateWeight(3, 2)
 
     # if matrix output isn't triangular, add the double connections to indicate two-way connection
     if not self.triangular:
-      scaleFree[0,1] = 1
-      scaleFree[0,3] = 1
-      scaleFree[1,2] = 1
-      scaleFree[2,3] = 1
+      scaleFree[0,1] = scaleFree[1, 0]
+      scaleFree[0,3] = scaleFree[3, 0]
+      scaleFree[1,2] = scaleFree[2, 1]
+      scaleFree[2,3] = scaleFree[3, 2]
 
     #to control the randomness of the output, set seed here
     r.seed(self.random)
@@ -93,17 +108,22 @@ class MatrixFactory:
         chosenNode = rows[chosenEdge]
         # if there isn't a connection prior, establish one
         if scaleFree[chosenNode, newNode] == 0 and scaleFree[newNode, chosenNode] == 0:
+          weight = 0
+          if chosenNode > newNode:
+            weight = self.generateWeight(chosenNode, newNode)
+          else:
+            weight = self.generateWeight(newNode, chosenNode)
           #if the matrix isn't triangular, add both connections
           if not self.triangular:
-            scaleFree[chosenNode, newNode] = 1
-            scaleFree[newNode, chosenNode] = 1
+            scaleFree[chosenNode, newNode] = weight
+            scaleFree[newNode, chosenNode] = weight
           #if symmetrical, only add the connection under the main diagonal
           else:
             # Property: in a lower triangular matrix, the row number has to always be higher than the column number
             if chosenNode > newNode:
-              scaleFree[chosenNode, newNode] = 1
+              scaleFree[chosenNode, newNode] = weight
             else:
-              scaleFree[newNode, chosenNode] = 1
+              scaleFree[newNode, chosenNode] = weight
           # increase established links
           establishedLinks += 1
 
@@ -113,29 +133,53 @@ class MatrixFactory:
   def makeSmallWorldMatrix(self, numberOfAgents, numberOfNeighbors, numberOfRandomLinks = 3):
     #first step is creating a new lattice
     smallWorld = self.makeLatticeMatrix(numberOfAgents, numberOfNeighbors)
-    # to control the randomness, we establish seed here
-    r.seed(self.random)
     # then we generate random connections
     amount = 0
+    r.seed(self.random)
     while amount < numberOfRandomLinks:
       # get two random agents
       x = r.randint(0, numberOfAgents - 1);
       y = r.randint(0, numberOfAgents - 1);
       # make sure they are not equal to each other
       # if they have no prior connection, create the connection
-      if not x == y and smallWorld[x, y] == 0 and smallWorld[y, x] == 0:
+      if (not x == y) and smallWorld[x, y] == 0 and smallWorld[y, x] == 0:
+        weight = 0
+        if x > y:
+          weight = self.generateWeight(x, y)
+        else:
+          weight = self.generateWeight(y, x)
         #if matrix isn't triangular, we need to two-way connect
         if not self.triangular:
-          smallWorld[x, y] = 1
-          smallWorld[y, x] = 1
+          smallWorld[x, y] = weight
+          smallWorld[y, x] = weight
         #if symmetrical, just fill in the information for a lower triangular matrix
         elif x > y:
-          smallWorld[x, y] = 1
+          smallWorld[x, y] = weight
         else:
-          smallWorld[y, x] = 1
+          smallWorld[y, x] = weight
         amount += 1
-
     return smallWorld
+
+  def generateSmallWorldPopulation(self, population, numberOfAgents, maxRandom = 10):
+    #establish max amount of connections an agent can have
+    maxConnections = (numberOfAgents - 1) // 2
+    generatedPopulation = []
+    for _ in range(population):
+      #get a random number of neighbors
+      noNeighbors = maxConnections
+      #get a random number of random connections
+      noRandom = r.randint(0, maxRandom)
+      #calculate the overflow in connections
+      overflow = noNeighbors + noRandom - maxConnections
+      if overflow > 0:
+        #remove overflow from the number of neighbors
+        noNeighbors -= overflow
+      generatedPopulation.append(self.makeSmallWorldMatrix(numberOfAgents, noNeighbors, noRandom))
+    return generatedPopulation
+
+
+
+
 
 
 
