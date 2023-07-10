@@ -26,7 +26,7 @@ def getDataFromHospital(name):
             consensusScore=consensusScoreList, display=False)
   df = pd.DataFrame(columns=columns, dtype=int)
   print(f"Using Hospital Data {name}")
-  array = readCSVData("HPC_NetMats2_v3", name)
+  array = readCSVData("HCP_NetMats2", name)
   smallWorld = convertArrayToMatrix(array, numberOfAgents)
   output = ng.start(smallWorld)
   consensusList = output["consensus"]

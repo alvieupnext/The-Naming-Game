@@ -1,8 +1,6 @@
 #!/usr/bin/env python
-from variants.ABNG import *
-import ray
-
 from multiprocessing import Pool
+from patientData import *
 from variants.ABNG import *
 from MatrixFactory import *
 from functools import reduce
@@ -29,7 +27,7 @@ def getDataFromHospital(name):
             consensusScore=consensusScoreList, display=False)
   df = pd.DataFrame(columns=columns, dtype=int)
   print(f"Using Hospital Data {name}")
-  array = readCSVData("HPC_NetMats2_v3", name)
+  array = readCSVData("HCP_NetMats2", name)
   smallWorld = convertArrayToMatrix(array, numberOfAgents)
   output = ng.start(smallWorld)
   consensusList = output["consensus"]
@@ -64,6 +62,11 @@ if __name__ == "__main__":
     print("Finished one")
     patientData = mergeData(patientData, ray.get(doneRemote[0]))
     patientData.to_csv("csv/output/convergenceHPC.csv")
+
+
+
+
+
 
 
 
