@@ -26,10 +26,10 @@ def readPatientData(name, type='connectivity'):
 def readCSVData(name, number):
   path = here + f'/csv/output/{name}.csv'
   # get data from csv
-  df = pd.read_csv(path, index_col=0)
+  df = pd.read_csv(path)
   desiredGenerated = df.iloc[[number], :]
   array = desiredGenerated.to_numpy()
-  #delete subject number
+  # #delete subject number
   ar_new = np.delete(array, 0)
   return ar_new
 
@@ -42,7 +42,7 @@ def convertMatrixToArray(matrix):
   return result
 
 #converts an array to a lower triangular matrix
-def convertArrayToMatrix(array, noOfAgents):
+def convertArrayToMatrix(array: object, noOfAgents: object) -> object:
   result = np.zeros((noOfAgents, noOfAgents), dtype=float)
   index = 0
   for n in range(noOfAgents):
@@ -91,7 +91,9 @@ def loadHPCData(name):
   # get data from txt
   allPatients = np.loadtxt(path, dtype=float)
   #get absolute value from allPatients
-  allPatients = np.absolute(allPatients)
+  # allPatients = np.absolute(allPatients)
+  allPatients[allPatients<0] = 0
+  print(allPatients.shape)
   # how many patients are there
   noOfPatients = len(allPatients)
   #how many elements does one patient contain
