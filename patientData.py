@@ -129,9 +129,9 @@ def loadHPCData(name):
 #   np.fill_diagonal(trig, 0)
 #   return trig
 # #
-SDMT = pd.read_csv(here + '/patients/SDMT.csv')
-
-info = pd.read_csv(here + '/patients/info.csv')
+# SDMT = pd.read_csv(here + '/patients/SDMT.csv')
+#
+# info = pd.read_csv(here + '/patients/info.csv')
 
 networkInfo = pd.read_csv(here + '/csv/output/NBackReducedPatientSC_with_MetaData.csv', index_col=0)
 
