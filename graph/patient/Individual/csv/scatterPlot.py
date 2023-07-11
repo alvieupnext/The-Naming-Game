@@ -2,18 +2,20 @@ from matplotlib import pyplot as plt
 from dataframeTools import *
 from patientData import *
 
-patientNames = names
+patientNames = list(range(812))
 
-groupSize = len(patientNames) // 5
+groupSize = len(patientNames) // 20
 
 patientGroups = [patientNames[i:i+groupSize] for i in range(0, len(patientNames), groupSize)]
 
 chosenConvergence = 0.95
 
+print(patientGroups)
+
 def scatterPlot(name):
   path = here + f"/csv/output/{name}.csv"
   patientData = pd.read_csv(path)
-  for i, patientGroup in enumerate(patientGroups):
+  for i, patientGroup in enumerate(patientGroups[3:]):
     plt.title(f"Scatter Plot Convergence with {chosenConvergence} with patient group {i}")
     plt.ylabel("Amount of Games played")
     plt.xlabel("Patient Number")
@@ -33,4 +35,4 @@ def scatterPlot(name):
 
     plt.show()
 
-scatterPlot("convergencePerPatient(N_back_Reduced)_weighted_hydra_1000")
+scatterPlot("convergenceHPC")
