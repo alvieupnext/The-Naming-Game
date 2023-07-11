@@ -8,7 +8,7 @@ import ray
 
 numberOfAgents =100
 
-consensusScoreList = [0.8, 0.9, 0.95, 1]
+consensusScoreList = [0.7, 0.8, 0.9, 0.95, 0.98, 0.99, 1]
 
 scoresStringList = [f"SC_{score}" for score in consensusScoreList]
 
@@ -23,12 +23,13 @@ def mergeData(sum, df):
 
 @ray.remote
 def getDataFromHospital(name):
-  ng = ABNG(maxIterations=100, simulations=10, strategy=Strategy.multi, output=["popularity", "consensus"],
+  ng = ABNG(maxIterations=100, simulations=300, strategy=Strategy.multi, output=["popularity", "consensus"],
             consensusScore=consensusScoreList, display=False)
   df = pd.DataFrame(columns=columns, dtype=int)
   print(f"Using Hospital Data {name}")
   array = readCSVData("HCP_NetMats2", name)
   smallWorld = convertArrayToMatrix(array, numberOfAgents)
+  print(smallWorld)
   output = ng.start(smallWorld)
   consensusList = output["consensus"]
   for sim, simValues in enumerate(consensusList):
@@ -61,7 +62,7 @@ if __name__ == "__main__":
     doneRemote, patientDataRemotes = ray.wait(patientDataRemotes, timeout=None)
     print("Finished one")
     patientData = mergeData(patientData, ray.get(doneRemote[0]))
-    patientData.to_csv("csv/output/convergenceHPC.csv")
+    patientData.to_csv("csv/output/convergenceHCP_300.csv")
 
 
 
