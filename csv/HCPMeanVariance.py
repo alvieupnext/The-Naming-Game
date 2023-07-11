@@ -31,6 +31,15 @@ def processDataFrame(df):
     # Reset the index of the DataFrame
     processed_df.reset_index(inplace=True, drop=True)
 
+    # Load the subject name from subjects.txt and add them to the DataFrame
+    subjects = pd.read_csv('subjects.txt', header=None)
+    processed_df['Subjects'] = subjects
+
+    #Make the subjects the first column
+    cols = processed_df.columns.tolist()
+    cols = cols[-1:] + cols[:-1]
+    processed_df = processed_df[cols]
+
     return processed_df
 
 # Specify the file path to the CSV
@@ -44,7 +53,7 @@ df = processDataFrame(df)
 print(df)
 
 # Assuming your DataFrame is named df
-output_file_path = 'output/convergenceMeanVarianceHCP.csv'
+output_file_path = 'output/convergenceMeanVarianceHCP_v2.csv'
 
 # Export the DataFrame to a CSV file
 df.to_csv(output_file_path, index=False)
