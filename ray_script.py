@@ -23,7 +23,7 @@ def mergeData(sum, df):
 
 @ray.remote
 def getDataFromHospital(name):
-  ng = ABNG(maxIterations=100, simulations=300, strategy=Strategy.multi, output=["popularity", "consensus"],
+  ng = ABNG(maxIterations=10000, simulations=1, strategy=Strategy.mono, output=["popularity", "consensus"],
             consensusScore=consensusScoreList, display=False)
   df = pd.DataFrame(columns=columns, dtype=int)
   print(f"Using Hospital Data {name}")
@@ -61,6 +61,7 @@ if __name__ == "__main__":
   while len(patientDataRemotes):
     doneRemote, patientDataRemotes = ray.wait(patientDataRemotes, timeout=None)
     print("Finished one")
+    print("Remaing tasks: ", len(patientDataRemotes))
     patientData = mergeData(patientData, ray.get(doneRemote[0]))
     patientData.to_csv("csv/output/convergenceHCP_300.csv")
 
