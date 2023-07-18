@@ -2,9 +2,9 @@ from matplotlib import pyplot as plt
 from patientData import *
 from dataframeTools import *
 
-patientNames = names
+patientNames = list(range(812))
 
-groupSize = len(patientNames) // 5
+groupSize = len(patientNames) // 50
 
 patientGroups = [patientNames[i:i+groupSize] for i in range(0, len(patientNames), groupSize)]
 
@@ -12,7 +12,7 @@ print(patientGroups)
 
 colors = ['blue', 'red', 'cyan', 'magenta', 'green', 'purple']
 
-consensusScoreList = [0.8, 0.9,0.95, 0.98, 0.99, 1]
+consensusScoreList = [0.8, 0.9,0.95, 1]
 
 #help procedures for the boxplot
 # function for setting the colors of the box plots pairs
@@ -66,6 +66,6 @@ def consensusTime(name):
     #show graph
     plt.show()
 
-consensusTime("convergencePerPatient(N_back_Reduced)_weighted_hydra_1000")
+consensusTime("convergenceHPC")
 
 

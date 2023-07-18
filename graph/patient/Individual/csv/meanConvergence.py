@@ -3,9 +3,9 @@ from patientData import *
 from dataframeTools import *
 import numpy as np
 
-patientNames = names
+patientNames = list(range(812))
 
-groupSize = len(patientNames) // 5
+groupSize = len(patientNames) // 50
 
 patientGroups = [patientNames[i:i+groupSize] for i in range(0, len(patientNames), groupSize)]
 
@@ -35,4 +35,4 @@ def meanConvergence(name):
     plt.show()
 
 
-meanConvergence("convergencePerPatient(N_back_Reduced)_weighted_hydra_1000")
+meanConvergence("convergenceHPC")

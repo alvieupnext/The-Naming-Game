@@ -20,15 +20,14 @@ names = list(range(812))
 def mergeData(sum, df):
   return pd.merge(sum, df, how='outer')
 
-# @ray.remote
+@ray.remote
 def getDataFromHospital(name):
   ng = ABNG(maxIterations=100, simulations=10, strategy=Strategy.multi, output=["popularity", "consensus"],
             consensusScore=consensusScoreList, display=False)
   df = pd.DataFrame(columns=columns, dtype=int)
   print(f"Using Hospital Data {name}")
-  array = readCSVData("HPC_NetMats2_absolute", name)
+  array = readCSVData("HCP_NetMats2", name)
   smallWorld = convertArrayToMatrix(array, numberOfAgents)
-  print(smallWorld)
   output = ng.start(smallWorld)
   consensusList = output["consensus"]
   for sim, simValues in enumerate(consensusList):
@@ -46,49 +45,22 @@ def getDataFromHospital(name):
   print(f"Finished using Generated patient data {name}")
   return df
 
-# plus = []
-#
-# neg = []
-#
-# for name in names:
-#   print(f"using {name}")
-#   array = readCSVData("HPC_NetMats2", name)
-#   pluArray = np.where(array > 0, array, 0)
-#   negArray = np.where(array < 0, array, 0)
-#   plus.extend(pluArray)
-#   neg.extend(negArray)
-
-# print(len(plus))
-#
-# print(len(neg))
-#
-# print(np.mean(plus))
-#
-# print(np.std(plus))
-#
-# print(np.mean(neg))
-#
-# print(np.mean(neg))
-
-#
+# print(getDataFromHospital(0))
 
 
 
+if __name__ == "__main__":
+  ray.init(address='auto')
+  patientDataRemotes = []
+  for name in names:
+    patientDataRemotes.append(getDataFromHospital.remote(name))
+  patientData = pd.DataFrame(columns=columns, dtype=int)
 
-
-
-# if __name__ == "__main__":
-#   ray.init(address='auto')
-#   patientDataRemotes = []
-#   for name in names:
-#     patientDataRemotes.append(getDataFromHospital.remote(name))
-#   patientData = pd.DataFrame(columns=columns, dtype=int)
-#
-#   while len(patientDataRemotes):
-#     doneRemote, patientDataRemotes = ray.wait(patientDataRemotes, timeout=None)
-#     print("Finished one")
-#     patientData = mergeData(patientData, ray.get(doneRemote[0]))
-#     patientData.to_csv("csv/output/convergenceHPC.csv")
+  while len(patientDataRemotes):
+    doneRemote, patientDataRemotes = ray.wait(patientDataRemotes, timeout=None)
+    print("Finished one")
+    patientData = mergeData(patientData, ray.get(doneRemote[0]))
+    patientData.to_csv("csv/output/convergenceHPC.csv")
 
 
 
