@@ -19,14 +19,14 @@ names = [int(name) for name in open("lowesthighestpatients.txt").read().split(",
 
 # names = list(range(812))]
 
-print(names)
+print(len(names))
 
 def mergeData(sum, df):
   return pd.merge(sum, df, how='outer')
 
 @ray.remote
 def getDataFromHospital(name):
-  ng = ABNG(maxIterations=10000, simulations=1, strategy=Strategy.mono, output=["popularity", "consensus"],
+  ng = ABNG(maxIterations=10000, simulations=10, strategy=Strategy.mono, output=["popularity", "consensus"],
             consensusScore=consensusScoreList, display=False)
   df = pd.DataFrame(columns=columns, dtype=int)
   print(f"Using Hospital Data {name}")
@@ -64,7 +64,7 @@ if __name__ == "__main__":
     print("Finished one")
     print("Remaing tasks: ", len(patientDataRemotes))
     patientData = mergeData(patientData, ray.get(doneRemote[0]))
-    patientData.to_csv("csv/output/convergenceHCP_1_Mono.csv")
+    patientData.to_csv("csv/output/convergenceHCP_20percent.csv")
 
 
 
