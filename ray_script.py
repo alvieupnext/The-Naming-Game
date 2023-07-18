@@ -1,9 +1,7 @@
 #!/usr/bin/env python
-from multiprocessing import Pool
+
 from patientData import *
 from variants.ABNG import *
-from MatrixFactory import *
-from functools import reduce
 import ray
 
 numberOfAgents =100
@@ -16,7 +14,12 @@ columns = ['NG sim', 'subject']
 
 columns.extend(scoresStringList)
 
-names = list(range(812))
+#Get the names from lowesthighestpatients.txt comma seperated
+names = [int(name) for name in open("lowesthighestpatients.txt").read().split(",")]
+
+# names = list(range(812))]
+
+print(names)
 
 def mergeData(sum, df):
   return pd.merge(sum, df, how='outer')
@@ -27,7 +30,7 @@ def getDataFromHospital(name):
             consensusScore=consensusScoreList, display=False)
   df = pd.DataFrame(columns=columns, dtype=int)
   print(f"Using Hospital Data {name}")
-  array = readCSVData("HCP_NetMats2", name)
+  array = readCSVData("HCP_with_subjects", name)
   smallWorld = convertArrayToMatrix(array, numberOfAgents)
   print(smallWorld)
   output = ng.start(smallWorld)
@@ -44,14 +47,12 @@ def getDataFromHospital(name):
     row.extend(reformattedSimValues)
     # add row to dataframe
     df.loc[len(df.index)] = row
-  print(f"Finished using Generated patient data {name}")
+  print(f"Finished using patient data {name}")
   return df
-
-# print(getDataFromHospital(0))
-
 
 
 if __name__ == "__main__":
+  # print(getDataFromHospital(102109))
   ray.init(address='auto')
   patientDataRemotes = []
   for name in names:

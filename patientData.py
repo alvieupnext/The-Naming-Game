@@ -29,7 +29,8 @@ def readCSVData(name, number, df = None):
     path = here + f'/csv/output/{name}.csv'
     # get data from csv
     df = pd.read_csv(path)
-  desiredGenerated = df.iloc[[number], :]
+  # Number coincides with the "Subject"  column
+  desiredGenerated = df.loc[df['Subject'] == number]
   array = desiredGenerated.to_numpy()
   # #delete subject number
   ar_new = np.delete(array, 0)
@@ -108,7 +109,6 @@ def loadHPCData(name):
     matrix = np.reshape(patient, (numberOfAgents, numberOfAgents))
     matrices.append(matrix)
   return matrices
-
 
 
 # def readPatientData(name, type='connectivity'):

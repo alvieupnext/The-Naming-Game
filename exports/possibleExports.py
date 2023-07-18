@@ -280,8 +280,38 @@ class agentMemory(export):
     return self.memory
 
 
+class consensusPercentageEvolution(namePopularity):
+
+  def setup(self, numberOfAgents):
+    # Call setup from parent class namePopularity
+    super().setup(numberOfAgents)
+    # Initialize list of lists to hold consensus percentages for each simulation
+    self.consensusPercentageMatrix = []
+
+  # When the final consensus is reached, get the name dictionary containing the popularity of the names per iteration
+  def onFinalConsensus(self, sim, it):
+    # Get the name dictionary containing the popularity of the names per iteration
+    nameDictionary = self.popularity
+    # Get the name that reached this final consensus
+    # Get the last element of all the dictionary values
+    # (the last element is the percentage of agents that know this name at the final consensus)
+    # Get the name with the highest percentage
+    finalConsensusName = max(nameDictionary, key=lambda x: nameDictionary[x][-1])
+    # get the value from the final consensus name
+    finalConsensusList = nameDictionary[finalConsensusName]
+    # Add the list to the matrix
+    self.consensusPercentageMatrix.append(finalConsensusList)
+
+
+
+  def output(self):
+    # return the matrix of consensus percentages
+    return self.consensusPercentageMatrix
+
+
+
 
 
 
 possibleExports = {"names": namesInvented, "circulation": namesInCirculation, "preferredAction": preferredAction, "popularity": namePopularity, "consensus": consensusIteration,
-                   "actions": actionsPerformed, "memory": agentMemory}
+                   "actions": actionsPerformed, "memory": agentMemory, "consensusPercentageEvolution": consensusPercentageEvolution}
