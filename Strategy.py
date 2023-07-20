@@ -21,3 +21,13 @@ def halfPopular(agentPairs):
 #only choose the least popular half of the agent pairs
 def halfUnpopular(agentPairs):
   return agentPairs[len(agentPairs)//2:len(agentPairs)]
+
+#Only choose the n most popular agent pairs (this function should return a lambda taking agentPairs
+#and returning the n most popular pairs)
+def nPopular(n):
+    return lambda agentPairs: agentPairs[0:n]
+
+#Only choose the n least popular agent pairs (this function should return a lambda taking agentPairs
+#and returning the n least popular pairs)
+def nUnpopular(n):
+    return lambda agentPairs: agentPairs[len(agentPairs)-n:len(agentPairs)]
