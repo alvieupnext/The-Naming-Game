@@ -81,7 +81,7 @@ def preferredAction(ng, actionMatrix, graph, high_percent=0, low_percent=0):
     percentages = {key: (value / total) * 100 for key, value in counts.items()}
 
     ax.set_title(
-      f"Iteration: {num + 1} - A: {percentages['A']:.1f}%, B: {percentages['B']:.1f}%, Both: {percentages['Both']:.1f}%, None: {percentages['None']:.1f}%")
+      f"Patient 203923 - Iteration: {num + 1} - A: {percentages['A']:.1f}%, B: {percentages['B']:.1f}%, Both: {percentages['Both']:.1f}%")
     ax.legend(handles=legend_elements, loc='lower right')
 
   fig, ax = plt.subplots()
@@ -98,7 +98,7 @@ def preferredAction(ng, actionMatrix, graph, high_percent=0, low_percent=0):
 
   ani = FuncAnimation(fig, update, frames=numberMatrix.shape[0], repeat=False)
 
-  ani.save('agent_choices_graph_203923_v11_full_10000.mp4', writer='ffmpeg')
+  ani.save('agent_choices_graph_203923.mp4', writer='ffmpeg')
 
 
 ab = ABNG(simulations=1, maxIterations=10000, strategy=Strategy.mono, output=["preferredAction"], consensusScore=[1], display=False)
