@@ -41,7 +41,7 @@ def mergeData(sum, df):
 
 @ray.remote
 def getDataFromHospital(name):
-  ng = ABNG(maxIterations=10000, simulations=15, strategy=Strategy.mono, output=["popularity", "consensus"],
+  ng = ABNG(maxIterations=10000, simulations=25, strategy=Strategy.mono, output=["popularity", "consensus"],
             consensusScore=consensusScoreList, display=False)
   df = pd.DataFrame(columns=columns, dtype=int)
   print(f"Using Hospital Data {name}")
