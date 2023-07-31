@@ -17,9 +17,24 @@ columns.extend(scoresStringList)
 #Get the names from lowesthighestpatients.txt comma seperated
 names = [int(name) for name in open("lowesthighestpatients.txt").read().split(",")]
 
+csv_data = pd.read_csv("csv/output/convergenceHCP_20percent_25_3ndpart.csv")
+
+
+# The patient IDs in the CSV file are integers, while the IDs we read from the text file are strings.
+# Let's convert the IDs in the CSV file to strings to make comparison easier.
+
+csv_patient_ids = csv_data["subject"].astype(int).tolist()
+
+# Let's find out which patients from the text file are not present in the CSV file.
+
+missing_patients = [patient for patient in names if patient not in csv_patient_ids]
+
+print(missing_patients)
+
+
 # names = list(range(812))]
 
-print(len(names))
+print(len(missing_patients))
 
 def mergeData(sum, df):
   return pd.merge(sum, df, how='outer')
@@ -64,7 +79,7 @@ if __name__ == "__main__":
     print("Finished one")
     print("Remaing tasks: ", len(patientDataRemotes))
     patientData = mergeData(patientData, ray.get(doneRemote[0]))
-    patientData.to_csv("csv/output/convergenceHCP_20percent_15_4ndpart.csv")
+    patientData.to_csv("csv/output/convergenceHCP_20percent_25_4ndpart.csv")
 
 
 
