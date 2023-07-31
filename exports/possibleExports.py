@@ -96,54 +96,49 @@ class namesInCirculation(export):
 
   # export which generates a heatmap with the preferred action of an agent per iteration (builds on top of names in circulation)
   # preferred Action assumes every topic is the same
+
+
 class preferredAction(namesInCirculation):
-    # add a circulation matrix on top of the existing setup
+  # add a circulation matrix on top of the existing setup
   def setup(self, numberOfAgents):
     # perform the namesInCirculation setup
     super().setup(numberOfAgents)
-    #add setup for circulation matrix
-    self.circulationMatrixPerSim= []
-    #remember iterations
+    # add setup for circulation matrix
+    self.circulationMatrixPerSim = []
+    # remember iterations
     self.iterations = self.ng.maxIterations
-    self.circulationMatrix = np.zeros((self.iterations, self.agents), dtype=object)
-    # fill with empty arrays (could be shortened using Pythonism
-    for x in range(self.iterations):
-      for y in range(self.agents):
-        self.circulationMatrix[x, y] = []
+    self.circulationMatrix = []
 
   def onSimulation(self, sim):
-    #perform the namesInCirculation every Simulation
+    # perform the namesInCirculation every Simulation
     super().onSimulation(sim)
-    #append matrix to list and clear circulation matrix
+    # append matrix to list and clear circulation matrix
     self.circulationMatrixPerSim.append(self.circulationMatrix)
-    self.circulationMatrix = np.zeros((self.iterations, self.agents), dtype=object)
-    #fill with empty arrays (could be shortened using Pythonism
-    for x in range(self.iterations):
-      for y in range(self.agents):
-        self.circulationMatrix[x, y] = []
+    self.circulationMatrix = []
 
-  #get the preferred action of every actor after every iteration
+  # get the preferred action of every actor after every iteration
   def onIteration(self, sim, it):
     allNames = list(self.circulation.keys())
+    self.circulationMatrix.append([])  # add new row
+    for _ in range(self.agents):  # initialize the new row with empty lists
+      self.circulationMatrix[-1].append([])
+
     for name in allNames:
       listOfAgents = self.circulation[name]
       for agent in listOfAgents:
-        self.circulationMatrix[it, agent].append(name)
-      #if we have reached our desired consensus, notify the Naming Game
+        self.circulationMatrix[-1][agent].append(name)
+      # if we have reached our desired consensus, notify the Naming Game
       consensus = self.checkConsensus(listOfAgents)
       if consensus:
-          self.ng.consensus = consensus
-
+        self.ng.consensus = consensus
 
   def onFinalConsensus(self, sim, it):
-    maxIterations = self.ng.maxIterations
-    #fill the rest of the matrix with the last row filled in
-    for i in range(it + 1, maxIterations):
-      self.circulationMatrix[i, :] = self.circulationMatrix[it, :]
+    pass  # no longer need to fill the rest of the matrix
 
-  #return all the circulation matrices
+  # return all the circulation matrices
   def output(self):
     return self.circulationMatrixPerSim
+
 
 #namePopularity assumes every topic is the same and only looks at the popularity of the name
 class namePopularity(namesInCirculation):

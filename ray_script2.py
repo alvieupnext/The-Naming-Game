@@ -5,6 +5,7 @@ import MatrixFactory as mf
 from variants.ABNG import *
 import Strategy
 from matplotlib.patches import Patch
+import ray
 
 from matplotlib.animation import FuncAnimation
 import pandas as pd
@@ -106,23 +107,50 @@ def preferredAction(ng, actionMatrix, graph, name, high_percent=0, low_percent=0
 
   ani.save(f'videos/agent_choices_graph_{name}.mp4', writer='ffmpeg')
 
+@ray.remote
+def getDataFromHospital(name):
+    ab = ABNG(simulations=1, maxIterations=10000, strategy=Strategy.mono, output=["preferredAction"],
+            consensusScore=[0.95], display=False)
+    numberOfAgents = 100
+    print(name)
+    csv = pd.read_csv(f'patients/HCP/patient_{name}.csv')
+    print(csv.head())
+    graph = nx.from_pandas_edgelist(csv, source="Source", target="Target", edge_attr="Weight")
+    print(graph.number_of_nodes())
+    matrix = convertArrayToMatrix(readCSVData("HCP_with_subjects", name), numberOfAgents)
+    output = ab.start(matrix)["preferredAction"][0]
 
-ab = ABNG(simulations=1, maxIterations=10000, strategy=Strategy.mono, output=["preferredAction"], consensusScore=[0.95], display=False)
-numberOfAgents =100
-for name in hcp_names:
-  print(name)
-  csv = pd.read_csv(f'patients/HCP/patient_{name}.csv')
-  print(csv.head())
-  graph = nx.from_pandas_edgelist(csv, source="Source", target="Target", edge_attr="Weight")
-  print(graph.number_of_nodes())
-  matrix = convertArrayToMatrix(readCSVData("HCP_with_subjects", name), numberOfAgents)
-  output = ab.start(matrix)["preferredAction"][0]
+    print(len(output))
 
-  print(len(output))
+    print (len(output[0]))
 
-  print (len(output[0]))
+    preferredAction(ab, output, graph, name)
+# for name in hcp_names:
+#   print(name)
+#   csv = pd.read_csv(f'patients/HCP/patient_{name}.csv')
+#   print(csv.head())
+#   graph = nx.from_pandas_edgelist(csv, source="Source", target="Target", edge_attr="Weight")
+#   print(graph.number_of_nodes())
+#   matrix = convertArrayToMatrix(readCSVData("HCP_with_subjects", name), numberOfAgents)
+#   output = ab.start(matrix)["preferredAction"][0]
+#
+#   print(len(output))
+#
+#   print (len(output[0]))
+#
+#   preferredAction(ab, output, graph, name)
 
-  preferredAction(ab, output, graph, name)
+
+if __name__ == "__main__":
+  ray.init(address='auto')
+  patientDataRemotes = []
+  for name in hcp_names:
+    patientDataRemotes.append(getDataFromHospital.remote(name))
+
+  while len(patientDataRemotes):
+    doneRemote, patientDataRemotes = ray.wait(patientDataRemotes, timeout=None)
+    print("Finished one")
+    print("Remaing tasks: ", len(patientDataRemotes))
 
 
 
