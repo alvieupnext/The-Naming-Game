@@ -70,7 +70,7 @@ if __name__ == "__main__":
   # print(getDataFromHospital(102109))
   ray.init(address='auto')
   patientDataRemotes = []
-  for name in names:
+  for name in missing_patients:
     patientDataRemotes.append(getDataFromHospital.remote(name))
   patientData = pd.DataFrame(columns=columns, dtype=int)
 
