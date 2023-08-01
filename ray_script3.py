@@ -31,7 +31,7 @@ def map_choices(choices):
 
 @ray.remote
 def getDataFromHospital(name):
-    ab = ABNG(simulations=1, maxIterations=10000, strategy=Strategy.mono, output=["preferredAction"],
+    ab = ABNG(simulations=1, maxIterations=100000, strategy=Strategy.mono, output=["preferredAction"],
             consensusScore=[1], display=False)
     numberOfAgents = 100
     matrix = convertArrayToMatrix(readCSVData("HCP_with_subjects", name), numberOfAgents)
