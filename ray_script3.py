@@ -1,15 +1,6 @@
-from matplotlib import pyplot as plt
-from variants.BaselineNG import *
-from variants.Imitation import *
-import MatrixFactory as mf
 from variants.ABNG import *
 import Strategy
-from matplotlib.patches import Patch
 import ray
-
-from matplotlib.animation import FuncAnimation
-import pandas as pd
-import networkx as nx
 from patientData import *
 
 hcp_names = pd.read_csv('csv/output/HCP_with_subjects.csv')
