@@ -51,7 +51,7 @@ if __name__ == "__main__":
   patientDataRemotes = []
   for name in hcp_names:
     patientDataRemotes.append(getDataFromHospital.remote(name))
-
+  patientData = pd.DataFrame()
   while len(patientDataRemotes):
     doneRemote, patientDataRemotes = ray.wait(patientDataRemotes, timeout=None)
     print("Finished one")
