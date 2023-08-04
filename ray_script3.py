@@ -9,17 +9,6 @@ hcp_names = hcp_names['Subject'].tolist()
 def mergeData(sum, df):
   return pd.merge(sum, df, how='outer')
 
-
-def map_choices(choices):
-  if len(choices) == 0:
-    return 0
-  elif len(choices) == 2:
-    return 3
-  elif choices[0] == 'A':
-    return 1
-  else:
-    return 2
-
 @ray.remote
 def getDataFromHospital(name):
     ab = ABNG(simulations=1, maxIterations=100000, strategy=Strategy.mono, output=["preferredAction"],
@@ -49,9 +38,13 @@ def getDataFromHospital(name):
 if __name__ == "__main__":
   ray.init(address='auto')
   patientDataRemotes = []
+  # Make an empty dataframe with all the columns we want (1 to 100, Iteration, Subject)
+  patientData = pd.DataFrame(columns=list(range(100)), dtype=int)
+  patientData['Iteration'] = patientData.index
+  patientData['Subject'] = 0
+  print(patientData)
   for name in hcp_names:
     patientDataRemotes.append(getDataFromHospital.remote(name))
-  patientData = pd.DataFrame()
   while len(patientDataRemotes):
     doneRemote, patientDataRemotes = ray.wait(patientDataRemotes, timeout=None)
     print("Finished one")
