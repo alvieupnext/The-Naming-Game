@@ -9,6 +9,17 @@ hcp_names = hcp_names['Subject'].tolist()
 def mergeData(sum, df):
   return pd.merge(sum, df, how='outer')
 
+
+def map_choices(choices):
+  if len(choices) == 0:
+    return 0
+  elif len(choices) == 2:
+    return 3
+  elif choices[0] == 'A':
+    return 1
+  else:
+    return 2
+
 @ray.remote
 def getDataFromHospital(name):
     ab = ABNG(simulations=1, maxIterations=100000, strategy=Strategy.mono, output=["preferredAction"],
