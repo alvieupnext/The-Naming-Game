@@ -23,7 +23,7 @@ def readPatientData(name, type='connectivity'):
   #make matrix triangular and return
   return np.tril(matrix)
 
-def readCSVData(name, number, df = None):
+def readCSVData(name, number, mode = 'zero', df = None):
   if df is None:
     # create file path
     path = here + f'/csv/output/{name}.csv'
@@ -34,8 +34,12 @@ def readCSVData(name, number, df = None):
   array = desiredGenerated.to_numpy()
   # #delete subject number
   ar_new = np.delete(array, 0)
-  # Make all negative numbers into a zero
-  ar_new[ar_new < 0] = 0
+  if mode == 'zero':
+    # Make all negative numbers into a zero
+    ar_new[ar_new < 0] = 0
+  elif mode == 'abs':
+    # Make all negative numbers into a positive
+    ar_new = np.abs(ar_new)
   return ar_new
 
 #converts a lower triangular matrix into an array

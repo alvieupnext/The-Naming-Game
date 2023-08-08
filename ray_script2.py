@@ -1,176 +1,118 @@
-from matplotlib import pyplot as plt
-from variants.BaselineNG import *
-from variants.Imitation import *
-import MatrixFactory as mf
+#!/usr/bin/env python
+
+from patientData import *
 from variants.ABNG import *
-import Strategy
-from matplotlib.patches import Patch
 import ray
 
-from matplotlib.animation import FuncAnimation
-import pandas as pd
-import networkx as nx
-from patientData import *
+numberOfAgents = 94
 
-def map_choices(choices):
-  if len(choices) == 0:
-    return 0
-  elif len(choices) == 2:
-    return 3
-  elif choices[0] == 'A':
-    return 1
-  else:
-    return 2
+consensusScoreList = [0.7, 0.8, 0.9, 0.95, 0.98, 0.99, 1]
 
-def map_color(value):
-  color_map = {0: 'lightgray', 1: 'blue', 2: 'yellow', 3: 'green'}
-  return color_map[value]
+scoresStringList = [f"SC_{score}" for score in consensusScoreList]
 
-# This is your weight threshold for different edge colors.
-threshold = 0.5
+columns = ['NG sim', 'Subject']
 
-# Open HCP with subject from csv output and get all the subject ids
-hcp_names = pd.read_csv('csv/output/HCP_with_subjects.csv')
-hcp_names = hcp_names['Subject'].tolist()
+columns.extend(scoresStringList)
 
-print(len(hcp_names))
+#Get the names from lowesthighestpatients.txt comma seperated
+# names = [int(name) for name in open("lowesthighestpatients.txt").read().split(",")]
+
+csv_data = pd.read_csv("csv/output/BRUMEG_AAL2_functional.csv")
 
 
-def preferredAction(ng, actionMatrix, graph, name, high_percent=0, low_percent=0):
-  def update(num):
-    ax.clear()
+# The patient IDs in the CSV file are integers, while the IDs we read from the text file are strings.
+# Let's convert the IDs in the CSV file to strings to make comparison easier.
 
-    # Compute the connection-weight product for each node
-    node_weights = {n: sum(d['Weight'] for _, _, d in graph.edges(n, data=True)) for n in graph.nodes()}
-    node_degrees = {n: d for n, d in graph.degree()}
-    node_metrics = {n: node_degrees[n] * node_weights[n] for n in graph.nodes()}
+csv_patient_ids = csv_data["Subject"].astype(int).tolist()
 
-    # Sort nodes by the computed metric and pick the top and bottom nodes by provided percentiles
-    sorted_nodes = sorted(node_metrics.items(), key=lambda x: x[1], reverse=True)
-    top_nodes = [n for n, _ in sorted_nodes[:int(len(sorted_nodes) * high_percent)]]
-    bottom_nodes = [n for n, _ in sorted_nodes[-int(len(sorted_nodes) * low_percent):]]
+def mergeData(sum, df):
+  return pd.merge(sum, df, how='outer')
 
-    selected_nodes = top_nodes + bottom_nodes
+def find_connected_components(smallWorld):
+    n = len(smallWorld)
+    visited = [False] * n
 
-    # Create a sub-matrix for only the selected nodes
-    numberMatrix_selected = numberMatrix[num, selected_nodes]
+    def dfs(v):
+      visited[v] = True
+      for i in range(n):
+        if i != v and (smallWorld[i][v] > 0 or smallWorld[v][i] > 0) and not visited[i]:
+          dfs(i)
 
-    node_colors = [map_color(val) for val in numberMatrix_selected]
+    components = 0
+    for i in range(n):
+      if not visited[i]:
+        dfs(i)
+        components += 1
 
-    # Get positions, sizes, and colors only for the selected nodes
-    pos = nx.spring_layout(graph, seed=42)
-    pos_selected = {n: pos[n] for n in selected_nodes}
-    node_sizes = [node_metrics[n] // 100 for n in selected_nodes]
+    return components
 
-    subgraph = graph.subgraph(selected_nodes)
-    widths = [d['Weight'] for _, _, d in subgraph.edges(data=True)]
-    edge_colors = [
-      'black' if (n1 in top_nodes and n2 in top_nodes) or (n1 in bottom_nodes and n2 in bottom_nodes) else 'red' for
-      n1, n2 in subgraph.edges()]
 
-    nx.draw_networkx_edges(subgraph, pos=pos_selected, ax=ax, width=widths, edge_color=edge_colors, alpha=0.1)
-    nx.draw_networkx_nodes(subgraph, pos=pos_selected, node_color=node_colors, ax=ax, node_size=node_sizes)
+def complete_matrix(triangular_matrix):
+  n = len(triangular_matrix)
+  complete = [[0] * n for _ in range(n)]
+  for i in range(n):
+    for j in range(i, n):
+      complete[i][j] = triangular_matrix[i][j] if j < len(triangular_matrix[i]) else 0
+      complete[j][i] = complete[i][j]
+  return complete
 
-    # Calculate percentages for choices in current iteration
-    choices = numberMatrix[num, :]
-    counts = {'A': 0, 'B': 0, 'Both': 0, 'None': 0}
-    for choice in choices:
-      if choice == 0:
-        counts['None'] += 1
-      elif choice == 1:
-        counts['A'] += 1
-      elif choice == 2:
-        counts['B'] += 1
-      elif choice == 3:
-        counts['Both'] += 1
-
-    total = sum(counts.values())
-    percentages = {key: (value / total) * 100 for key, value in counts.items()}
-
-    ax.set_title(
-      f"Patient {name} - Iteration: {num + 1} - A: {percentages['A']:.1f}%, B: {percentages['B']:.1f}%, Both: {percentages['Both']:.1f}%")
-    ax.legend(handles=legend_elements, loc='lower right')
-
-  fig, ax = plt.subplots()
-  numberMatrix = np.zeros((len(actionMatrix), len(actionMatrix[0])))
-  for x in range(numberMatrix.shape[0]):
-    for y in range(numberMatrix.shape[1]):
-      numberMatrix[x, y] = map_choices(actionMatrix[x][y])
-
-  # Create legend
-  legend_elements = [Patch(facecolor='lightgray', edgecolor='lightgray', label='None'),
-                     Patch(facecolor='blue', edgecolor='blue', label='A'),
-                     Patch(facecolor='yellow', edgecolor='yellow', label='B'),
-                     Patch(facecolor='green', edgecolor='green', label='Both')]
-
-  ani = FuncAnimation(fig, update, frames=numberMatrix.shape[0], repeat=False)
-
-  ani.save(f'videos/agent_choices_graph_{name}.mp4', writer='ffmpeg')
 
 @ray.remote
 def getDataFromHospital(name):
-    ab = ABNG(simulations=1, maxIterations=10000, strategy=Strategy.mono, output=["preferredAction"],
-            consensusScore=[0.95], display=False)
-    numberOfAgents = 100
-    print(name)
-    csv = pd.read_csv(f'patients/HCP/patient_{name}.csv')
-    print(csv.head())
-    graph = nx.from_pandas_edgelist(csv, source="Source", target="Target", edge_attr="Weight")
-    print(graph.number_of_nodes())
-    matrix = convertArrayToMatrix(readCSVData("HCP_with_subjects", name), numberOfAgents)
-    output = ab.start(matrix)["preferredAction"][0]
-
-    print(len(output))
-
-    print (len(output[0]))
-
-    preferredAction(ab, output, graph, name)
-# for name in hcp_names:
-#   print(name)
-#   csv = pd.read_csv(f'patients/HCP/patient_{name}.csv')
-#   print(csv.head())
-#   graph = nx.from_pandas_edgelist(csv, source="Source", target="Target", edge_attr="Weight")
-#   print(graph.number_of_nodes())
-#   matrix = convertArrayToMatrix(readCSVData("HCP_with_subjects", name), numberOfAgents)
-#   output = ab.start(matrix)["preferredAction"][0]
-#
-#   print(len(output))
-#
-#   print (len(output[0]))
-#
-#   preferredAction(ab, output, graph, name)
+  ng = ABNG(maxIterations=1000000, simulations=25, strategy=Strategy.mono, output=["popularity", "consensus"],
+            consensusScore=consensusScoreList, display=True)
+  df = pd.DataFrame(columns=columns, dtype=int)
+  print(f"Using Hospital Data {name}")
+  array = readCSVData("BRUMEG_AAL2_functional", name, mode='abs')
+  smallWorld = convertArrayToMatrix(array, numberOfAgents)
+  print(smallWorld)
+  # smallWorld_complete = complete_matrix(smallWorld)
+  # components = find_connected_components(smallWorld_complete)
+  # print("Number of connected components:", components)
+  output = ng.start(smallWorld)
+  consensusList = output["consensus"]
+  for sim, simValues in enumerate(consensusList):
+    # extract the convergence values from the simValues
+    reformattedSimValues = list(map(lambda set: set[1], simValues))
+    # if the array isn't the right size, fill rest of space with max iterations (not converged)
+    while len(reformattedSimValues) < len(consensusScoreList):
+      reformattedSimValues.append(ng.maxIterations)
+    # add simulation number and patient to an array
+    row = [sim, name]
+    # extend it with the reformatted simulation values
+    row.extend(reformattedSimValues)
+    # add row to dataframe
+    df.loc[len(df.index)] = row
+  print(f"Finished using patient data {name}")
+  return df
 
 
 if __name__ == "__main__":
   ray.init(address='auto')
   patientDataRemotes = []
-  for name in hcp_names:
+  for name in csv_patient_ids:
     patientDataRemotes.append(getDataFromHospital.remote(name))
+  patientData = pd.DataFrame(columns=columns, dtype=int)
 
   while len(patientDataRemotes):
     doneRemote, patientDataRemotes = ray.wait(patientDataRemotes, timeout=None)
     print("Finished one")
     print("Remaing tasks: ", len(patientDataRemotes))
+    patientData = mergeData(patientData, ray.get(doneRemote[0]))
+    patientData.to_csv("csv/output/convergenceBRUMEG_AAL2_abs_25.csv")
 
 
 
 
-# Load the patient_121921.csv from csv/output folder in pandas
-# p121921_csv = pd.read_csv("csv/output/patient_121921.csv")
-#
-# # And patient_203923.csv
-# p203923_csv = pd.read_csv("csv/output/patient_203923.csv")
 
-# # Create a graph from the csvs (networkx)
-# p121921 = nx.from_pandas_edgelist(p121921_csv, source="Source", target="Target", edge_attr="Weight")
-# p203923 = nx.from_pandas_edgelist(p203923_csv, source="Source", target="Target", edge_attr="Weight")
-#
-# p121921_matrix = convertArrayToMatrix(readCSVData("HCP_with_subjects", 121921), numberOfAgents)
-#
-# p203923_matrix = convertArrayToMatrix(readCSVData("HCP_with_subjects", 203923), numberOfAgents)
-#
-# output = ab.start(p203923_matrix)["preferredAction"][0]
-#
-# print(output)
-#
-# preferredAction(ab, output, p203923)
+
+
+
+
+
+
+
+
+
+
+
