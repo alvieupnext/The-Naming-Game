@@ -53,7 +53,6 @@ smallWorld = convertArrayToMatrix(readCSVData("HCP_with_subjects", 102109), 100)
 
 
 def degree(matrix):
-  print(matrix)
   """Calculate the degree of each node in the graph."""
   return np.sum(matrix, axis=0)
 
@@ -72,14 +71,8 @@ def sort_by_degree(matrix, actionMatrix):
     actionMatrix = np.array(actionMatrix, dtype=int)  # Convert actionMatrix to dtype=int
     degrees = degree(triangular_to_full(matrix))
     indices = np.arange(len(degrees))
+    print(matrix)
     sorted_indices = np.argsort(degrees)[::-1]  # Descending order
-    print("Unsorted indices")
-    print(degrees)
-    print(indices)
-    sorted_degrees = degrees[sorted_indices]  # Reorder the degrees
-    print("Sorted indices")
-    print(sorted_degrees)
-    print(sorted_indices)
     sorted_matrix = matrix[sorted_indices, :]
     sorted_matrix = sorted_matrix[:, sorted_indices]
     sorted_actionMatrix = actionMatrix[:, sorted_indices]
@@ -108,7 +101,7 @@ output = patientCSV.to_numpy()
 
 sorted_smallWorld, sorted_output, sorted_indices = sort_by_degree(smallWorld, output)
 
-print(sorted_output)
+# print(sorted_output)
 
 
 preferredAction(sorted_output, sorted_indices)

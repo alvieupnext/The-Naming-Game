@@ -166,6 +166,8 @@ class namePopularity(namesInCirculation):
         valueList = [0] * (it + 1)
         valueList[it] = proportion
         self.popularity[name] = valueList
+      #Print the current name with the percentage of agents that know it (format it neatly)
+      print(name + ": " + str(round(proportion * 100, 2)) + "%")
       #if we have reached our desired consensus, notify the Naming Game
       consensus = self.checkConsensus(listOfAgents)
       if consensus:
@@ -222,6 +224,7 @@ class consensusIteration(export):
     self.currentConsensus = 0
     #reset current consensus list
     self.consensuslist = []
+
 
   #as output return a list of all the iterations where consensus was reached
   def output(self):

@@ -34,6 +34,8 @@ def readCSVData(name, number, df = None):
   array = desiredGenerated.to_numpy()
   # #delete subject number
   ar_new = np.delete(array, 0)
+  # Make all negative numbers into a zero
+  ar_new[ar_new < 0] = 0
   return ar_new
 
 #converts a lower triangular matrix into an array
