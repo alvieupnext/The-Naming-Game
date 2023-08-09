@@ -29,15 +29,19 @@ def map_color(value):
 threshold = 0.5
 
 # Open HCP with subject from csv output and get all the subject ids
-hcp_names = pd.read_csv('csv/output/BRUMEG_AAL2.csv')
+hcp_names = pd.read_csv('csv/output/HCP_with_subjects.csv')
 hcp_names = hcp_names['Subject'].tolist()
 
 print(len(hcp_names))
 
 
-def preferredAction(ng, actionMatrix, graph, name, high_percent=0, low_percent=0):
+def preferredAction(actionMatrix, graph, name, high_percent=0, low_percent=0):
   def update(num):
     ax.clear()
+
+    #print a message every 100 frame updates
+    if num % 100 == 0:
+      print(f'Frame {num} of {len(actionMatrix)}')
 
     # Compute the connection-weight product for each node
     node_weights = {n: sum(d['Weight'] for _, _, d in graph.edges(n, data=True)) for n in graph.nodes()}
@@ -52,7 +56,7 @@ def preferredAction(ng, actionMatrix, graph, name, high_percent=0, low_percent=0
     selected_nodes = top_nodes + bottom_nodes
 
     # Create a sub-matrix for only the selected nodes
-    numberMatrix_selected = numberMatrix[num, selected_nodes]
+    numberMatrix_selected = actionMatrix[num, selected_nodes]
 
     node_colors = [map_color(val) for val in numberMatrix_selected]
 
@@ -71,7 +75,7 @@ def preferredAction(ng, actionMatrix, graph, name, high_percent=0, low_percent=0
     nx.draw_networkx_nodes(subgraph, pos=pos_selected, node_color=node_colors, ax=ax, node_size=node_sizes)
 
     # Calculate percentages for choices in current iteration
-    choices = numberMatrix[num, :]
+    choices = actionMatrix[num, :]
     counts = {'A': 0, 'B': 0, 'Both': 0, 'None': 0}
     for choice in choices:
       if choice == 0:
@@ -91,10 +95,6 @@ def preferredAction(ng, actionMatrix, graph, name, high_percent=0, low_percent=0
     ax.legend(handles=legend_elements, loc='lower right')
 
   fig, ax = plt.subplots()
-  numberMatrix = np.zeros((len(actionMatrix), len(actionMatrix[0])))
-  for x in range(numberMatrix.shape[0]):
-    for y in range(numberMatrix.shape[1]):
-      numberMatrix[x, y] = map_choices(actionMatrix[x][y])
 
   # Create legend
   legend_elements = [Patch(facecolor='lightgray', edgecolor='lightgray', label='None'),
@@ -102,13 +102,15 @@ def preferredAction(ng, actionMatrix, graph, name, high_percent=0, low_percent=0
                      Patch(facecolor='yellow', edgecolor='yellow', label='B'),
                      Patch(facecolor='green', edgecolor='green', label='Both')]
 
-  ani = FuncAnimation(fig, update, frames=numberMatrix.shape[0], repeat=False)
+  ani = FuncAnimation(fig, update, frames=actionMatrix.shape[0], repeat=False)
 
   ani.save(f'videos/agent_choices_graph_{name}.mp4', writer='ffmpeg')
 
+#Load convergenceHCP_1sim_preferred_action.csv from csv/output folder in pandas
+convergence_csv = pd.read_csv("csv/output/convergenceHCP_1sim_preferred_action.csv", index_col=0)
 
-ab = ABNG(simulations=1, maxIterations=10000, strategy=Strategy.mono, output=["preferredAction"], consensusScore=[0.95], display=False)
-numberOfAgents =100
+numberOfAgents = 100
+
 for name in hcp_names:
   print(name)
   csv = pd.read_csv(f'patients/HCP/patient_{name}.csv')
@@ -116,13 +118,24 @@ for name in hcp_names:
   graph = nx.from_pandas_edgelist(csv, source="Source", target="Target", edge_attr="Weight")
   print(graph.number_of_nodes())
   matrix = convertArrayToMatrix(readCSVData("HCP_with_subjects", name), numberOfAgents)
-  output = ab.start(matrix)["preferredAction"][0]
+  # Get output from convergence_csv based on the name of the patient (Subject)
+  print(convergence_csv.head())
+  output = convergence_csv.loc[convergence_csv['Subject'] == name]
+
+  # Sort output by ascending iteration count
+  output = output.sort_values(by=['Iteration'])
+
+  #Drop the Subject and Iteration columns
+  output = output.drop(columns=['Subject', 'Iteration'])
+
+    # Convert the output to a matrix
+  output = output.to_numpy()
 
   print(len(output))
 
   print (len(output[0]))
 
-  preferredAction(ab, output, graph, name)
+  preferredAction(output, graph, name)
 
 
 
