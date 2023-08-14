@@ -3,7 +3,7 @@ import Strategy
 import ray
 from patientData import *
 
-hcp_names = pd.read_csv('csv/output/HCP_with_subjects.csv')
+hcp_names = pd.read_csv('csv/output/BRUMEG_AAL2_functional.csv')
 hcp_names = hcp_names['Subject'].tolist()
 
 def mergeData(sum, df):
@@ -22,9 +22,9 @@ def map_choices(choices):
 
 @ray.remote
 def getDataFromHospital(name):
-    ab = ABNG(simulations=1, maxIterations=100000, strategy=Strategy.mono, output=["preferredAction"],
+    ab = ABNG(simulations=1, maxIterations=1000000, strategy=Strategy.mono, output=["preferredAction"],
             consensusScore=[1], display=False)
-    numberOfAgents = 100
+    numberOfAgents = 94
     matrix = convertArrayToMatrix(readCSVData("HCP_with_subjects", name), numberOfAgents)
     output = ab.start(matrix)["preferredAction"][0]
     numberOutput = np.zeros((len(output), len(output[0])), dtype=int)
@@ -49,8 +49,8 @@ def getDataFromHospital(name):
 if __name__ == "__main__":
   ray.init(address='auto')
   patientDataRemotes = []
-  # Make an empty dataframe with all the columns we want (1 to 100, Iteration, Subject)
-  patientData = pd.DataFrame(columns=list(range(100)), dtype=int)
+  # Make an empty dataframe with all the columns we want (1 to 94, Iteration, Subject)
+  patientData = pd.DataFrame(columns=list(range(94)), dtype=int)
   patientData['Iteration'] = patientData.index
   patientData['Subject'] = 0
   print(patientData)
@@ -61,31 +61,4 @@ if __name__ == "__main__":
     print("Finished one")
     print("Remaing tasks: ", len(patientDataRemotes))
     patientData = mergeData(patientData, ray.get(doneRemote[0]))
-    patientData.to_csv("csv/output/convergenceHCP_1sim_preferred_action.csv")
-
-# df = getDataFromHospital(102109)
-#
-# df.to_csv("csv/output/convergenceHCP_1sim_preferred_action.csv")
-
-
-
-
-# Load the patient_121921.csv from csv/output folder in pandas
-# p121921_csv = pd.read_csv("csv/output/patient_121921.csv")
-#
-# # And patient_203923.csv
-# p203923_csv = pd.read_csv("csv/output/patient_203923.csv")
-
-# # Create a graph from the csvs (networkx)
-# p121921 = nx.from_pandas_edgelist(p121921_csv, source="Source", target="Target", edge_attr="Weight")
-# p203923 = nx.from_pandas_edgelist(p203923_csv, source="Source", target="Target", edge_attr="Weight")
-#
-# p121921_matrix = convertArrayToMatrix(readCSVData("HCP_with_subjects", 121921), numberOfAgents)
-#
-# p203923_matrix = convertArrayToMatrix(readCSVData("HCP_with_subjects", 203923), numberOfAgents)
-#
-# output = ab.start(p203923_matrix)["preferredAction"][0]
-#
-# print(output)
-#
-# preferredAction(ab, output, p203923)
+    patientData.to_csv("csv/output/convergenceBRUMEG_1sim_preferred_action.csv")

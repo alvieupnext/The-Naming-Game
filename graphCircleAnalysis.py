@@ -28,8 +28,8 @@ def map_color(value):
 # This is your weight threshold for different edge colors.
 threshold = 0.5
 
-# Open HCP with subject from csv output and get all the subject ids
-hcp_names = pd.read_csv('csv/output/BRUMEG_AAL2.csv')
+# Open subject from csv output and get all the subject ids
+hcp_names = pd.read_csv('csv/output/BRUMEG_AAL2_functional.csv')
 hcp_names = hcp_names['Subject'].tolist()
 
 print(len(hcp_names))
@@ -108,14 +108,14 @@ def preferredAction(ng, actionMatrix, graph, name, high_percent=0, low_percent=0
 
 
 ab = ABNG(simulations=1, maxIterations=10000, strategy=Strategy.mono, output=["preferredAction"], consensusScore=[0.95], display=False)
-numberOfAgents =100
+numberOfAgents =94
 for name in hcp_names:
   print(name)
-  csv = pd.read_csv(f'patients/HCP/patient_{name}.csv')
+  csv = pd.read_csv(f'patients/BRUMEG/patient_{name}.csv')
   print(csv.head())
   graph = nx.from_pandas_edgelist(csv, source="Source", target="Target", edge_attr="Weight")
   print(graph.number_of_nodes())
-  matrix = convertArrayToMatrix(readCSVData("HCP_with_subjects", name), numberOfAgents)
+  matrix = convertArrayToMatrix(readCSVData("BRUMEG_AAL2_functional", name), numberOfAgents)
   output = ab.start(matrix)["preferredAction"][0]
 
   print(len(output))

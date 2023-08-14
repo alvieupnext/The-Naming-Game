@@ -23,7 +23,7 @@ def readPatientData(name, type='connectivity'):
   #make matrix triangular and return
   return np.tril(matrix)
 
-def readCSVData(name, number, mode = 'zero', df = None):
+def readCSVData(name, number, mode = 'abs', df = None):
   if df is None:
     # create file path
     path = here + f'/csv/output/{name}.csv'

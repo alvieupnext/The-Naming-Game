@@ -21,6 +21,7 @@ def map_choices(choices):
   else:
     return 2
 
+#print
 def map_color(value):
   color_map = {0: 'lightgray', 1: 'blue', 2: 'yellow', 3: 'green'}
   return color_map[value]
