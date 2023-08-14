@@ -25,7 +25,7 @@ def getDataFromHospital(name):
     ab = ABNG(simulations=1, maxIterations=1000000, strategy=Strategy.mono, output=["preferredAction"],
             consensusScore=[1], display=False)
     numberOfAgents = 94
-    matrix = convertArrayToMatrix(readCSVData("HCP_with_subjects", name), numberOfAgents)
+    matrix = convertArrayToMatrix(readCSVData("BRUMEG_AAL2_functional", name), numberOfAgents)
     output = ab.start(matrix)["preferredAction"][0]
     numberOutput = np.zeros((len(output), len(output[0])), dtype=int)
     #for every row in the output matrix
