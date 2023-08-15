@@ -30,7 +30,7 @@ def map_color(value):
 threshold = 0.5
 
 # Open HCP with subject from csv output and get all the subject ids
-hcp_names = pd.read_csv('csv/output/HCP_with_subjects.csv')
+hcp_names = pd.read_csv('csv/output/BRUMEG_AAL2_functional.csv')
 hcp_names = hcp_names['Subject'].tolist()
 
 print(len(hcp_names))
@@ -57,7 +57,7 @@ def preferredAction(actionMatrix, graph, name, high_percent=0, low_percent=0):
     selected_nodes = top_nodes + bottom_nodes
 
     # Create a sub-matrix for only the selected nodes
-    numberMatrix_selected = actionMatrix[num, selected_nodes]
+    numberMatrix_selected = actionMatrix[num, :]
 
     node_colors = [map_color(val) for val in numberMatrix_selected]
 
@@ -108,17 +108,17 @@ def preferredAction(actionMatrix, graph, name, high_percent=0, low_percent=0):
   ani.save(f'videos/agent_choices_graph_{name}.mp4', writer='ffmpeg')
 
 #Load convergenceHCP_1sim_preferred_action.csv from csv/output folder in pandas
-convergence_csv = pd.read_csv("csv/output/convergenceHCP_1sim_preferred_action.csv", index_col=0)
+convergence_csv = pd.read_csv("csv/output/convergenceBRUMEG_1sim_preferred_action.csv", index_col=0)
 
-numberOfAgents = 100
+numberOfAgents = 94
 
 for name in hcp_names:
   print(name)
-  csv = pd.read_csv(f'patients/HCP/patient_{name}.csv')
+  csv = pd.read_csv(f'patients/BRUMEG/patient_{name}.csv')
   print(csv.head())
   graph = nx.from_pandas_edgelist(csv, source="Source", target="Target", edge_attr="Weight")
   print(graph.number_of_nodes())
-  matrix = convertArrayToMatrix(readCSVData("HCP_with_subjects", name), numberOfAgents)
+  matrix = convertArrayToMatrix(readCSVData("BRUMEG_AAL2_functional", name), numberOfAgents)
   # Get output from convergence_csv based on the name of the patient (Subject)
   print(convergence_csv.head())
   output = convergence_csv.loc[convergence_csv['Subject'] == name]
