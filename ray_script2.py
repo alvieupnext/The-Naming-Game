@@ -4,7 +4,7 @@ from patientData import *
 from variants.ABNG import *
 import ray
 
-numberOfAgents = 94
+numberOfAgents = 100
 
 consensusScoreList = [0.7, 0.8, 0.9, 0.95, 0.98, 0.99, 1]
 
@@ -17,7 +17,7 @@ columns.extend(scoresStringList)
 #Get the names from lowesthighestpatients.txt comma seperated
 # names = [int(name) for name in open("lowesthighestpatients.txt").read().split(",")]
 
-csv_data = pd.read_csv("csv/output/BRUMEG_AAL2_functional.csv")
+csv_data = pd.read_csv("csv/output/HCP_with_subjects_abs.csv")
 
 
 # The patient IDs in the CSV file are integers, while the IDs we read from the text file are strings.
@@ -63,7 +63,7 @@ def getDataFromHospital(name):
             consensusScore=consensusScoreList, display=True)
   df = pd.DataFrame(columns=columns, dtype=int)
   print(f"Using Hospital Data {name}")
-  array = readCSVData("BRUMEG_AAL2_functional", name, mode='abs')
+  array = readCSVData("HCP_with_subjects_abs", name)
   smallWorld = convertArrayToMatrix(array, numberOfAgents)
   print(smallWorld)
   # smallWorld_complete = complete_matrix(smallWorld)
@@ -88,6 +88,7 @@ def getDataFromHospital(name):
 
 
 if __name__ == "__main__":
+  # print(getDataFromHospital(102109))
   ray.init(address='auto')
   patientDataRemotes = []
   for name in csv_patient_ids:
@@ -99,7 +100,7 @@ if __name__ == "__main__":
     print("Finished one")
     print("Remaing tasks: ", len(patientDataRemotes))
     patientData = mergeData(patientData, ray.get(doneRemote[0]))
-    patientData.to_csv("csv/output/convergenceBRUMEG_AAL2_abs_25_part2.csv")
+    patientData.to_csv("csv/output/convergenceHCPabs_25_part2.csv")
 
 
 

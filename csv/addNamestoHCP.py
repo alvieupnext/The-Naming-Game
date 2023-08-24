@@ -43,7 +43,7 @@ def processDataFrame(df):
     return processed_df
 
 # Specify the file path to the CSV
-file_path = 'output/HCP_NetMats2.csv'
+file_path = 'output/HPC_NetMats2_v4.csv'
 
 # Read the CSV file into a DataFrame
 df = pd.read_csv(file_path, index_col="Unnamed: 0")
@@ -53,7 +53,7 @@ df = processDataFrame(df)
 print(df)
 
 # Assuming your DataFrame is named df
-output_file_path = 'output/HCP_with_subjects.csv'
+output_file_path = 'output/HCP_with_subjects_abs.csv'
 
 # Export the DataFrame to a CSV file
 df.to_csv(output_file_path, index=False)

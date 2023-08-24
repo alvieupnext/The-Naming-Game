@@ -101,7 +101,7 @@ def loadHPCData(name):
   allPatients = np.loadtxt(path, dtype=float)
   #get absolute value from allPatients
   # allPatients = np.absolute(allPatients)
-  allPatients[allPatients<0] = 0
+  # allPatients[allPatients<0] = 0
   print(allPatients.shape)
   # how many patients are there
   noOfPatients = len(allPatients)

@@ -30,5 +30,5 @@ for matrix, name in zip(population, names):
   # add row to dataframe
   df.loc[len(df.index)] = array
 
-df.to_csv("output/HPC_NetMats2_v3.csv")
+df.to_csv("output/HPC_NetMats2_v4.csv")
 
