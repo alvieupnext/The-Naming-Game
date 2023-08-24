@@ -1,15 +1,11 @@
 from matplotlib import pyplot as plt
-from variants.BaselineNG import *
-from variants.Imitation import *
-import MatrixFactory as mf
 from variants.ABNG import *
-import Strategy
+from namingGameTools import Strategy
 from matplotlib.patches import Patch
 
 from matplotlib.animation import FuncAnimation
-import pandas as pd
 import networkx as nx
-from patientData import *
+from patients.patientData import *
 
 def map_choices(choices):
   if len(choices) == 0:

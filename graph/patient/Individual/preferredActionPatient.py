@@ -1,7 +1,7 @@
 from matplotlib import pyplot as plt
-from patientData import *
+from patients.patientData import *
 from variants.ABNG import *
-import Strategy
+from namingGameTools import Strategy
 
 ng = ABNG(maxIterations=100, simulations=1, strategy=Strategy.multi, output=["preferredAction"],
           consensusScore=[0.95], display=False)

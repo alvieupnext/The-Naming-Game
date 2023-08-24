@@ -1,8 +1,7 @@
 import unittest
 from variants.Imitation import *
-import Strategy
-from MatrixFactory import *
-import numpy as np
+from namingGameTools.MatrixFactory import *
+
 
 class ImitationTest(unittest.TestCase):
   #

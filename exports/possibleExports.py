@@ -167,7 +167,7 @@ class namePopularity(namesInCirculation):
         valueList[it] = proportion
         self.popularity[name] = valueList
       #Print the current name with the percentage of agents that know it (format it neatly)
-      print(name + ": " + str(round(proportion * 100, 2)) + "%")
+      self.ng.display(name + ": " + str(round(proportion * 100, 2)) + "%")
       #if we have reached our desired consensus, notify the Naming Game
       consensus = self.checkConsensus(listOfAgents)
       if consensus:

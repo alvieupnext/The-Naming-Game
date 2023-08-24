@@ -1,5 +1,5 @@
 import bct
-from patientData import *
+from patients.patientData import *
 from matplotlib import pyplot as plt
 
 array = loadHPCData("netmats2")

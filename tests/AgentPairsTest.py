@@ -1,6 +1,5 @@
 import unittest
-import MatrixFactory as mf
-import AgentPairs as ap
+from namingGameTools import AgentPairs as ap, MatrixFactory as mf
 import numpy as np
 # importing the module
 import collections

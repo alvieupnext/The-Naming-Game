@@ -1,14 +1,10 @@
 # This code is responsible for exporting NG convergence results to a csv file (using multicore)
 import sys
-import os
 
 sys.path.append('C:/Users/alvar/PycharmProjects/MAP')
 
-import pandas as pd
-import numpy as np
 from multiprocessing import Pool
-from patientData import *
-import Strategy
+from patients.patientData import *
 from variants.ABNG import *
 from functools import reduce
 

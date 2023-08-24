@@ -1,7 +1,5 @@
 
-from patientData import *
-from variants.ABNG import *
-from functools import reduce
+from patients.patientData import *
 import pandas as pd
 
 columns = ['subject']

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from patientData import *
+from patients.patientData import *
 from variants.ABNG import *
 import ray
 
@@ -15,7 +15,7 @@ columns = ['NG sim', 'Subject']
 columns.extend(scoresStringList)
 
 #Get the names from lowesthighestpatients.txt comma seperated
-names = [int(name) for name in open("lowesthighestpatients.txt").read().split(",")]
+names = [int(name) for name in open("patients/HCP/lowesthighestpatients.txt").read().split(",")]
 
 # csv_data = pd.read_csv("csv/output/HCP_with_subjects_abs.csv")
 #

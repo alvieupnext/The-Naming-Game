@@ -1,4 +1,4 @@
-from patientData import loadHPCData
+from patients.patientData import loadHPCData
 
 import pandas as pd
 import numpy as np

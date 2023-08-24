@@ -1,8 +1,4 @@
 from matplotlib import pyplot as plt
-import pandas as pd
-from patientData import *
-
-
 
 plt.title(f"SDMT chart")
 

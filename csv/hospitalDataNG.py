@@ -1,8 +1,5 @@
-from multiprocessing import Pool
-from patientData import *
+from patients.patientData import *
 from variants.ABNG import *
-from MatrixFactory import *
-from functools import reduce
 import ray
 
 numberOfAgents =100

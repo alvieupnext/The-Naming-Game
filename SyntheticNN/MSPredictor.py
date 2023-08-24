@@ -1,18 +1,12 @@
 import torch
-import torch.nn as nn
-import torchvision # torch package for vision related things
 import torch.nn.functional as F  # Parameterless functions, like (some) activation functions
-import torchvision.datasets as datasets  # Standard datasets
-import torchvision.transforms as transforms  # Transformations we can perform on our dataset for augmentation
 from torch import optim  # For optimizers like SGD, Adam, etc.
 from torch import nn  # All neural network modules
-from patientData import *
+from patients.patientData import *
 import pandas as pd
 from torch.utils.data import DataLoader, Dataset  # Gives easier dataset managment by creating mini batches etc.
 from torch.utils.data.sampler import SubsetRandomSampler
-from torchmetrics import MeanSquaredError
-from matplotlib import pyplot as plt
-import seaborn as sb
+
 
 #Create Network
 class NN(nn.Module):

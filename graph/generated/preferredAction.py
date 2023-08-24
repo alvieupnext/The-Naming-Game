@@ -1,9 +1,6 @@
 from matplotlib import pyplot as plt
-from variants.BaselineNG import *
-from variants.Imitation import *
-import MatrixFactory as mf
 from variants.ABNG import *
-import Strategy
+from namingGameTools import Strategy, MatrixFactory as mf
 
 
 def map_choices(choices):
