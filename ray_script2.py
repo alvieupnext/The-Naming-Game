@@ -15,15 +15,15 @@ columns = ['NG sim', 'Subject']
 columns.extend(scoresStringList)
 
 #Get the names from lowesthighestpatients.txt comma seperated
-# names = [int(name) for name in open("lowesthighestpatients.txt").read().split(",")]
+names = [int(name) for name in open("lowesthighestpatients.txt").read().split(",")]
 
-csv_data = pd.read_csv("csv/output/HCP_with_subjects_abs.csv")
-
-
-# The patient IDs in the CSV file are integers, while the IDs we read from the text file are strings.
-# Let's convert the IDs in the CSV file to strings to make comparison easier.
-
-csv_patient_ids = csv_data["Subject"].astype(int).tolist()
+# csv_data = pd.read_csv("csv/output/HCP_with_subjects_abs.csv")
+#
+#
+# # The patient IDs in the CSV file are integers, while the IDs we read from the text file are strings.
+# # Let's convert the IDs in the CSV file to strings to make comparison easier.
+#
+# csv_patient_ids = csv_data["Subject"].astype(int).tolist()
 
 def mergeData(sum, df):
   return pd.merge(sum, df, how='outer')
@@ -91,7 +91,7 @@ if __name__ == "__main__":
   # print(getDataFromHospital(102109))
   ray.init(address='auto')
   patientDataRemotes = []
-  for name in csv_patient_ids:
+  for name in names:
     patientDataRemotes.append(getDataFromHospital.remote(name))
   patientData = pd.DataFrame(columns=columns, dtype=int)
 
