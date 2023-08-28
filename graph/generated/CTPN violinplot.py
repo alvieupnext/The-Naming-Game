@@ -5,7 +5,6 @@ import numpy as np
 from pylab import plot, show, \
                   legend, violinplot, setp
 
-#TODO clean this code
 numberOfAgents = 100
 
 consensusScoreList = [0.8, 0.9,0.95, 0.98, 0.99, 1]

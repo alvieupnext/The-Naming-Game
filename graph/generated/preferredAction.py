@@ -1,7 +1,7 @@
 from matplotlib import pyplot as plt
 from variants.ABNG import *
 from namingGameTools import Strategy, MatrixFactory as mf
-
+import numpy as np
 
 def map_choices(choices):
   if len(choices) == 0:

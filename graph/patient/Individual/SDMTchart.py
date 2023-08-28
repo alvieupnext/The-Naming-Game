@@ -1,4 +1,5 @@
 from matplotlib import pyplot as plt
+from patients.patientData import *
 
 plt.title(f"SDMT chart")
 
@@ -6,11 +7,13 @@ plt.xlabel("Patients")
 
 plt.ylabel("SDMT score")
 
-dataTable = SDMT
+patient_data = brumeg_functional_data
 
-patientNames = names
+patientNames = patient_data['Subject'].tolist()
+SDMT = patient_data['SDMT'].tolist()
 
-groupSize = len(names) // 5
+
+groupSize = len(patientNames) // 5
 
 patientGroups = [patientNames[i:i+groupSize] for i in range(0, len(patientNames), groupSize)]
 
@@ -21,13 +24,13 @@ for index, group in enumerate(patientGroups):
 
   plt.ylabel("SDMT score")
 
-  data = dataTable['SDMT'][index*groupSize:index*groupSize + groupSize]
+  data = SDMT[index*groupSize:index*groupSize + groupSize]
 
 
 
-  print(data.values)
+  print(data)
 
-  plt.plot(data.values)
+  plt.plot(data)
 
   plt.xticks(list(range(groupSize)), group)
 

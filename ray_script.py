@@ -17,7 +17,7 @@ columns.extend(scoresStringList)
 #Get the names from lowesthighestpatients.txt comma seperated
 names = [int(name) for name in open("patients/HCP/lowesthighestpatients.txt").read().split(",")]
 
-# csv_data = pd.read_csv("csv/output/HCP_with_subjects_abs.csv")
+# csv_data = pd.read_csv("csv/output/HCP_abs_v4.csv")
 #
 #
 # # The patient IDs in the CSV file are integers, while the IDs we read from the text file are strings.

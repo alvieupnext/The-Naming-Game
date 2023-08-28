@@ -2,22 +2,30 @@ from matplotlib import pyplot as plt
 from variants.ABNG import *
 from namingGameTools import Strategy
 from patients.patientData import *
+import numpy as np
 
-numberOfAgents = 100
+numberOfAgents = brumeg_functional_agents
 
 consensusScoreList = [0.8, 0.9,0.95, 0.98, 0.99, 1]
 
-ng = ABNG(maxIterations=100, simulations=10, strategy=Strategy.multi, output=["popularity", "consensus"],
+ng = ABNG(maxIterations=1000, simulations=1, strategy=Strategy.multi, output=["popularity", "consensus"],
           consensusScore=consensusScoreList, display=False)
 
-patientNames = names
+patient_data = brumeg_functional
 
-groupSize = len(patientNames) // 95
+#Get the patient names from the Subject column
+patientNames = patient_data['Subject'].tolist()
+
+# For only choosing a subset of patients
+patientNames = patientNames[0:1]
+
+# groupSize = len(patientNames) // 4
+groupSize = 1
+
+print(groupSize)
 
 
 patientGroups = [patientNames[i:i+groupSize] for i in range(0, len(patientNames), groupSize)]
-
-print(patientGroups)
 
 colors = ['blue', 'red', 'cyan', 'magenta', 'green', 'purple']
 
@@ -44,8 +52,10 @@ for i, patientGroup in enumerate(patientGroups):
 
   for row, patient in enumerate(patientGroup):
     print(f"Using Patient Data {patient}")
-    data = readPatientData(patient)
-    output = ng.start(data)
+    #Get the patient data from the pandas
+    data = readFromPandasDataframe(patient_data, patient)
+    matrix = convertArrayToMatrix(data, numberOfAgents)
+    output = ng.start(matrix)
     #get list of when consensus was reached for every simulation
     consensusList = output["consensus"]
     # reformat list to get the iteration values
@@ -56,7 +66,6 @@ for i, patientGroup in enumerate(patientGroups):
       for index, set in enumerate(simulationConsensus):
         #get the right iteration from consensusList and append it to the reformatted list
         reformattedConsensusList[index].append(set[1])
-    print(reformattedConsensusList)
     #fill a row of the consensusMatrix
     for column, values in enumerate(reformattedConsensusList):
       consensusMatrix[row, column] = values

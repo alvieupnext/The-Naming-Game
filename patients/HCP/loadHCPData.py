@@ -1,13 +1,17 @@
 
-from patients.patientData import *
+import os
 import pandas as pd
+import numpy as np
+from patients.patientData import convertMatrixToArray
 
 columns = []
 
 noOfAgents =100
 
+here = os.path.dirname(os.path.abspath(__file__))
+
 #Used for reading netmats files
-def loadHPCData(name):
+def loadHCPData(name):
   #create file path
   path = here + f'/{name}.txt'
   # get data from txt
@@ -29,7 +33,7 @@ def loadHPCData(name):
     matrices.append(matrix)
   return matrices
 
-population = loadHPCData("netmats2")
+population = loadHCPData("netmats2")
 
 names = [i for i in range(len(population))]
 
@@ -50,5 +54,11 @@ for matrix, name in zip(population, names):
   # add row to dataframe
   hcp_dataframe_100nodes.loc[len(hcp_dataframe_100nodes.index)] = array
 
-hcp_dataframe_100nodes.to_csv("HPC_NetMats2_v4.csv")
+#Load the subjects from subjects.txt
+subjects = np.loadtxt(here + '/subjects.txt', dtype=int)
+
+#Add the subjects to the dataframe
+hcp_dataframe_100nodes.insert(0, "Subject", subjects)
+
+hcp_dataframe_100nodes.to_csv("HCP_NetMats2_v4.csv")
 

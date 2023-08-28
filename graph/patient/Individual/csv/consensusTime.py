@@ -1,14 +1,16 @@
 from matplotlib import pyplot as plt
 from patients.patientData import *
-from dataframeTools import *
+from patients.patientData import brumeg_functional_convergence
 
-patientNames = list(range(812))
+patientData = brumeg_functional_convergence
 
-groupSize = len(patientNames) // 50
+#get the unique values of the Subject row
+patientNames = patientData['Subject'].unique().tolist()
+
+# groupSize = len(patientNames) // 50
+groupSize = 4
 
 patientGroups = [patientNames[i:i+groupSize] for i in range(0, len(patientNames), groupSize)]
-
-print(patientGroups)
 
 colors = ['blue', 'red', 'cyan', 'magenta', 'green', 'purple']
 
@@ -20,12 +22,10 @@ def setBoxColors(bp):
   for index, box in enumerate(bp['boxes']):
     plt.setp(box, color=colors[index])
 
-def consensusTime(name):
-  path = here + f"/csv/output/{name}.csv"
-  patientData = pd.read_csv(path)
+def consensusTime():
   for i, patientGroup in enumerate(patientGroups):
     #set titles of the graph
-    plt.title(f"Consensus Time Per Patient(ABNG, 100 simulations, using patient SC group {i} with size {groupSize})")
+    plt.title(f"Consensus Time (ABNG, 100 sim, using patient SC group {i})")
     plt.ylabel("Amount of Games played")
     plt.xlabel("Patient Number")
     #draw legend (draws lines, uses these lines for the legend and then undraws them)
@@ -66,6 +66,6 @@ def consensusTime(name):
     #show graph
     plt.show()
 
-consensusTime("convergenceHPC")
+consensusTime()
 
 

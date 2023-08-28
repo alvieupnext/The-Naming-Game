@@ -1,6 +1,7 @@
 from matplotlib import pyplot as plt
 from variants.Imitation import *
 from namingGameTools import Strategy, MatrixFactory as mf
+import numpy as np
 
 
 def namesPerIteration(ng, matrixNetwork):

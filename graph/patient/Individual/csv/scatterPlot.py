@@ -1,10 +1,12 @@
 from matplotlib import pyplot as plt
-from dataframeTools import *
 from patients.patientData import *
 
-patientNames = list(range(812))
+patientData = brumeg_functional_convergence
 
-groupSize = len(patientNames) // 20
+patientNames = patientData['Subject'].unique().tolist()
+
+# groupSize = len(patientNames) // 20
+groupSize = 5
 
 patientGroups = [patientNames[i:i+groupSize] for i in range(0, len(patientNames), groupSize)]
 
@@ -12,9 +14,7 @@ chosenConvergence = 0.95
 
 print(patientGroups)
 
-def scatterPlot(name):
-  path = here + f"/csv/output/{name}.csv"
-  patientData = pd.read_csv(path)
+def scatterPlot():
   for i, patientGroup in enumerate(patientGroups[3:]):
     plt.title(f"Scatter Plot Convergence with {chosenConvergence} with patient group {i}")
     plt.ylabel("Amount of Games played")
@@ -35,4 +35,4 @@ def scatterPlot(name):
 
     plt.show()
 
-scatterPlot("convergenceHPC")
+scatterPlot()
