@@ -1,8 +1,7 @@
 from abc import ABC, abstractmethod
-import AgentPairs as ap
-import numpy as np
+from namingGameTools import AgentPairs as ap, Strategy
 from exports.possibleExports import possibleExports
-import Strategy
+
 
 #Here, we will be defining the abstract superclass for all of the strategies for the Naming game, in general all the Naming Game variants use the same skeleton
 

@@ -1,16 +1,9 @@
 #!/usr/bin/env python
 
 # This code is responsible for exporting NG convergence results to a csv file (using multicore)
-import sys
-import os
 
-import pandas as pd
-import numpy as np
-from multiprocessing import Pool
-from patientData import *
-import Strategy
+from patients.patientData import *
 from variants.ABNG import *
-from functools import reduce
 import ray
 
 consensusScoreList = [0.8, 0.9, 0.95, 0.98, 0.99, 1]

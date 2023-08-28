@@ -1,5 +1,5 @@
 from matplotlib import pyplot as plt
-from patientData import *
+from patients.patientData import *
 from fitter import Fitter
 from fitter import get_common_distributions
 

@@ -1,7 +1,7 @@
 import unittest
-import MatrixFactory as mf
+from namingGameTools import MatrixFactory as mf
 import numpy as np
-from patientData import generateConnectionWeight
+from patients.patientData import generateConnectionWeight
 
 class MatrixFactoryTest(unittest.TestCase):
   #setup the test

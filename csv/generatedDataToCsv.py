@@ -1,9 +1,7 @@
 
-from patientData import *
-from variants.ABNG import *
-from functools import reduce
+from patients.patientData import *
 import pandas as pd
-from MatrixFactory import *
+from namingGameTools.MatrixFactory import *
 
 columns = ['subject']
 

@@ -1,5 +1,5 @@
 from matplotlib import pyplot as plt
-from patientData import *
+from patients.patientData import *
 import pandas as pd
 from dataframeTools import *
 

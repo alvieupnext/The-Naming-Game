@@ -1,6 +1,6 @@
 from matplotlib import pyplot as plt
 from dataframeTools import *
-from patientData import *
+from patients.patientData import *
 
 patientNames = list(range(812))
 

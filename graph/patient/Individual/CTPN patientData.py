@@ -1,11 +1,7 @@
 from matplotlib import pyplot as plt
-from variants.BaselineNG import *
-from variants.Imitation import *
 from variants.ABNG import *
-import MatrixFactory as mf
-import Strategy
-import numpy as np
-from patientData import *
+from namingGameTools import Strategy
+from patients.patientData import *
 
 numberOfAgents = 100
 

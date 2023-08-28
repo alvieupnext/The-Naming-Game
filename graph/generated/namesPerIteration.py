@@ -1,8 +1,7 @@
 from matplotlib import pyplot as plt
-from variants.BaselineNG import *
 from variants.Imitation import *
-import MatrixFactory as mf
-import Strategy
+from namingGameTools import Strategy, MatrixFactory as mf
+
 
 def namesPerIteration(ng, matrixNetwork):
   plt.title(f"Average Names Invented in Total Per Iteration ({ng.name}, {ng.strategy.__name__})")

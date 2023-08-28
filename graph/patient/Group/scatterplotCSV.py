@@ -1,10 +1,5 @@
 from matplotlib import pyplot as plt
-from variants.ABNG import *
-import Strategy
-import numpy as np
-from pylab import plot, show, \
-                  legend, boxplot, setp
-from patientData import *
+from patients.patientData import *
 import pandas as pd
 from dataframeTools import *
 
