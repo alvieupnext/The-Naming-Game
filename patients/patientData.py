@@ -67,25 +67,10 @@ def getWeightsFromPatient(name):
   #turn into weight array and return
   return convertMatrixToArray(matrix)
 
-#Used for reading netmats files
-def loadHPCData(name):
-  #create file path
-  path = here + f'/HCP/{name}.txt'
-  # get data from txt
-  allPatients = np.loadtxt(path, dtype=float)
-  #get absolute value from allPatients
-  # allPatients = np.absolute(allPatients)
-  # allPatients[allPatients<0] = 0
-  print(allPatients.shape)
-  # how many patients are there
-  noOfPatients = len(allPatients)
-  #how many elements does one patient contain
-  noOfElements = len(allPatients[0])
-  numberOfAgents = np.sqrt(noOfElements).astype(int)
-  #generate list of matrices
-  matrices = []
-  #calculate number of agents
-  for patient in allPatients:
-    matrix = np.reshape(patient, (numberOfAgents, numberOfAgents))
-    matrices.append(matrix)
-  return matrices
+#Load the data from the folders
+brumeg_functional = pd.read_csv('BRUMEG_functional/BRUMEG_AAL2_functional.csv')
+
+
+
+print(brumeg_functional.head())
+
