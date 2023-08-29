@@ -21,4 +21,6 @@ for index, patient in enumerate(patientNames[25:29]):
     ax = sns.heatmap(matrix, mask=mask,  square=True,  cmap="YlGnBu")
     ax.set_title(patient, x=0.8, y=0.5)
 
+plt.suptitle("Heatmaps Between The Nodes (HCP from NetMats2)")
+
 plt.show()
