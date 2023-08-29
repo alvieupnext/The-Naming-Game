@@ -41,6 +41,16 @@ def readFromPandasDataframe(df, number, mode = 'abs'):
         ar_new = np.abs(ar_new)
     return ar_new
 
+def getWeightsFromPatient(df, patient):
+  #Get the row of the patient
+  patientRow = df.loc[df["Subject"] == patient]
+  #Turn the row into a numpy array
+  patientArray = patientRow.to_numpy()
+  #Delete the first element of the array (the patient number)
+  patientArray = np.delete(patientArray, 0)
+  #Return array
+  return patientArray
+
 #converts a lower triangular matrix into an array
 def convertMatrixToArray(matrix):
   result = []
