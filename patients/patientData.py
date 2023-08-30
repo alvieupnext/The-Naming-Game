@@ -1,18 +1,20 @@
-#procedure for turning patient code from csv into readable data
+#procedure for turning patient code from csv_results into readable data
 import numpy as np
 import pandas as pd
+import networkx as nx
+from graphAnalysis.smallWorldNess import *
 import random
 
 import os
 
 here = os.path.dirname(os.path.abspath(__file__))
 
-# names = np.loadtxt(here + '/patients/names.csv', dtype=int)
+# names = np.loadtxt(here + '/patients/names.csv_results', dtype=int)
 
 def readCSVData(name, number, mode = 'abs', dataset='BRUMEG'):
   # create file path
-  path = here + f'/patient/{dataset}/{name}.csv'
-  # get data from csv
+  path = here + f'/patient/{dataset}/{name}.csv_results'
+  # get data from csv_results
   df = pd.read_csv(path)
   # Number coincides with the "Subject"  column
   desiredGenerated = df.loc[df['Subject'] == number]
@@ -74,6 +76,64 @@ def getConsensusIterationOfSubject(df, patient, convergenceRate, structure = 'SC
   iterationRows = patientRows[f"{structure}_{convergenceRate}"]
   return iterationRows.tolist()
 
+#Make an NetworkX graph from a patient and given a dataframe
+def create_graph_from_subject_number(subject_number, data):
+  """Create a NetworkX graph for a given subject number from the dataset."""
+  row = data[data["Subject"] == subject_number].iloc[0].drop("Subject")
+
+  graph = nx.Graph()
+
+  for col, weight in row.items():
+    if '-' in col and weight != 0:
+      source, target = map(int, col[1:].split('-'))
+      graph.add_edge(source, target, Weight=np.abs(weight))
+
+  return graph
+
+#Add graphMetadata to the patientData
+def addGraphMetadata(structuralData, patientData):
+  df = pd.DataFrame(
+    columns=["Subject", "characteristicPathLength", "globalEfficiency", "localEfficiency", "degreeDistribution",
+             "clusterCoefficient", "transitivity", "smallWorldNess"
+             ])
+  #get all Subject names from the structuralData
+  subjectNames = structuralData["Subject"].tolist()
+  for patient in subjectNames:
+    print(f"Adding metadata to patient {patient}")
+    #get the graph from the patient
+    graph = create_graph_from_subject_number(patient, structuralData)
+    assert(not graph.is_directed())
+    # Calculate characteristic path length and global efficiency
+    characteristicPathLength = nx.average_shortest_path_length(graph)
+    globalEfficiency = nx.global_efficiency(graph)
+
+    # Calculate local efficiency
+    localEfficiency = nx.local_efficiency(graph)
+
+    # Calculate degree distribution
+    degreeDistribution = np.mean([d for _, d in graph.degree()])
+
+    # Calculate cluster coefficient
+    clusterCoefficient = nx.average_clustering(graph)
+
+    # Calculate transitivity
+    transitivity = nx.transitivity(graph)
+
+    # Calculate small-worldness using bctpy
+    smallWorld = smallWorldNess(clusterCoefficient, characteristicPathLength)
+
+    row = [patient, characteristicPathLength, globalEfficiency, localEfficiency, degreeDistribution,
+           clusterCoefficient,transitivity, smallWorld
+           ]
+
+    #Insert row to dataframe
+    df.loc[len(df)] = row
+
+  #Merge the dataframe with the patientData
+  return pd.merge(patientData, df, on="Subject")
+
+
+
 
 #Load the data from the folders
 brumeg_functional = pd.read_csv(here + '/BRUMEG_functional/BRUMEG_AAL2_functional.csv')
@@ -84,12 +144,18 @@ brumeg_functional_agents = 94
 
 brumeg_functional_convergence = pd.read_csv(here + '/BRUMEG_functional/convergenceBRUMEG_AAL2_functional.csv')
 
+print("busy")
+
+print(addGraphMetadata(brumeg_functional, brumeg_functional_data).head())
+
 hcp_patient_data = pd.read_csv(here + '/HCP/HCP_NetMats2_v4.csv', index_col=0)
+
+hcp_single_sim_preferred = pd.read_csv(here + '/HCP/convergenceHCP_1sim_preferred_action.csv', index_col=0)
 
 hcp_agents = 100
 
 
-print(brumeg_functional_data.head())
+# print(brumeg_functional_data.head())
 # print(brumeg_functional_convergence.head())
 #
 # #Due to MATLAB workings, the first agent is 1, not 0

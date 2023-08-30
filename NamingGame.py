@@ -4,8 +4,6 @@ from exports.possibleExports import possibleExports
 
 
 #Here, we will be defining the abstract superclass for all of the strategies for the Naming game, in general all the Naming Game variants use the same skeleton
-
-#TODO make methods private
 class NamingGame(ABC):
 
   def __init__(self, simulations=2, maxIterations=50, display=False, strategy=Strategy.multi, output=[], consensusScore = [1]):

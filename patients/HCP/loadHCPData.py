@@ -60,5 +60,5 @@ subjects = np.loadtxt(here + '/subjects.txt', dtype=int)
 #Add the subjects to the dataframe
 hcp_dataframe_100nodes.insert(0, "Subject", subjects)
 
-hcp_dataframe_100nodes.to_csv("HCP_NetMats2_v4.csv")
+hcp_dataframe_100nodes.to_csv("HCP_NetMats2_v4.csv_results")
 

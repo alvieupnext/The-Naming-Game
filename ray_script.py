@@ -17,7 +17,7 @@ columns.extend(scoresStringList)
 #Get the names from lowesthighestpatients.txt comma seperated
 names = [int(name) for name in open("patients/HCP/lowesthighestpatients.txt").read().split(",")]
 
-# csv_data = pd.read_csv("csv/output/HCP_abs_v4.csv")
+# csv_data = pd.read_csv("csv_results/output/HCP_abs_v4.csv_results")
 #
 #
 # # The patient IDs in the CSV file are integers, while the IDs we read from the text file are strings.
@@ -100,7 +100,7 @@ if __name__ == "__main__":
     print("Finished one")
     print("Remaing tasks: ", len(patientDataRemotes))
     patientData = mergeData(patientData, ray.get(doneRemote[0]))
-    patientData.to_csv("csv/output/convergenceHCPabs_25.csv")
+    patientData.to_csv("csv_results/output/convergenceHCPabs_25.csv_results")
 
 
 

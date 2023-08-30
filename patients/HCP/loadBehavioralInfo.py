@@ -1,9 +1,9 @@
-#Imports for processing csv files and dataframes
+#Imports for processing csv_results files and dataframes
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-#Access the behavioral csv file in patients folder
+#Access the behavioral csv_results file in patients folder
 behavioral = pd.read_csv("behavioral.csv")
 
 #Subjects are a txt file seperated by newlines so we need to process the txt and add the subjects to a list
@@ -21,5 +21,5 @@ behavioral = behavioral[behavioral["Subject"].isin(subjects)]
 
 print(behavioral)
 
-#Export behavioral information to csv/ouput/behavioralInformation.csv
-behavioral.to_csv("behavioralInformation.csv", index=False)
+#Export behavioral information to csv_results/ouput/behavioralInformation.csv_results
+behavioral.to_csv("behavioralInformation.csv_results", index=False)
