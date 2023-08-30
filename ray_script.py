@@ -3,6 +3,7 @@
 from patientData import *
 from variants.ABNG import *
 import ray
+import pandas as pd
 
 numberOfAgents = 100
 
@@ -16,6 +17,13 @@ columns.extend(scoresStringList)
 
 #Get the names from lowesthighestpatients.txt comma seperated
 names = [int(name) for name in open("lowesthighestpatients.txt").read().split(",")]
+
+previousWork = pd.read_csv("csv/output/convergenceHCPabs_25.csv", index_col=0)
+
+#Get all names that are not present in the Subject column of the previous work dataframe
+names = [name for name in names if name not in previousWork["Subject"].tolist()]
+
+print(names)
 
 # csv_data = pd.read_csv("csv/output/HCP_with_subjects_abs.csv")
 #
@@ -100,7 +108,7 @@ if __name__ == "__main__":
     print("Finished one")
     print("Remaing tasks: ", len(patientDataRemotes))
     patientData = mergeData(patientData, ray.get(doneRemote[0]))
-    patientData.to_csv("csv/output/convergenceHCPabs_25.csv")
+    patientData.to_csv("csv/output/convergenceHCPabs_25_part3.csv")
 
 
 

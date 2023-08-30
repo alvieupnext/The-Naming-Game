@@ -17,6 +17,13 @@ columns.extend(scoresStringList)
 #Get the names from lowesthighestpatients.txt comma seperated
 names = [int(name) for name in open("lowesthighestpatients.txt").read().split(",")]
 
+previousWork = pd.read_csv("csv/output/convergenceHCPabs_25_part2.csv", index_col=0)
+
+#Get all names that are not present in the Subject column of the previous work dataframe
+names = [name for name in names if name not in previousWork["Subject"].tolist()]
+
+print(names)
+
 # csv_data = pd.read_csv("csv/output/HCP_with_subjects_abs.csv")
 #
 #
