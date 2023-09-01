@@ -11,7 +11,7 @@ consensusScoreList = [0.8, 0.9,0.95, 0.98, 0.99, 1]
 ng = ABNG(maxIterations=1000, simulations=1, strategy=Strategy.multi, output=["popularity", "consensus"],
           consensusScore=consensusScoreList, display=False)
 
-patient_data = brumeg_functional
+patient_data = brumeg_functional_matrices
 
 #Get the patient names from the Subject column
 patientNames = patient_data['Subject'].tolist()

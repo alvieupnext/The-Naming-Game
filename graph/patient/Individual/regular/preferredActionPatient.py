@@ -6,7 +6,7 @@ from namingGameTools import Strategy
 ng = ABNG(maxIterations=100, simulations=1, strategy=Strategy.multi, output=["preferredAction"],
           consensusScore=[0.95], display=False)
 
-patient_data = brumeg_functional
+patient_data = brumeg_functional_matrices
 numberOfAgents = brumeg_functional_agents
 patient = 1
 

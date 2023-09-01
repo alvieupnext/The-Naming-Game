@@ -136,7 +136,7 @@ def addGraphMetadata(structuralData, patientData):
 
 
 #Load the data from the folders
-brumeg_functional = pd.read_csv(here + '/BRUMEG_functional/BRUMEG_AAL2_functional.csv')
+brumeg_functional_matrices = pd.read_csv(here + '/BRUMEG_functional/BRUMEG_AAL2_functional.csv')
 
 brumeg_functional_data = pd.read_csv(here + '/BRUMEG_functional/BRUMEG_AAL2_functional_data.csv')
 
@@ -144,16 +144,24 @@ brumeg_functional_agents = 94
 
 brumeg_functional_convergence = pd.read_csv(here + '/BRUMEG_functional/convergenceBRUMEG_AAL2_functional.csv')
 
-print("busy")
+# print("busy")
+#
+# addGraphMetadata(brumeg_functional_matrices, brumeg_functional_data).to_csv(here + 'BRUMEG_AAL2_functional_data_with_metadata.csv')
 
-addGraphMetadata(brumeg_functional, brumeg_functional_data).to_csv(here + 'BRUMEG_AAL2_functional_data_with_metadata.csv')
+hcp_patient_structural_matrices = pd.read_csv(here + '/HCP/HCP_NetMats2_v4.csv', index_col=0)
 
-hcp_patient_data = pd.read_csv(here + '/HCP/HCP_NetMats2_v4.csv', index_col=0)
+hcp_behavioral_data = pd.read_csv(here + '/HCP/behavioralInformation.csv')
+
+hcp_convergence = pd.read_csv(here + '/HCP/convergenceHCP_abs_50.csv', index_col=0)
 
 hcp_single_sim_preferred = pd.read_csv(here + '/HCP/convergenceHCP_1sim_preferred_action.csv', index_col=0)
 
+
 hcp_agents = 100
 
+print(hcp_behavioral_data)
+
+print(hcp_convergence)
 
 # print(brumeg_functional_data.head())
 # print(brumeg_functional_convergence.head())

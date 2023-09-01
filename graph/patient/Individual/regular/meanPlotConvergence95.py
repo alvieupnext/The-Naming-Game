@@ -6,7 +6,7 @@ from patients.patientData import *
 ng = ABNG(maxIterations=2000, simulations=3, strategy=Strategy.multi, output=["popularity", "consensus"],
           consensusScore=[0.95], display=False)
 
-patient_data = brumeg_functional
+patient_data = brumeg_functional_matrices
 
 numberOfAgents = brumeg_functional_agents
 

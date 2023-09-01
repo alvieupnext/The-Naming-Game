@@ -22,4 +22,4 @@ behavioral = behavioral[behavioral["Subject"].isin(subjects)]
 print(behavioral)
 
 #Export behavioral information to csv_results/ouput/behavioralInformation.csv_results
-behavioral.to_csv("behavioralInformation.csv_results", index=False)
+behavioral.to_csv("behavioralInformation.csv", index=False)
