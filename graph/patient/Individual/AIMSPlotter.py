@@ -5,11 +5,14 @@ import seaborn as sns
 from scipy import stats
 from patients.patientData import *
 
-#Load the BRUMEG AAL2 functional csv_results
-data = brumeg_functional_convergence
+#Load the functional csv_results
+convergence = brumeg_functional_convergence
 
-#Merge the SDMT convergence with the patient data to get SDMT
-data = data.merge(brumeg_functional_data, on='Subject')
+#Load the behavioral csv_results
+behavioral = brumeg_functional_data
+
+#Merge the convergence with the patient data to get
+convergence = convergence.merge(behavioral, on='Subject')
 
 consensus_levels = ['SC_0.7', 'SC_0.8', 'SC_0.9', 'SC_0.95', 'SC_0.98', 'SC_1']
 
@@ -20,13 +23,13 @@ def histogram(df):
     consensus_columns = [col for col in df.columns if col.startswith('SC_')]
     plt.figure(figsize=(15, 8))
     sns.boxplot(data=df[consensus_columns])
-    plt.title('Distribution of Consensus Iterations for Different Consensus Levels')
+    plt.title('Distribution of Consensus Iterations for Different Consensus Levels (HCP)')
     plt.xlabel('Consensus Level')
     plt.ylabel('Consensus Iterations')
     plt.xticks(rotation=45)
     plt.show()
 
-def scatterplot(df):
+def scatterplot(df, attribute='SDMT'):
     # Function to create subplot with regression line and Pearson correlation
     def create_subplot(ax, x, y, xlabel, ylabel, title):
         sns.regplot(x=x, y=y, ax=ax, scatter_kws={'s': 10})
@@ -40,9 +43,9 @@ def scatterplot(df):
     fig, axes = plt.subplots(2, 3, figsize=(18, 12))
 
     for ax, consensus in zip(axes.ravel(), consensus_levels):
-        create_subplot(ax, df['SDMT'], df[consensus],
-                       xlabel='SDMT Score', ylabel=f'{consensus[3:]} Consensus Iterations',
-                       title=f'Relationship Between SDMT Score and {consensus[3:]} Consensus Iterations')
+        create_subplot(ax, df[attribute], df[consensus],
+                       xlabel=f'{attribute} Score', ylabel=f'{consensus[3:]} Consensus Iterations',
+                       title=f'Relationship Between {attribute} Score and {consensus[3:]} Consensus Iterations (HCP)')
 
     plt.tight_layout()
     plt.show()
@@ -169,16 +172,16 @@ def fourQuartilesHistogram(df):
 # create_timeseries(data, consensus_levels, percentage_titles,
 #                   'Time Series of Mean Consensus Iterations for Different Levels')
 
-# histogram(data)
+# histogram(convergence)
 
-# scatterplot(data)
+scatterplot(convergence, 'PMAT24_A_CR')
 
-# cdf(data)
+# cdf(convergence)
 
-# distribution(data)
+# distribution(convergence)
 
-# t_test(data)
+# t_test(convergence)
 
-fourQuartilesCDF(data)
+# fourQuartilesCDF(convergence)
 
-# fourQuartilesHistogram(data)
+# fourQuartilesHistogram(convergence)

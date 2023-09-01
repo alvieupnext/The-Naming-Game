@@ -156,6 +156,18 @@ hcp_convergence = pd.read_csv(here + '/HCP/convergenceHCP_abs_50.csv', index_col
 
 hcp_single_sim_preferred = pd.read_csv(here + '/HCP/convergenceHCP_1sim_preferred_action.csv', index_col=0)
 
+# Reading the content of the file
+with open(here + "/HCP/lowesthighestpatients.txt", "r") as file:
+    content = file.read()
+
+# Splitting the content into two groups based on newline
+lowest_patients_str, highest_patients_str = content.split("\n")
+
+# Separating the patients in each group using comma separator and converting them to integers
+lowest_hcp_patients = [int(patient.strip()) for patient in lowest_patients_str.split(",") if patient.strip()]
+highest_hcp_patients = [int(patient.strip()) for patient in highest_patients_str.split(",") if patient.strip()]
+
+
 
 hcp_agents = 100
 
