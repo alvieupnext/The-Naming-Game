@@ -77,7 +77,7 @@ def getConsensusIterationOfSubject(df, patient, convergenceRate, structure = 'SC
   return iterationRows.tolist()
 
 #Make an NetworkX graph from a patient and given a dataframe
-def create_graph_from_subject_number(subject_number, data):
+def createGraphFromSubjectNumber(subject_number, data):
   """Create a NetworkX graph for a given subject number from the dataset."""
   row = data[data["Subject"] == subject_number].iloc[0].drop("Subject")
 
@@ -101,7 +101,7 @@ def addGraphMetadata(structuralData, patientData):
   for patient in subjectNames:
     print(f"Adding metadata to patient {patient}")
     #get the graph from the patient
-    graph = create_graph_from_subject_number(patient, structuralData)
+    graph = createGraphFromSubjectNumber(patient, structuralData)
     assert(not graph.is_directed())
     # Calculate characteristic path length and global efficiency
     characteristicPathLength = nx.average_shortest_path_length(graph)
@@ -146,7 +146,7 @@ brumeg_functional_convergence = pd.read_csv(here + '/BRUMEG_functional/convergen
 
 print("busy")
 
-print(addGraphMetadata(brumeg_functional, brumeg_functional_data).head())
+addGraphMetadata(brumeg_functional, brumeg_functional_data).to_csv(here + 'BRUMEG_AAL2_functional_data_with_metadata.csv')
 
 hcp_patient_data = pd.read_csv(here + '/HCP/HCP_NetMats2_v4.csv', index_col=0)
 

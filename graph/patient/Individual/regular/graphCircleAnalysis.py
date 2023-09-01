@@ -105,7 +105,7 @@ def preferredAction(ng, actionMatrix, graph, name, high_percent=0, low_percent=0
 ab = ABNG(simulations=1, maxIterations=10, strategy=Strategy.mono, output=["preferredAction"], consensusScore=[0.95], display=False)
 
 for name in names[0:1]:
-  graph = create_graph_from_subject_number(name, data)
+  graph = createGraphFromSubjectNumber(name, data)
   array = readFromPandasDataframe(data, name)
   matrix = convertArrayToMatrix(array , numberOfAgents)
   output = ab.start(matrix)["preferredAction"][0]
