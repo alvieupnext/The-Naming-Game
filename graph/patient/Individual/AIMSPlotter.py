@@ -174,7 +174,7 @@ def fourQuartilesHistogram(df):
 
 # histogram(convergence)
 
-scatterplot(convergence, 'PMAT24_A_CR')
+scatterplot(convergence, 'SDMT')
 
 # cdf(convergence)
 

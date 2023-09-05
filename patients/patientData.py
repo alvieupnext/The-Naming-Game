@@ -89,10 +89,6 @@ highest_hcp_patients = [int(patient.strip()) for patient in highest_patients_str
 
 hcp_agents = 100
 
-print(lowest_hcp_patients)
-
-print(highest_hcp_patients)
-
 # print(brumeg_functional_data.head())
 # print(brumeg_functional_convergence.head())
 #
