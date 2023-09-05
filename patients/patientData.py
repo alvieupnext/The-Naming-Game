@@ -11,24 +11,6 @@ here = os.path.dirname(os.path.abspath(__file__))
 
 # names = np.loadtxt(here + '/patients/names.csv_results', dtype=int)
 
-def readCSVData(name, number, mode = 'abs', dataset='BRUMEG'):
-  # create file path
-  path = here + f'/patient/{dataset}/{name}.csv_results'
-  # get data from csv_results
-  df = pd.read_csv(path)
-  # Number coincides with the "Subject"  column
-  desiredGenerated = df.loc[df['Subject'] == number]
-  array = desiredGenerated.to_numpy()
-  # #delete subject number
-  ar_new = np.delete(array, 0)
-  if mode == 'zero':
-    # Make all negative numbers into a zero
-    ar_new[ar_new < 0] = 0
-  elif mode == 'abs':
-    # Make all negative numbers into a positive
-    ar_new = np.abs(ar_new)
-  return ar_new
-
 def readFromPandasDataframe(df, number, mode = 'abs'):
     # Number coincides with the "Subject"  column
     desiredGenerated = df.loc[df['Subject'] == number]
@@ -171,9 +153,9 @@ highest_hcp_patients = [int(patient.strip()) for patient in highest_patients_str
 
 hcp_agents = 100
 
-print(hcp_behavioral_data)
+print(lowest_hcp_patients)
 
-print(hcp_convergence)
+print(highest_hcp_patients)
 
 # print(brumeg_functional_data.head())
 # print(brumeg_functional_convergence.head())
