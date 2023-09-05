@@ -1,14 +1,10 @@
 from matplotlib import pyplot as plt
-from variants.BaselineNG import *
-from variants.Imitation import *
 from variants.ABNG import *
-import MatrixFactory as mf
-import Strategy
+from namingGameTools import Strategy, MatrixFactory as mf
 import numpy as np
 from pylab import plot, show, \
                   legend, violinplot, setp
 
-#TODO clean this code
 numberOfAgents = 100
 
 consensusScoreList = [0.8, 0.9,0.95, 0.98, 0.99, 1]

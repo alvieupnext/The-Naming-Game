@@ -1,9 +1,6 @@
 from matplotlib import pyplot as plt
-from variants.BaselineNG import *
-from variants.Imitation import *
 from variants.ABNG import *
-import MatrixFactory as mf
-import Strategy
+from namingGameTools import Strategy, MatrixFactory as mf
 
 ng = ABNG(maxIterations=1000, simulations=2, strategy=Strategy.multi, output=["popularity"], consensusScore=[0.8], display=False)
 

@@ -1,4 +1,5 @@
 import random as r
+from namingGameTools import MatrixFactory as mf
 
 # Implementation of the MATLAB code written for the Multi Agent Learning Project by Guy Nagels
 
@@ -6,9 +7,10 @@ import random as r
 
 #This functions takes a number of agents and a number of neighbors and returns a lattice matrix
 def makeSmallWorldMatrix(numberOfAgents, numberOfNeighbors, numberOfRandomLinks):
+  factory = mf.MatrixFactory()
 
   #create a lattice matrix
-  latticeA = lattice.makeLatticeMatrix(numberOfAgents, numberOfNeighbors)
+  latticeA = factory.makeLatticeMatrix(numberOfAgents, numberOfNeighbors)
 
   #generate random connections
   amount = 0

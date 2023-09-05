@@ -1,8 +1,7 @@
 import unittest
 from variants.BaselineNG import *
-import Strategy
-from MatrixFactory import *
-from exports.export import *
+from namingGameTools import Strategy
+from namingGameTools.MatrixFactory import *
 import numpy as np
 
 class BaselineNGTest(unittest.TestCase):
