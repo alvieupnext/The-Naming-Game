@@ -5,6 +5,8 @@ from matplotlib.patches import Patch
 
 from matplotlib.animation import FuncAnimation
 from patients.patientData import *
+import networkx as nx
+from patients.graphMetadata import createGraphFromSubjectNumber
 
 def map_choices(choices):
   if len(choices) == 0:
@@ -24,7 +26,7 @@ def map_color(value):
 threshold = 0.5
 
 # Open subject from csv_results output and get all the subject ids
-data = hcp_patient_data
+data = hcp_patient_structural_matrices
 names = data['Subject'].tolist()
 
 numberOfAgents = hcp_agents
@@ -107,7 +109,7 @@ ab = ABNG(simulations=1, maxIterations=10, strategy=Strategy.mono, output=["pref
 
 convergence_csv = hcp_single_sim_preferred
 
-for name in names[0:1]:
+for name in names[1:2]:
   graph = createGraphFromSubjectNumber(name, data)
   array = readFromPandasDataframe(data, name)
   matrix = convertArrayToMatrix(array , numberOfAgents)

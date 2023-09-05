@@ -7,7 +7,7 @@ print(get_common_distributions())
 
 distros = get_common_distributions()
 
-patientData = hcp_patient_data
+patientData = hcp_patient_structural_matrices
 
 patientNames = patientData['Subject'].tolist()
 
