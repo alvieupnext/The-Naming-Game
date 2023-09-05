@@ -3,11 +3,11 @@
 #Example on how to use the Naming Game and patient data using a script in Ray which then can be queued on a computer with multiple cores
 
 #Following ray script will store the convergence information in a csv
-
-from patients.patientData import *
 from variants.ABNG import *
 import ray
-from patients.patientData import *
+from patients.patientData import lowest_hcp_patients, highest_hcp_patients, hcp_patient_structural_matrices, hcp_agents, readFromPandasDataframe, convertArrayToMatrix
+
+import pandas as pd
 
 numberOfAgents = hcp_agents
 
