@@ -29,7 +29,6 @@ def map_choices(choices):
 def getDataFromHospital(name):
     ab = ABNG(simulations=1, maxIterations=1000000, strategy=Strategy.mono, output=["preferredAction"],
             consensusScore=[1], display=False)
-    numberOfAgents = 94
     matrix = convertArrayToMatrix(readFromPandasDataframe(data, name), numberOfAgents)
     output = ab.start(matrix)["preferredAction"][0]
     numberOutput = np.zeros((len(output), len(output[0])), dtype=int)
@@ -55,7 +54,7 @@ if __name__ == "__main__":
   ray.init(address='auto')
   patientDataRemotes = []
   # Make an empty dataframe with all the columns we want (1 to 94, Iteration, Subject)
-  patientData = pd.DataFrame(columns=list(range(94)), dtype=int)
+  patientData = pd.DataFrame(columns=list(range(numberOfAgents)), dtype=int)
   patientData['Iteration'] = patientData.index
   patientData['Subject'] = 0
   print(patientData)
