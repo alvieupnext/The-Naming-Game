@@ -31,7 +31,7 @@ data = hcp_patient_structural_matrices
 def mergeData(sum, df):
   return pd.merge(sum, df, how='outer')
 
-# @ray.remote
+@ray.remote
 def getDataFromHospital(name):
   ng = ABNG(maxIterations=1000000, simulations=25, strategy=Strategy.mono, output=["popularity", "consensus"],
             consensusScore=consensusScoreList, display=True)
@@ -59,18 +59,17 @@ def getDataFromHospital(name):
 
 
 if __name__ == "__main__":
-  # ray.init(address='auto')
-  # patientDataRemotes = []
-  # for name in names:
-  #   patientDataRemotes.append(getDataFromHospital.remote(name))
-  # patientData = pd.DataFrame(columns=columns, dtype=int)
-  getDataFromHospital(101006)
-  # while len(patientDataRemotes):
-  #   doneRemote, patientDataRemotes = ray.wait(patientDataRemotes, timeout=None)
-  #   print("Finished one")
-  #   print("Remaing tasks: ", len(patientDataRemotes))
-  #   patientData = mergeData(patientData, ray.get(doneRemote[0]))
-  #   patientData.to_csv("patients/output/convergenceHCPabs_25.csv_results")
+  ray.init(address='auto')
+  patientDataRemotes = []
+  for name in names:
+    patientDataRemotes.append(getDataFromHospital.remote(name))
+  patientData = pd.DataFrame(columns=columns, dtype=int)
+  while len(patientDataRemotes):
+    doneRemote, patientDataRemotes = ray.wait(patientDataRemotes, timeout=None)
+    print("Finished one")
+    print("Remaing tasks: ", len(patientDataRemotes))
+    patientData = mergeData(patientData, ray.get(doneRemote[0]))
+    patientData.to_csv("patients/output/convergenceHCPabs_25.csv_results")
 
 
 
