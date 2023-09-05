@@ -2,12 +2,14 @@
 
 #Example on how to use the Naming Game and patient data using a script in Ray which then can be queued on a computer with multiple cores
 
+#Following ray script will store the convergence information in a csv
+
 from patients.patientData import *
 from variants.ABNG import *
 import ray
 from patients.patientData import *
 
-numberOfAgents = 100
+numberOfAgents = hcp_agents
 
 consensusScoreList = [0.7, 0.8, 0.9, 0.95, 0.98, 0.99, 1]
 
