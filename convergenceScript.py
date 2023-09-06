@@ -71,7 +71,7 @@ if __name__ == "__main__":
     print("Finished one")
     print("Remaing tasks: ", len(patientDataRemotes))
     patientData = mergeData(patientData, ray.get(doneRemote[0]))
-    patientData.to_csv("patients/output/convergenceHCPabs_25.csv_results")
+    patientData.to_csv("patients/output/convergenceHCPabs_25.csv")
 
 
 
