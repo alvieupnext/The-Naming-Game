@@ -2,12 +2,14 @@
 
 #Example on how to use the Naming Game and patient data using a script in Ray which then can be queued on a computer with multiple cores
 
-from patients.patientData import *
+#Following ray script will store the convergence information in a csv
 from variants.ABNG import *
 import ray
-from patients.patientData import *
+from patients.patientData import lowest_hcp_patients, highest_hcp_patients, hcp_patient_structural_matrices, hcp_agents, readFromPandasDataframe, convertArrayToMatrix
 
-numberOfAgents = 100
+import pandas as pd
+
+numberOfAgents = hcp_agents
 
 consensusScoreList = [0.7, 0.8, 0.9, 0.95, 0.98, 0.99, 1]
 
@@ -31,7 +33,7 @@ data = hcp_patient_structural_matrices
 def mergeData(sum, df):
   return pd.merge(sum, df, how='outer')
 
-# @ray.remote
+@ray.remote
 def getDataFromHospital(name):
   ng = ABNG(maxIterations=1000000, simulations=25, strategy=Strategy.mono, output=["popularity", "consensus"],
             consensusScore=consensusScoreList, display=True)
@@ -59,18 +61,17 @@ def getDataFromHospital(name):
 
 
 if __name__ == "__main__":
-  # ray.init(address='auto')
-  # patientDataRemotes = []
-  # for name in names:
-  #   patientDataRemotes.append(getDataFromHospital.remote(name))
-  # patientData = pd.DataFrame(columns=columns, dtype=int)
-  getDataFromHospital(101006)
-  # while len(patientDataRemotes):
-  #   doneRemote, patientDataRemotes = ray.wait(patientDataRemotes, timeout=None)
-  #   print("Finished one")
-  #   print("Remaing tasks: ", len(patientDataRemotes))
-  #   patientData = mergeData(patientData, ray.get(doneRemote[0]))
-  #   patientData.to_csv("patients/output/convergenceHCPabs_25.csv_results")
+  ray.init(address='auto')
+  patientDataRemotes = []
+  for name in names:
+    patientDataRemotes.append(getDataFromHospital.remote(name))
+  patientData = pd.DataFrame(columns=columns, dtype=int)
+  while len(patientDataRemotes):
+    doneRemote, patientDataRemotes = ray.wait(patientDataRemotes, timeout=None)
+    print("Finished one")
+    print("Remaing tasks: ", len(patientDataRemotes))
+    patientData = mergeData(patientData, ray.get(doneRemote[0]))
+    patientData.to_csv("patients/output/convergenceHCPabs_25.csv")
 
 
 

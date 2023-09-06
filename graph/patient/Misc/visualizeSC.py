@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 
-patientData = hcp_patient_data
+patientData = hcp_patient_structural_matrices
 
 agents = hcp_agents
 
