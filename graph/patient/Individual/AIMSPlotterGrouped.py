@@ -164,7 +164,7 @@ create_timeseries(convergence, consensus_levels, percentage_titles,
 
 # distribution(convergence)
 
-# t_test(convergence)
+t_test(convergence)
 
 # fourQuartilesCDF(convergence)
 
